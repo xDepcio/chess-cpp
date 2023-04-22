@@ -1,18 +1,22 @@
 #pragma once
-#include "Metadata.h"
-#include "Piece.h"
-#include "Pawn.h"
 #include <memory>
+#include "Piece.h"
 
 class Square
 {
-private:
-	metadata::Color color;
-	std::unique_ptr<Piece> piece;
 public:
-	Square(metadata::Color squareColor) : piece(nullptr), color(squareColor) {};
-	
-	Piece* getPiece() const;
-	void setPiece(Piece const& piece);
-};
+	Square() : piece(nullptr) {};
 
+	void setPiece(Piece& pieceToSet)
+	{
+		piece = std::move(std::make_unique<Piece>(pieceToSet));
+	}
+
+	Piece* getPiece()
+	{
+		return piece.get();
+	}
+
+private:
+	std::unique_ptr<Piece> piece;
+};
