@@ -1,11 +1,11 @@
 #include "Square.h"
 
-void Square::setPiece(const Piece& piece)
+Piece* Square::getPiece() const
 {
-	Square::piece = piece;
+	return piece.get();
 }
 
-Piece Square::getPiece() const
+void Square::setPiece(Piece const& piece)
 {
-	return piece;
+	Square::piece = std::move(std::make_unique<Piece>(piece));
 }

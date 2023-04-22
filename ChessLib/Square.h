@@ -2,15 +2,17 @@
 #include "Metadata.h"
 #include "Piece.h"
 #include "Pawn.h"
+#include <memory>
+
 class Square
 {
 private:
 	metadata::Color color;
-	Piece piece;
+	std::unique_ptr<Piece> piece;
 public:
-	Square(metadata::Color color) : color(color), piece(Pawn(Color::White)) {};
+	Square(metadata::Color squareColor) : piece(nullptr), color(squareColor) {};
 	
-	Piece getPiece() const;
-	void setPiece(const Piece& piece);
+	Piece* getPiece() const;
+	void setPiece(Piece const& piece);
 };
 

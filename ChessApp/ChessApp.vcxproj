@@ -129,11 +129,6 @@
   <ItemGroup>
     <ClCompile Include="ChessApp.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ChessLib\ChessLib.vcxproj">
-      <Project>{6e5fe92a-8685-4658-8039-0d8514414656}</Project>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
