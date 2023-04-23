@@ -12,19 +12,19 @@ public:
 		White,
 		Black
 	};
-	//Piece(Color withColor, std::pair<int, int> startCoords) : color(withColor), coords(startCoords) {};
-	Piece(Color withColor) : color(withColor) {};
+	Piece(Color withColor) : color(withColor), displayName("x") {};
 
-	virtual bool isMoveValid(Board const* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const
+	virtual bool isMoveValid(Board const* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const;
+
+	void gotCaptured(Piece const& captuedBy) {};
+
+	virtual std::string getName() const
 	{
-		return false;
+		return ":(";
 	}
 
-	void gotCaptured(Piece const& captuedBy);
-
-	//void move(std::pair<int, int> toCoords);
 
 protected:
 	Color color;
-	//std::pair<int, int> coords;
+	std::string displayName;
 };

@@ -3,6 +3,7 @@
 #include "Square.h"
 #include <vector>
 #include <iostream>
+#include <typeinfo>
 
 class Board
 {
