@@ -8,18 +8,21 @@ public:
 	Square() : piece(nullptr) {};
 
 	//void setPiece(Piece& pieceToSet)
-	void setPiece(std::unique_ptr<Piece> pieceToSet)
+	std::unique_ptr<Piece> setPiece(std::unique_ptr<Piece> pieceToSet)
 	{
-		if (piece == nullptr)
-		{
-			piece = std::move(pieceToSet);
-		}
-		else
-		{
-			Piece* movedPiece = getPiece();
-			movedPiece->gotCaptured(*movedPiece);
-			piece = std::move(pieceToSet);
-		}
+		std::unique_ptr<Piece> old = std::move(piece);
+		piece = std::move(pieceToSet);
+		return old;
+		//if (piece == nullptr)
+		//{
+		//	piece = std::move(pieceToSet);
+		//}
+		//else
+		//{
+		//	Piece* movedPiece = getPiece();
+		//	movedPiece->gotCaptured(*movedPiece);
+		//	piece = std::move(pieceToSet);
+		//}
 	}
 
 	Piece* getPiece() const

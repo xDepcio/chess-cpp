@@ -10,7 +10,7 @@ class Board
 public:
 	Board(int width, int height);
 
-	void setPiece(std::pair<int, int> cords, Piece piece);
+	std::unique_ptr<Piece> setPiece(std::pair<int, int> cords, std::unique_ptr<Piece> piece);
 
 	std::vector<std::vector<Square> >& getBoard();
 

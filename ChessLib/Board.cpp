@@ -12,9 +12,9 @@ Board::Board(int width, int height)
 	}
 }
 
-void Board::setPiece(std::pair<int, int> cords, Piece piece)
+std::unique_ptr<Piece> Board::setPiece(std::pair<int, int> cords, std::unique_ptr<Piece> piece)
 {
-	squares[cords.first][cords.second].setPiece(std::make_unique<Piece>(piece));
+	return squares[cords.first][cords.second].setPiece(std::move(piece));
 }
 
 std::vector<std::vector<Square>>& Board::getBoard()
@@ -44,9 +44,8 @@ void Board::printBoard() const
 
 void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 {
-	Piece* movedPiece = squares[from.first][from.second].getPiece();
 	if (squares[from.first][from.second].getPiece()->isMoveValid(this, from, to))
 	{
-		squares[to.first][to.second].setPiece(std::make_unique<Piece>(*movedPiece));
+		setPiece(to, setPiece(from, nullptr));
 	}
 }

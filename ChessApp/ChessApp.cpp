@@ -12,16 +12,17 @@ int main()
 {
     std::cout << "Hello World!\n";
     Board b(8, 8);
-    b.setPiece({ 0, 0 }, Pawn(Piece::Color::White));
-    b.setPiece({ 7, 0 }, Pawn(Piece::Color::Black));
+    b.setPiece({ 0, 0 }, std::make_unique<Pawn>(Piece::Color::White));
+    b.setPiece({ 7, 0 }, std::make_unique<Pawn>(Piece::Color::Black));
     b.printBoard();
     b.move({ 0, 0 }, { 1, 0 });
+    b.printBoard();
 
-    std::vector<Piece*> pieces;
-    pieces.push_back(new Piece(Piece::Color::Black));
-    pieces.push_back(new Pawn(Piece::Color::White));
-    pieces[0]->getName();
-    pieces[1]->getName();
+    //std::vector<Piece*> pieces;
+    //pieces.push_back(new Piece(Piece::Color::Black));
+    //pieces.push_back(new Pawn(Piece::Color::White));
+    //pieces[0]->getName();
+    //pieces[1]->getName();
 }
 
 // Run program: Ctrl + F5 or Debug > Start Without Debugging menu

@@ -20,7 +20,7 @@ public:
 
 	virtual std::string getName() const
 	{
-		return ":(";
+		return displayName;
 	}
 
 

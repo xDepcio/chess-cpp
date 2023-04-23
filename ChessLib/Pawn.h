@@ -9,9 +9,5 @@ private:
 public:
 	Pawn(Color withColor);
 	bool isMoveValid(Board const* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const override;
-	virtual std::string getName() const override
-	{
-		return "xd";
-	}
 };
 
