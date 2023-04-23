@@ -5,6 +5,7 @@
 #include "../ChessLib/Board.h"
 #include "../ChessLib/Metadata.h"
 #include "../ChessLib/Piece.h"
+#include <typeinfo>
 
 using namespace metadata;
 
@@ -13,8 +14,7 @@ int main()
     std::cout << "Hello World!\n";
     Board b(8, 8);
     b.printBoard();
-    b.setPiece({ 0, 0 }, Piece(2));
-    b.getBoard()[0][0].getPiece()->printSelf();
+    b.setPiece({ 0, 0 }, Piece(Piece::Color::White));
 
 
 }

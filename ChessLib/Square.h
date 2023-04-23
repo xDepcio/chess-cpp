@@ -9,7 +9,16 @@ public:
 
 	void setPiece(Piece& pieceToSet)
 	{
-		piece = std::move(std::make_unique<Piece>(pieceToSet));
+		if (piece == nullptr)
+		{
+			piece = std::move(std::make_unique<Piece>(pieceToSet));
+		}
+		else
+		{
+			Piece* movedPiece = getPiece();
+			movedPiece->gotCaptured(pieceToSet);
+			piece = std::move(std::make_unique<Piece>(pieceToSet));
+		}
 	}
 
 	Piece* getPiece()
