@@ -4,6 +4,7 @@
 #include <vector>
 #include <iostream>
 #include <typeinfo>
+#include "Pawn.h"
 
 class Board
 {
