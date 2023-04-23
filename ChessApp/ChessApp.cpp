@@ -11,9 +11,11 @@ using namespace metadata;
 int main()
 {
     std::cout << "Hello World!\n";
-    Board b;
-    Piece p1(1);
-    b.setPiece(b.getBoard()[0][0], p1);
+    Board b(8, 8);
+    b.printBoard();
+    b.setPiece({ 0, 0 }, Piece(2));
+    b.getBoard()[0][0].getPiece()->printSelf();
+
 
 }
 

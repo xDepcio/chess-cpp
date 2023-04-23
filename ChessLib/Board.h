@@ -2,28 +2,43 @@
 #include "Piece.h"
 #include "Square.h"
 #include <vector>
+#include <iostream>
 
 class Board
 {
 public:
-	Board()
+	Board(int width, int height)
 	{
-		squares.push_back(std::vector<Square>());
-		squares.push_back(std::vector<Square>());
-		squares[0].push_back(Square());
-		squares[0].push_back(Square());
-		squares[1].push_back(Square());
-		squares[1].push_back(Square());
+		for (int j = 0; j < height; j++)
+		{
+			squares.push_back(std::vector<Square>());
+			for (int i = 0; i < width; i++)
+			{
+				squares[j].push_back(Square());
+			}
+		}
 	}
 
-	void setPiece(Square& square, Piece& piece)
+	void setPiece(std::pair<int, int> cords, Piece piece)
 	{
-		square.setPiece(piece);
+		squares[cords.first][cords.second].setPiece(piece);
 	}
 
 	std::vector<std::vector<Square> >& getBoard()
 	{
 		return squares;
+	}
+
+	void printBoard()
+	{
+		for (int i = 0; i < squares.size(); i++)
+		{
+			for (int j = 0; j < squares[0].size(); j++)
+			{
+				std::cout << " X ";
+			}
+			std::cout << '\n';
+		}
 	}
 
 private:
