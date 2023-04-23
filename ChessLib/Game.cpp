@@ -28,6 +28,8 @@ void Game::run()
 	board.setPiece({ 6, 6 }, std::make_unique<Pawn>(Piece::Color::White));
 	board.setPiece({ 6, 7 }, std::make_unique<Pawn>(Piece::Color::White));
 
+	board.setPiece({ 2, 1 }, std::make_unique<Pawn>(Piece::Color::White));
+
 	do
 	{
 		clearTerminal();
@@ -43,8 +45,11 @@ void Game::run()
 		std::string input;
 		std::cin >> input;
 		std::cout << input << '\n';
-
 		auto coords = parseCoords(input);
+
+		Piece* movedPiece = board.getPiece(coords.first);
+		auto moves = movedPiece->getValidMoves(&board, coords.first);
+		//auto moves = board.getPawnMoves(coords.first);
 		board.move(coords.first, coords.second);
 	
 

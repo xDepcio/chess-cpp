@@ -16,8 +16,9 @@ public:
 	std::vector<std::vector<Square> >& getBoard();
 
 	void printBoard() const;
+	Piece* getPiece(std::pair<int, int> coords) const;
 
-	std::vector<std::pair<int, int>>& getPawnMoves(std::pair<int, int> atCoords) const;
+	std::vector<std::pair<int, int>> getPawnMoves(std::pair<int, int> atCoords);
 	std::vector<std::pair<int, int>>& getKnightMoves(std::pair<int, int> atCoords) const;
 	std::vector<std::pair<int, int>>& getHorizontalMoves(std::pair<int, int> atCoords) const;
 	std::vector<std::pair<int, int>>& getVerticalMoves(std::pair<int, int> atCoords) const;
@@ -25,6 +26,10 @@ public:
 
 	void move(std::pair<int, int> from, std::pair<int, int> to);
 
+	bool areCoordinatesValid(std::pair<int, int> coordinates) const;
+
 private:
+	int width;
+	int height;
 	std::vector<std::vector<Square> > squares = { };
 };

@@ -10,8 +10,10 @@ public:
 	//void setPiece(Piece& pieceToSet)
 	std::unique_ptr<Piece> setPiece(std::unique_ptr<Piece> pieceToSet)
 	{
+		// Returns Piece that previously occupied the square
 		std::unique_ptr<Piece> old = std::move(piece);
 		piece = std::move(pieceToSet);
+
 		return old;
 		//if (piece == nullptr)
 		//{
