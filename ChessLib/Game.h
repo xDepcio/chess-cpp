@@ -5,6 +5,7 @@
 #include <iomanip>
 #include <sstream>
 #include "Knight.h"
+#include "Rook.h"
 
 class Game
 {

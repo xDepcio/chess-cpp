@@ -173,6 +173,122 @@ std::vector<std::pair<int, int>> Board::getKnightMoves(std::pair<int, int> atCoo
 	return validKnightMoves;
 }
 
+std::vector<std::pair<int, int>> Board::getHorizontalMoves(std::pair<int, int> atCoords)
+{
+	int row = atCoords.first;
+	int col = atCoords.second;
+	Piece* pieceAtCoords = squares[row][col].getPiece();
+
+	std::vector<std::pair<int, int>> validHorizontalMoves;
+
+	bool areSquaresLeft = true;
+	int dir = -1;
+	int checkCol = col;
+	while (areSquaresLeft)
+	{
+		checkCol += dir;
+		if (areCoordinatesValid({ row, checkCol }))
+		{
+			Piece* pieceAtSquare = squares[row][checkCol].getPiece();
+			if (pieceAtSquare == nullptr)
+			{
+				auto taken = setPiece({ row, checkCol }, setPiece(atCoords, nullptr));
+				if (!isCheck(pieceAtCoords->getColor()))
+				{
+					validHorizontalMoves.push_back({ row, checkCol });
+				}
+				setPiece(atCoords, setPiece({ row, checkCol }, std::move(taken)));
+			}
+			else if (pieceAtSquare->getColor() != pieceAtCoords->getColor())
+			{
+				auto taken = setPiece({ row, checkCol }, setPiece(atCoords, nullptr));
+				if (!isCheck(pieceAtCoords->getColor()))
+				{
+					validHorizontalMoves.push_back({ row, checkCol });
+				}
+				setPiece(atCoords, setPiece({ row, checkCol }, std::move(taken)));
+				checkCol = col;
+				dir += 2;
+			}
+			else
+			{
+				checkCol = col;
+				dir += 2;
+			}
+
+		}
+		else
+		{
+			checkCol = col;
+			dir += 2;
+		}
+		if (dir > 1)
+		{
+			areSquaresLeft = false;
+		}
+	}
+
+	return validHorizontalMoves;
+}
+
+std::vector<std::pair<int, int>> Board::getVerticalMoves(std::pair<int, int> atCoords)
+{
+	int row = atCoords.first;
+	int col = atCoords.second;
+	Piece* pieceAtCoords = squares[row][col].getPiece();
+
+	std::vector<std::pair<int, int>> validVerticalMoves;
+
+	bool areSquaresLeft = true;
+	int dir = -1;
+	int checkRow = row;
+	while (areSquaresLeft)
+	{
+		checkRow += dir;
+		if (areCoordinatesValid({ checkRow, col }))
+		{
+			Piece* pieceAtSquare = squares[checkRow][col].getPiece();
+			if (pieceAtSquare == nullptr)
+			{
+				auto taken = setPiece({ checkRow, col }, setPiece(atCoords, nullptr));
+				if (!isCheck(pieceAtCoords->getColor()))
+				{
+					validVerticalMoves.push_back({ checkRow, col });
+				}
+				setPiece(atCoords, setPiece({ checkRow, col }, std::move(taken)));
+			}
+			else if (pieceAtSquare->getColor() != pieceAtCoords->getColor())
+			{
+				auto taken = setPiece({ checkRow, col }, setPiece(atCoords, nullptr));
+				if (!isCheck(pieceAtCoords->getColor()))
+				{
+					validVerticalMoves.push_back({ checkRow, col });
+				}
+				setPiece(atCoords, setPiece({ checkRow, col }, std::move(taken)));
+				checkRow = row;
+				dir += 2;
+			}
+			else
+			{
+				checkRow = row;
+				dir += 2;
+			}
+
+		}
+		else
+		{
+			checkRow = row;
+			dir += 2;
+		}
+		if (dir > 1)
+		{
+			areSquaresLeft = false;
+		}
+	}
+
+	return validVerticalMoves;
+}
+
 
 void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 {
