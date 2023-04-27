@@ -26,6 +26,11 @@ bool Piece::isMoveValid(Board* board, std::pair<int, int> const& from, std::pair
 //	return std::vector<std::pair<int, int>>();
 //}
 
+std::string Piece::getName() const
+{
+    return (this->color == Piece::Color::White ? "w" : "b") + this->pieceSignature;
+}
+
 Piece::Color Piece::getColor() const
 {
 	return color;

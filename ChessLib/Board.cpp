@@ -39,7 +39,7 @@ void Board::printBoard() const
 			}
 			else
 			{
-				std::cout << " - ";
+				std::cout << " -- ";
 			}
 		}
 		std::cout << '\n';

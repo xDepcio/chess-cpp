@@ -14,8 +14,9 @@ public:
 		White,
 		Black
 	};
-	Piece(Color withColor) : color(withColor), displayName("x") {};
-	Piece(Color withColor, int id) : color(withColor), displayName("x"), debugId(id) {};
+
+	Piece(Color withColor) : color(withColor), pieceSignature("x"), debugId(0) {};
+	Piece(Color withColor, int id) : color(withColor), pieceSignature("x"), debugId(id) {};
 
 	bool isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const;
 
@@ -23,10 +24,7 @@ public:
 
 	void gotCaptured(Piece const& captuedBy) {};
 
-	virtual std::string getName() const
-	{
-		return displayName;
-	}
+	std::string getName() const;
 
 	Color getColor() const;
 
@@ -37,7 +35,7 @@ public:
 
 protected:
 	Color color;
-	std::string displayName;
+	std::string pieceSignature;
 	int debugId;
 	//std::pair<int, int> coords;
 };

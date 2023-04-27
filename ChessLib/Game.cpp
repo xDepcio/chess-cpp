@@ -2,13 +2,8 @@
 
 void Game::run()
 {
-	enum turn
-	{
-		white = 0,
-		black = 1
-	};
+	Piece::Color playerTurn = Piece::Color::White;
 
-	turn playerTurn = white;
 	Board board(8, 8), *boardPt;
 	boardPt = &board;
 	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Piece::Color::Black, 1));
@@ -36,7 +31,7 @@ void Game::run()
 	{
 		clearTerminal();
 		std::cout << "===============================================\n";
-		std::cout << (playerTurn == turn::white ? "Whites turn" : "Blacks turn") << '\n' << '\n';
+		std::cout << (playerTurn == Piece::Color::White ? "Whites turn" : "Blacks turn") << '\n' << '\n';
 		std::cout << "q - quit\n";
 		std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
 
@@ -57,21 +52,29 @@ void Game::run()
 		auto coords = parseCoords(input);
 
 		Piece* movedPiece = boardPt->getPiece(coords.first);
-		Piece* movedPiece2 = boardPt->getPiece(coords.first);
 
-		if (movedPiece->isMoveValid(boardPt, coords.first, coords.second))
+		if (movedPiece->getColor() != playerTurn)
 		{
-			boardPt->move(coords.first, coords.second);
 			std::ostringstream ss;
-			ss << (playerTurn == turn::white ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
-				<< coords.second.first << ", " << coords.second.second;
+			ss << "Can't move " << (playerTurn == Piece::Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Piece::Color::White ? "Whites " : "Blacks ") << "turn.";
 			messages.push_back(ss.str());
 		}
 		else
 		{
-			messages.push_back("Illegal move");
+			if (movedPiece->isMoveValid(boardPt, coords.first, coords.second))
+			{
+				boardPt->move(coords.first, coords.second);
+				std::ostringstream ss;
+				ss << (playerTurn == Piece::Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
+					<< coords.second.first << ", " << coords.second.second;
+				messages.push_back(ss.str());
+				playerTurn = playerTurn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White;
+			}
+			else
+			{
+				messages.push_back("Illegal move");
+			}
 		}
-
 
 	} while (true);
 
