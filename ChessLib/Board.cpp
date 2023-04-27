@@ -30,6 +30,7 @@ void Board::printBoard() const
 {
 	for (int i = 0; i < squares.size(); i++)
 	{
+		std::cout << " " << 8 - i << " ";
 		for (int j = 0; j < squares[0].size(); j++)
 		{
 			Piece* squarePiece = squares[i][j].getPiece();
@@ -44,12 +45,36 @@ void Board::printBoard() const
 		}
 		std::cout << '\n';
 	}
+	std::cout << "    a   b   c   d   e   f   g   h\n";
 }
 
 Piece* Board::getPiece(std::pair<int, int> coords) const
 {
 	return squares[coords.first][coords.second].getPiece();
 }
+
+std::pair<int, int> Board::getKingLocation(Piece::Color const kingColor) const
+{
+	int rowNum = 0;
+	for (auto& row : squares)
+	{
+		int colNum = 0;
+		for (auto& sqr : row)
+		{
+			King* sqrPiece = dynamic_cast<King*>(sqr.getPiece());
+			if (sqrPiece != nullptr && sqrPiece->getColor() == kingColor)
+			{
+				return {rowNum, colNum};
+			}
+
+			colNum++;
+		}
+		
+		rowNum++;
+	}
+	return {-1, -1};
+}
+
 
 std::vector<std::pair<int, int>> Board::getPawnMoves(std::pair<int, int> atCoords)
 {
@@ -72,15 +97,11 @@ std::vector<std::pair<int, int>> Board::getPawnMoves(std::pair<int, int> atCoord
 				if (pieceToBeTaken->getColor() != pieceAtCoords->getColor())
 				{
 					auto taken = setPiece(coords, setPiece(atCoords, nullptr));
-					//if (isCheck(pieceAtCoords->getColor()))
-					if (true) // TODO... check for check in here
-					{
-						setPiece(atCoords, setPiece(coords, std::move(taken)));
-					}
-					else
+					if (!isCheck(pieceAtCoords->getColor()))
 					{
 						validMoves.push_back(coords);
 					}
+					setPiece(atCoords, setPiece(coords, std::move(taken)));
 				}
 			}
 		}
@@ -106,12 +127,65 @@ std::vector<std::pair<int, int>> Board::getPawnMoves(std::pair<int, int> atCoord
 	return validMoves;
 }
 
+std::vector<std::pair<int, int>> Board::getKingMoves(std::pair<int, int> atCoords)
+{
+	std::vector<std::pair<int, int>> validKingMoves = {};
+	return validKingMoves;
+}
+
+std::vector<std::pair<int, int>> Board::getKnightMoves(std::pair<int, int> atCoords)
+{
+	int row = atCoords.first;
+	int col = atCoords.second;
+	Piece* knightAtCoords = squares[row][col].getPiece();
+
+	std::vector<std::pair<int, int>> validKnightMoves;
+
+	std::vector<std::pair<int, int>> movesToCheck = {
+		{row + 2, col - 1},
+		{row + 2, col + 1},
+		{row - 2, col - 1},
+		{row - 2, col + 1},
+		{row - 1, col - 2},
+		{row + 1, col - 2},
+		{row - 1, col + 2},
+		{row + 1, col + 2},
+	};
+
+	for (auto& move : movesToCheck)
+	{
+		if (areCoordinatesValid(move))
+		{
+			Piece* pieceToBeTaken = getPiece(move);
+			if (pieceToBeTaken == nullptr || pieceToBeTaken->getColor() != knightAtCoords->getColor())
+			{
+				auto taken = setPiece(move, setPiece(atCoords, nullptr));
+				if (!isCheck(knightAtCoords->getColor()))
+				{
+					validKnightMoves.push_back(move);
+				}
+				setPiece(atCoords, setPiece(move, std::move(taken)));
+			}
+
+		}
+	}
+
+	return validKnightMoves;
+}
+
+
 void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 {
 	if (this->getPiece(from)->isMoveValid(this, from, to))
 	{
 		setPiece(to, setPiece(from, nullptr));
 	}
+}
+
+bool Board::isCheck(Piece::Color const piecesColor) const
+{
+	auto kingCoords = getKingLocation(piecesColor);
+	return false;
 }
 
 bool Board::areCoordinatesValid(std::pair<int, int> coordinates) const

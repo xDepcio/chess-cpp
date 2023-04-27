@@ -6,25 +6,29 @@ void Game::run()
 
 	Board board(8, 8), *boardPt;
 	boardPt = &board;
-	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Piece::Color::Black, 1));
-	boardPt->setPiece({ 1, 1 }, std::make_unique<Pawn>(Piece::Color::Black, 2));
-	boardPt->setPiece({ 1, 2 }, std::make_unique<Pawn>(Piece::Color::Black, 3));
-	boardPt->setPiece({ 1, 3 }, std::make_unique<Pawn>(Piece::Color::Black, 4));
-	boardPt->setPiece({ 1, 4 }, std::make_unique<Pawn>(Piece::Color::Black, 5));
-	boardPt->setPiece({ 1, 5 }, std::make_unique<Pawn>(Piece::Color::Black, 6));
-	boardPt->setPiece({ 1, 6 }, std::make_unique<Pawn>(Piece::Color::Black, 7));
-	boardPt->setPiece({ 1, 7 }, std::make_unique<Pawn>(Piece::Color::Black, 8));
+	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Piece::Color::Black, 201));
+	boardPt->setPiece({ 1, 1 }, std::make_unique<Pawn>(Piece::Color::Black, 202));
+	boardPt->setPiece({ 1, 2 }, std::make_unique<Pawn>(Piece::Color::Black, 203));
+	boardPt->setPiece({ 1, 3 }, std::make_unique<Pawn>(Piece::Color::Black, 204));
+	boardPt->setPiece({ 1, 4 }, std::make_unique<Pawn>(Piece::Color::Black, 205));
+	boardPt->setPiece({ 1, 5 }, std::make_unique<Pawn>(Piece::Color::Black, 206));
+	boardPt->setPiece({ 1, 6 }, std::make_unique<Pawn>(Piece::Color::Black, 207));
+	boardPt->setPiece({ 1, 7 }, std::make_unique<Pawn>(Piece::Color::Black, 208));
 
-	boardPt->setPiece({ 6, 0 }, std::make_unique<Pawn>(Piece::Color::White, 9));
-	boardPt->setPiece({ 6, 1 }, std::make_unique<Pawn>(Piece::Color::White, 10));
-	boardPt->setPiece({ 6, 2 }, std::make_unique<Pawn>(Piece::Color::White, 11));
-	boardPt->setPiece({ 6, 3 }, std::make_unique<Pawn>(Piece::Color::White, 12));
-	boardPt->setPiece({ 6, 4 }, std::make_unique<Pawn>(Piece::Color::White, 13));
-	boardPt->setPiece({ 6, 5 }, std::make_unique<Pawn>(Piece::Color::White, 14));
-	boardPt->setPiece({ 6, 6 }, std::make_unique<Pawn>(Piece::Color::White, 15));
-	boardPt->setPiece({ 6, 7 }, std::make_unique<Pawn>(Piece::Color::White, 16));
+	boardPt->setPiece({ 0, 1 }, std::make_unique<Knight>(Piece::Color::Black, 211));
+	boardPt->setPiece({ 0, 6 }, std::make_unique<Knight>(Piece::Color::Black, 212));
 
-	boardPt->setPiece({ 2, 1 }, std::make_unique<Pawn>(Piece::Color::White, 17));
+	boardPt->setPiece({ 6, 0 }, std::make_unique<Pawn>(Piece::Color::White, 101));
+	boardPt->setPiece({ 6, 1 }, std::make_unique<Pawn>(Piece::Color::White, 102));
+	boardPt->setPiece({ 6, 2 }, std::make_unique<Pawn>(Piece::Color::White, 103));
+	boardPt->setPiece({ 6, 3 }, std::make_unique<Pawn>(Piece::Color::White, 104));
+	boardPt->setPiece({ 6, 4 }, std::make_unique<Pawn>(Piece::Color::White, 105));
+	boardPt->setPiece({ 6, 5 }, std::make_unique<Pawn>(Piece::Color::White, 106));
+	boardPt->setPiece({ 6, 6 }, std::make_unique<Pawn>(Piece::Color::White, 107));
+	boardPt->setPiece({ 6, 7 }, std::make_unique<Pawn>(Piece::Color::White, 108));
+
+	boardPt->setPiece({ 7, 1 }, std::make_unique<Knight>(Piece::Color::White, 111));
+	boardPt->setPiece({ 7, 6 }, std::make_unique<Knight>(Piece::Color::White, 112));
 
 	std::vector<std::string> messages;
 	do
@@ -33,7 +37,8 @@ void Game::run()
 		std::cout << "===============================================\n";
 		std::cout << (playerTurn == Piece::Color::White ? "Whites turn" : "Blacks turn") << '\n' << '\n';
 		std::cout << "q - quit\n";
-		std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
+		std::cout << "type coordiantes in form (start-end). ex. d2-d4\n";
+		//std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
 
 		std::cout << "===============================================\n";
 		boardPt->printBoard();
@@ -53,7 +58,11 @@ void Game::run()
 
 		Piece* movedPiece = boardPt->getPiece(coords.first);
 
-		if (movedPiece->getColor() != playerTurn)
+		if (movedPiece == nullptr)
+		{
+			messages.push_back("Illegal move");
+		}
+		else if (movedPiece->getColor() != playerTurn)
 		{
 			std::ostringstream ss;
 			ss << "Can't move " << (playerTurn == Piece::Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Piece::Color::White ? "Whites " : "Blacks ") << "turn.";
@@ -86,37 +95,56 @@ void Game::clearTerminal()
 	std::cout << "\x1B[2J\x1B[3J\x1B[H";
 }
 
+//std::pair<std::pair<int, int>, std::pair<int, int>> Game::parseCoords(std::string coords)
+//{
+//	bool filledFirst = false;
+//	std::pair<int, int> startCoords;
+//	std::pair<int, int> endCoords;
+//	for (int i = 0; i < coords.size(); i++)
+//	{
+//		char delim = coords[i];
+//		if (delim == '.')
+//		{
+//			filledFirst = true;
+//		}
+//		if (delim == ',')
+//		{
+//			if (!filledFirst)
+//			{
+//				int numRow = coords[i - 1] - 48;
+//				int numCol = coords[i + 1] - 48;
+//				startCoords.first = numRow;
+//				startCoords.second = numCol;
+//
+//			}
+//			else
+//			{
+//				int numRow = coords[i - 1] - 48;
+//				int numCol = coords[i + 1] - 48;
+//				endCoords.first = numRow;
+//				endCoords.second = numCol;
+//
+//			}
+//		}
+//	}
+//	return std::pair<std::pair<int, int>, std::pair<int, int>>(startCoords, endCoords);
+//}
+
 std::pair<std::pair<int, int>, std::pair<int, int>> Game::parseCoords(std::string coords)
 {
-	bool filledFirst = false;
-	std::pair<int, int> startCoords;
-	std::pair<int, int> endCoords;
-	for (int i = 0; i < coords.size(); i++)
+	std::pair<int, int> startCoords = { boardCoordinateToInt(coords[1]), boardCoordinateToInt(coords[0]) };
+	std::pair<int, int> endCoords = { boardCoordinateToInt(coords[4]), boardCoordinateToInt(coords[3]) };
+	return { startCoords, endCoords };
+}
+
+int Game::boardCoordinateToInt(char coordinateSign) const
+{
+	if (coordinateSign <= 57) // "9" is 57 in ASCI
 	{
-		char delim = coords[i];
-		if (delim == '.')
-		{
-			filledFirst = true;
-		}
-		if (delim == ',')
-		{
-			if (!filledFirst)
-			{
-				int numRow = coords[i - 1] - 48;
-				int numCol = coords[i + 1] - 48;
-				startCoords.first = numRow;
-				startCoords.second = numCol;
-
-			}
-			else
-			{
-				int numRow = coords[i - 1] - 48;
-				int numCol = coords[i + 1] - 48;
-				endCoords.first = numRow;
-				endCoords.second = numCol;
-
-			}
-		}
+		return 7 - (coordinateSign - 49);
 	}
-	return std::pair<std::pair<int, int>, std::pair<int, int>>(startCoords, endCoords);
+	else
+	{
+		return coordinateSign - 97;
+	}
 }
