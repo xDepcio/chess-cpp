@@ -32,6 +32,8 @@ public:
 
 	bool hasMadeFirstMove() const;
 
+	void handleGotTaken(Piece* takenBy);
+
 protected:
 	Color color;
 	std::string pieceSignature;

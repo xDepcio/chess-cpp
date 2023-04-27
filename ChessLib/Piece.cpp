@@ -36,3 +36,8 @@ bool Piece::hasMadeFirstMove() const
     return madeFirstMove;
 }
 
+void Piece::handleGotTaken(Piece* takenBy)
+{
+    // TODO... Do something when piece is taken
+}
+
