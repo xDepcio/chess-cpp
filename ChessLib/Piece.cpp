@@ -15,16 +15,6 @@ bool Piece::isMoveValid(Board* board, std::pair<int, int> const& from, std::pair
 
     return false;
 }
-//
-//std::vector<std::pair<int, int>> Piece::getValidMoves(Board* board, std::pair<int, int> const& atCoords) const
-//{
-//	return std::vector<std::pair<int, int>>();
-//}
-
-//std::vector<std::pair<int, int>> Piece::getValidMoves(Board* board, std::pair<int, int> const& atCoords) const
-//{
-//	return std::vector<std::pair<int, int>>();
-//}
 
 std::string Piece::getName() const
 {
@@ -34,5 +24,15 @@ std::string Piece::getName() const
 Piece::Color Piece::getColor() const
 {
 	return color;
+}
+
+void Piece::handleGotMoved()
+{
+    madeFirstMove = true;
+}
+
+bool Piece::hasMadeFirstMove() const
+{
+    return madeFirstMove;
 }
 

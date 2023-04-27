@@ -178,6 +178,7 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 {
 	if (this->getPiece(from)->isMoveValid(this, from, to))
 	{
+		this->getPiece(from)->handleGotMoved();
 		setPiece(to, setPiece(from, nullptr));
 	}
 }

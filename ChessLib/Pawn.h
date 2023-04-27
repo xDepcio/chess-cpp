@@ -5,7 +5,6 @@
 class Pawn : public Piece
 {
 private:
-	bool madeFirstMove = false;
 
 public:
 	Pawn(Color withColor);
@@ -13,7 +12,5 @@ public:
 	//bool isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const override;
 
 	std::vector<std::pair<int, int>> getValidMoves(Board* board, std::pair<int, int> const& atCoords) const override;
-
-	bool hasMadeFirstMove() const;
 };
 

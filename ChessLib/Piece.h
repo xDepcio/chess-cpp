@@ -28,14 +28,13 @@ public:
 
 	Color getColor() const;
 
-	//void setCoords(std::pair<int, int> newCoords)
-	//{
-	//	coords = newCoords;
-	//}
+	void handleGotMoved();
+
+	bool hasMadeFirstMove() const;
 
 protected:
 	Color color;
 	std::string pieceSignature;
 	int debugId;
-	//std::pair<int, int> coords;
+	bool madeFirstMove = false;
 };

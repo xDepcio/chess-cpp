@@ -27,8 +27,3 @@ std::vector<std::pair<int, int>> Pawn::getValidMoves(Board* board, std::pair<int
 {
     return board->getPawnMoves(atCoords);
 }
-
-bool Pawn::hasMadeFirstMove() const
-{
-    return madeFirstMove;
-}
