@@ -15,10 +15,11 @@ public:
 		Black
 	};
 	Piece(Color withColor) : color(withColor), displayName("x") {};
+	Piece(Color withColor, int id) : color(withColor), displayName("x"), debugId(id) {};
 
-	virtual bool isMoveValid(Board const* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const;
+	bool isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const;
 
-	virtual std::vector<std::pair<int, int>> getValidMoves(Board* board, std::pair<int, int> const& atCoords) const;
+	virtual std::vector<std::pair<int, int>> getValidMoves(Board* board, std::pair<int, int> const& atCoords) const = 0;
 
 	void gotCaptured(Piece const& captuedBy) {};
 
@@ -37,5 +38,6 @@ public:
 protected:
 	Color color;
 	std::string displayName;
+	int debugId;
 	//std::pair<int, int> coords;
 };

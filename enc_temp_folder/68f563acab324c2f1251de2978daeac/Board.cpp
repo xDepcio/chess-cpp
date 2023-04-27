@@ -73,8 +73,9 @@ std::vector<std::pair<int, int>> Board::getPawnMoves(std::pair<int, int> atCoord
 				{
 					auto taken = setPiece(coords, setPiece(atCoords, nullptr));
 					//if (isCheck(pieceAtCoords->getColor()))
-					if (true) // TODO... check for check in here
+					if (true)
 					{
+						//setPiece(atCoords, std::move(taken));
 						setPiece(atCoords, setPiece(coords, std::move(taken)));
 					}
 					else

@@ -63,7 +63,7 @@ void Game::run()
 		{
 			boardPt->move(coords.first, coords.second);
 			std::ostringstream ss;
-			ss << (playerTurn == turn::white ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
+			ss << (playerTurn == turn::white ? "Whites" : "Black") << "moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
 				<< coords.second.first << ", " << coords.second.second;
 			messages.push_back(ss.str());
 		}

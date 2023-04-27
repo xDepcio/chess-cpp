@@ -1,7 +1,9 @@
 #pragma once
 #include <iostream>
 #include "Board.h"
-#include <string>
+#include <vector>
+#include <iomanip>
+#include <sstream>
 
 class Game
 {
