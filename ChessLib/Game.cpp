@@ -18,6 +18,9 @@ void Game::run()
 	boardPt->setPiece({ 0, 1 }, std::make_unique<Knight>(Piece::Color::Black, 211));
 	boardPt->setPiece({ 0, 6 }, std::make_unique<Knight>(Piece::Color::Black, 212));
 
+	boardPt->setPiece({ 0, 2 }, std::make_unique<Bishop>(Piece::Color::Black, 242));
+	boardPt->setPiece({ 0, 5 }, std::make_unique<Bishop>(Piece::Color::Black, 242));
+
 	boardPt->setPiece({ 0, 0 }, std::make_unique<Rook>(Piece::Color::Black, 221));
 	boardPt->setPiece({ 0, 7 }, std::make_unique<Rook>(Piece::Color::Black, 222));
 	
@@ -34,6 +37,9 @@ void Game::run()
 
 	boardPt->setPiece({ 7, 1 }, std::make_unique<Knight>(Piece::Color::White, 111));
 	boardPt->setPiece({ 7, 6 }, std::make_unique<Knight>(Piece::Color::White, 112));
+
+	boardPt->setPiece({ 7, 2 }, std::make_unique<Bishop>(Piece::Color::White, 142));
+	boardPt->setPiece({ 7, 5 }, std::make_unique<Bishop>(Piece::Color::White, 142));
 
 	boardPt->setPiece({ 7, 0 }, std::make_unique<Rook>(Piece::Color::White, 121));
 	boardPt->setPiece({ 7, 7 }, std::make_unique<Rook>(Piece::Color::White, 122));

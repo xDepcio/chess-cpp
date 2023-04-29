@@ -300,6 +300,52 @@ std::vector<std::pair<int, int>> Board::getVerticalMoves(std::pair<int, int> atC
 	return validVerticalMoves;
 }
 
+std::vector<std::pair<int, int>> Board::getDiagonalMoves(std::pair<int, int> atCoords, bool ignoreCheck)
+{
+	int row = atCoords.first;
+	int col = atCoords.second;
+	Piece* pieceAtCoords = squares[row][col].getPiece();
+
+	std::vector<std::pair<int, int>> validDiagonalMoves;
+
+	int dir = -1;
+	int checkRow = row;
+	int checkColLeft = col;
+	int checkColRight = col;
+	bool leftInvalid = false;
+	bool rightInvalid = false;
+
+	while (dir <= 1)
+	{
+		checkRow += dir;
+		checkColLeft += dir;
+		checkColRight -= dir;
+
+		if (!leftInvalid)
+		{
+			Board::moveState mvFeedbackLeft = addMoveIfValid(atCoords, { checkRow, checkColLeft }, validDiagonalMoves);
+			leftInvalid = mvFeedbackLeft.status == Board::moveState::Status::invalid;
+		}
+		if (!rightInvalid)
+		{
+			Board::moveState mvFeedbackRight = addMoveIfValid(atCoords, { checkRow, checkColRight }, validDiagonalMoves);
+			rightInvalid = mvFeedbackRight.status == Board::moveState::Status::invalid;
+		}
+
+		if (leftInvalid && rightInvalid)
+		{
+			checkRow = row;
+			checkColLeft = col;
+			checkColRight = col;
+			dir += 2;
+			leftInvalid = false;
+			rightInvalid = false;
+		}
+	}
+
+	return validDiagonalMoves;
+}
+
 
 void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 {
@@ -355,4 +401,43 @@ bool Board::areCoordinatesValid(std::pair<int, int> coordinates) const
 		return false;
 	
 	return true;
+}
+
+Board::moveState Board::addMoveIfValid(std::pair<int, int>& from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
+{
+	moveState feedback = moveState();
+	
+	Piece* movedPiece = getPiece(from);
+
+	if (!areCoordinatesValid(to))
+	{
+		feedback.status = Board::moveState::Status::invalid;
+		feedback.reason = Board::moveState::Reason::invalid_wrong_coords;
+		return feedback;
+	}
+
+	Piece* pieceMovedTo = squares[to.first][to.second].getPiece();
+	if (pieceMovedTo == nullptr || pieceMovedTo->getColor() != movedPiece->getColor())
+	{
+		auto taken = setPiece(to, setPiece(from, nullptr));
+		if (ignoreCheck || !isCheck(movedPiece->getColor()))
+		{
+			feedback.status = Board::moveState::Status::valid;
+			feedback.reason = pieceMovedTo == nullptr ? Board::moveState::Reason::valid_empty : Board::moveState::Reason::valid_takes_enemy;
+			addTo.push_back(to);
+		}
+		// else (if is check)
+		else
+		{
+			feedback.status = Board::moveState::Status::invalid;
+			feedback.reason = Board::moveState::Reason::invalid_causes_own_check;
+		}
+		setPiece(from, setPiece(to, std::move(taken)));
+		return feedback;
+	}
+
+	// If would take own piece
+	feedback.status = Board::moveState::Status::invalid;
+	feedback.reason = Board::moveState::Reason::invalid_takes_own;
+	return feedback;
 }

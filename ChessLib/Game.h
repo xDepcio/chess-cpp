@@ -6,6 +6,7 @@
 #include <sstream>
 #include "Knight.h"
 #include "Rook.h"
+#include "Bishop.h"
 
 class Game
 {
