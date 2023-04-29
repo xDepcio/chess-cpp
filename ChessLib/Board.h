@@ -8,6 +8,7 @@
 #include <typeinfo>
 #include "Knight.h"
 #include "Rook.h"
+#include "Bishop.h"
 
 class Board
 {
