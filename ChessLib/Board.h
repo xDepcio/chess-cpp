@@ -6,6 +6,8 @@
 #include <vector>
 #include <iostream>
 #include <typeinfo>
+#include "Knight.h"
+#include "Rook.h"
 
 class Board
 {
@@ -20,7 +22,6 @@ public:
 
 	Piece* getPiece(std::pair<int, int> coords) const;
 
-	//King* getKing(Piece::Color const kingColor) const;
 	std::pair<int, int> getKingLocation(Piece::Color const kingColor) const;
 
 	std::vector<std::pair<int, int>> getPawnMoves(std::pair<int, int> atCoords, bool ignoreCheck = false);
@@ -31,7 +32,7 @@ public:
 
 	void move(std::pair<int, int> from, std::pair<int, int> to);
 
-	bool isCheck(Piece::Color const piecesColor) const;
+	bool isCheck(Piece::Color const piecesColor);
 
 	bool areCoordinatesValid(std::pair<int, int> coordinates) const;
 

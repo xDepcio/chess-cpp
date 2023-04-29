@@ -41,3 +41,8 @@ void Piece::handleGotTaken(Piece* takenBy)
     // TODO... Do something when piece is taken
 }
 
+Piece::Color Piece::otherColor() const
+{
+    return color == Color::White ? Color::Black : Color::White;
+}
+

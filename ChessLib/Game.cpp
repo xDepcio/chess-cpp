@@ -20,6 +20,8 @@ void Game::run()
 
 	boardPt->setPiece({ 0, 0 }, std::make_unique<Rook>(Piece::Color::Black, 221));
 	boardPt->setPiece({ 0, 7 }, std::make_unique<Rook>(Piece::Color::Black, 222));
+	
+	boardPt->setPiece({ 0, 4 }, std::make_unique<King>(Piece::Color::Black, 231));
 
 	boardPt->setPiece({ 6, 0 }, std::make_unique<Pawn>(Piece::Color::White, 101));
 	boardPt->setPiece({ 6, 1 }, std::make_unique<Pawn>(Piece::Color::White, 102));
@@ -35,6 +37,8 @@ void Game::run()
 
 	boardPt->setPiece({ 7, 0 }, std::make_unique<Rook>(Piece::Color::White, 121));
 	boardPt->setPiece({ 7, 7 }, std::make_unique<Rook>(Piece::Color::White, 122));
+
+	boardPt->setPiece({ 7, 4 }, std::make_unique<King>(Piece::Color::White, 131));
 
 	std::vector<std::string> messages;
 	do

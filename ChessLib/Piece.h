@@ -34,6 +34,8 @@ public:
 
 	void handleGotTaken(Piece* takenBy);
 
+	Color otherColor() const;
+
 protected:
 	Color color;
 	std::string pieceSignature;

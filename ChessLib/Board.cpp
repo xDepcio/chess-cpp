@@ -303,16 +303,46 @@ std::vector<std::pair<int, int>> Board::getVerticalMoves(std::pair<int, int> atC
 
 void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 {
-	if (this->getPiece(from)->isMoveValid(this, from, to))
+	// moves found piece (doesn't check if move is valid)
+	if (this->getPiece(from))
 	{
 		this->getPiece(from)->handleGotMoved();
 		setPiece(to, setPiece(from, nullptr));
+
+		// If current moved checked enemy
+		if (isCheck(getPiece(to)->otherColor()))
+		{
+			//bool checkMate = isCheckMate();
+		}
 	}
 }
 
-bool Board::isCheck(Piece::Color const piecesColor) const
+bool Board::isCheck(Piece::Color const piecesColor)
 {
 	auto kingCoords = getKingLocation(piecesColor);
+	Piece* king = getPiece(kingCoords);
+
+	auto knightChecks = getKnightMoves(kingCoords, true);
+	auto rookChecksVer = getVerticalMoves(kingCoords, true);
+	auto rookChecksHor = getHorizontalMoves(kingCoords, true);
+	//TODO... Add bishop moves.
+
+	std::vector<std::pair<int, int>> rookChecks;
+	rookChecks.insert(rookChecks.end(), rookChecksVer.begin(), rookChecksVer.end());
+	rookChecks.insert(rookChecks.end(), rookChecksHor.begin(), rookChecksHor.end());
+
+	for (auto& move : knightChecks)
+	{
+		if ( Knight* p = dynamic_cast<Knight*>(getPiece(move)) )
+			return true;
+	}
+
+	for (auto& move : rookChecks)
+	{
+		if (Rook* p = dynamic_cast<Rook*>(getPiece(move)))
+			return true;
+	}
+
 	return false;
 }
 
