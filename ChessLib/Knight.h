@@ -9,6 +9,6 @@ public:
 	Knight(Color withColor);
 	Knight(Color withColor, int id);
 
-	std::vector<std::pair<int, int>> getValidMoves(Board* board, std::pair<int, int> const& atCoords) const override;
+	std::vector<std::pair<int, int>> getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck = false) const override;
 };
 

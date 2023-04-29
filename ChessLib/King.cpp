@@ -5,7 +5,7 @@ King::King(Color withColor) : Piece(withColor)
 	Piece::pieceSignature = "K";
 }
 
-std::vector<std::pair<int, int>> King::getValidMoves(Board* board, std::pair<int, int> const& atCoords) const
+std::vector<std::pair<int, int>> King::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
-	return board->getKingMoves(atCoords);
+	return board->getKingMoves(atCoords, ignoreCheck);
 }

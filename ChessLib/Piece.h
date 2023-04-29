@@ -20,7 +20,7 @@ public:
 
 	bool isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const;
 
-	virtual std::vector<std::pair<int, int>> getValidMoves(Board* board, std::pair<int, int> const& atCoords) const = 0;
+	virtual std::vector<std::pair<int, int>> getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck = false) const = 0;
 
 	void gotCaptured(Piece const& captuedBy) {};
 

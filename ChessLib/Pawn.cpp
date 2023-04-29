@@ -23,7 +23,7 @@ Pawn::Pawn(Color withColor, int id) : Piece(withColor, id)
 //    return false;
 //}
 
-std::vector<std::pair<int, int>> Pawn::getValidMoves(Board* board, std::pair<int, int> const& atCoords) const
+std::vector<std::pair<int, int>> Pawn::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
-    return board->getPawnMoves(atCoords);
+    return board->getPawnMoves(atCoords, ignoreCheck);
 }

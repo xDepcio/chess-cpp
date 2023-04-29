@@ -10,7 +10,7 @@ Knight::Knight(Color withColor, int id) : Piece(withColor, id)
 	Piece::pieceSignature = "k";
 }
 
-std::vector<std::pair<int, int>> Knight::getValidMoves(Board* board, std::pair<int, int> const& atCoords) const
+std::vector<std::pair<int, int>> Knight::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
-	return board->getKnightMoves(atCoords);
+	return board->getKnightMoves(atCoords, ignoreCheck);
 }
