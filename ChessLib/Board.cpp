@@ -136,7 +136,21 @@ std::vector<std::pair<int, int>> Board::getPawnMoves(std::pair<int, int> atCoord
 
 std::vector<std::pair<int, int>> Board::getKingMoves(std::pair<int, int> atCoords, bool ignoreCheck)
 {
-	std::vector<std::pair<int, int>> validKingMoves = {};
+	std::vector<std::pair<int, int>> validKingMoves;
+	std::vector<std::pair<int, int>> movesToCheck = {
+		{atCoords.first - 1, atCoords.second - 1},
+		{atCoords.first - 1, atCoords.second},
+		{atCoords.first - 1, atCoords.second + 1},
+		{atCoords.first, atCoords.second - 1},
+		{atCoords.first, atCoords.second + 1},
+		{atCoords.first + 1, atCoords.second - 1},
+		{atCoords.first + 1, atCoords.second},
+		{atCoords.first + 1, atCoords.second + 1},
+	};
+
+	for (auto& move : movesToCheck)
+		addMoveIfValid(atCoords, move, validKingMoves, ignoreCheck);
+
 	return validKingMoves;
 }
 
