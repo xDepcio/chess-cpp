@@ -39,6 +39,8 @@ public:
 
 	bool isCheck(Piece::Color const piecesColor);
 
+	bool isCheckMate(Piece::Color const piecesColor);
+
 	bool areCoordinatesValid(std::pair<int, int> coordinates) const;
 
 private:

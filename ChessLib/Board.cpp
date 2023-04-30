@@ -404,7 +404,11 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 		// If current moved checked enemy
 		if (isCheck(getPiece(to)->otherColor()))
 		{
-			//bool checkMate = isCheckMate();
+			if (isCheckMate(getPiece(to)->otherColor()))
+			{
+				std::cout << "CHECK MATE!";
+				throw std::runtime_error("CHECKMATE NOT HANDLED YET!");
+			}
 		}
 	}
 }
@@ -431,17 +435,46 @@ bool Board::isCheck(Piece::Color const piecesColor)
 
 	for (auto& move : rookChecks)
 	{
-		if (Rook* p = dynamic_cast<Rook*>(getPiece(move)))
+		Queen* q = dynamic_cast<Queen*>(getPiece(move));
+		Rook* r = dynamic_cast<Rook*>(getPiece(move));
+		if (q || r)
 			return true;
 	}
 
 	for (auto& move : bishopChecks)
 	{
-		if (Bishop* b = dynamic_cast<Bishop*>(getPiece(move)))
+		Bishop* b = dynamic_cast<Bishop*>(getPiece(move));
+		Queen* q = dynamic_cast<Queen*>(getPiece(move));
+		if (b || q)
+			return true;
+
+		// checked by pawn
+		Pawn* p = dynamic_cast<Pawn*>(getPiece(move));
+		int dir = piecesColor == Piece::Color::White ? 1 : -1;
+		if ((move.first - kingCoords.first) * dir == 1 && p)
 			return true;
 	}
 
 	return false;
+}
+
+bool Board::isCheckMate(Piece::Color const piecesColor)
+{
+	for (int row = 0; row < squares.size(); row++)
+	{
+		for (int col = 0; col < squares[0].size(); col++)
+		{
+			Square& sqr = squares[row][col];
+			Piece* piece = sqr.getPiece();
+			if (piece != nullptr && piece->getColor() == piecesColor)
+			{
+				auto validMoves = piece->getValidMoves(this, { row, col });
+				if (validMoves.size() > 0)
+					return false;
+			}
+		}
+	}
+	return true;
 }
 
 bool Board::areCoordinatesValid(std::pair<int, int> coordinates) const
