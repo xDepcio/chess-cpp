@@ -112,20 +112,24 @@ std::vector<std::pair<int, int>> Board::getPawnMoves(std::pair<int, int> atCoord
 		Piece* pieceInFront = getPiece({ atCoords.first - (1 * dir), atCoords.second });
 		if (pieceInFront == nullptr)
 		{
+			auto taken = setPiece({ atCoords.first - (1 * dir), atCoords.second }, setPiece(atCoords, nullptr));
 			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
 			{
 				validMoves.push_back({ atCoords.first - (1 * dir), atCoords.second });
 			}
+			setPiece(atCoords, setPiece({ atCoords.first - (1 * dir), atCoords.second }, std::move(taken)));
 
 			if (!pieceAtCoords->hasMadeFirstMove() && areCoordinatesValid({ atCoords.first - (2 * dir), atCoords.second }))
 			{
 				Piece* twoInFront = getPiece({ atCoords.first - (2 * dir), atCoords.second });
 				if (twoInFront == nullptr)
 				{
+					auto taken = setPiece({ atCoords.first - (2 * dir), atCoords.second }, setPiece(atCoords, nullptr));
 					if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
 					{
 						validMoves.push_back({ atCoords.first - (2 * dir), atCoords.second });
 					}
+					setPiece(atCoords, setPiece({ atCoords.first - (2 * dir), atCoords.second }, std::move(taken)));
 				}
 			}
 		}
