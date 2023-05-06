@@ -83,6 +83,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ClickableLabel.cpp" />
     <ClCompile Include="QtGame.cpp" />
     <QtRcc Include="ChessAppQt.qrc" />
     <QtUic Include="ChessAppQt.ui" />
@@ -91,6 +92,7 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <QtMoc Include="ClickableLabel.h" />
     <ClInclude Include="QtGame.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="resource1.h" />

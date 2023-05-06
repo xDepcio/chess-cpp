@@ -4,6 +4,7 @@
 #include <iostream>
 #include "ui_ChessAppQt.h"
 #include "QtGame.h"
+#include "ClickableLabel.h"
 
 class ChessAppQt : public QMainWindow
 {
@@ -15,8 +16,11 @@ public:
 
     void startGame();
     void updateBoard();
+    void connectSquares();
 
     std::string getPathToPiece(Piece* piece) const;
+
+    void handleBoardFieldClick(std::pair<int, int> const& fieldCoords);
 
 private:
     Ui::ChessAppQtClass ui;

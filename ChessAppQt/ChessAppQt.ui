@@ -86,7 +86,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row0col0label">
+                  <widget class="ClickableLabel" name="row0col0label">
                    <property name="text">
                     <string>testName</string>
                    </property>
@@ -117,7 +117,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row0col1label">
+                  <widget class="ClickableLabel" name="row0col1label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -148,7 +148,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row0col2label">
+                  <widget class="ClickableLabel" name="row0col2label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -179,7 +179,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row0col3label">
+                  <widget class="ClickableLabel" name="row0col3label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -210,7 +210,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row0col4label">
+                  <widget class="ClickableLabel" name="row0col4label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -241,7 +241,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row0col5label">
+                  <widget class="ClickableLabel" name="row0col5label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -272,7 +272,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row0col6label">
+                  <widget class="ClickableLabel" name="row0col6label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -303,7 +303,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row0col7label">
+                  <widget class="ClickableLabel" name="row0col7label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -355,7 +355,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row1col0label">
+                  <widget class="ClickableLabel" name="row1col0label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -386,7 +386,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row1col1label">
+                  <widget class="ClickableLabel" name="row1col1label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -417,7 +417,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row1col2label">
+                  <widget class="ClickableLabel" name="row1col2label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -448,7 +448,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row1col3label">
+                  <widget class="ClickableLabel" name="row1col3label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -479,7 +479,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row1col4label">
+                  <widget class="ClickableLabel" name="row1col4label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -510,7 +510,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row1col5label">
+                  <widget class="ClickableLabel" name="row1col5label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -541,7 +541,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row1col6label">
+                  <widget class="ClickableLabel" name="row1col6label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -572,7 +572,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row1col7label">
+                  <widget class="ClickableLabel" name="row1col7label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -624,7 +624,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row2col0label">
+                  <widget class="ClickableLabel" name="row2col0label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -655,7 +655,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row2col1label">
+                  <widget class="ClickableLabel" name="row2col1label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -686,7 +686,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row2col2label">
+                  <widget class="ClickableLabel" name="row2col2label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -717,7 +717,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row2col3label">
+                  <widget class="ClickableLabel" name="row2col3label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -748,7 +748,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row2col4label">
+                  <widget class="ClickableLabel" name="row2col4label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -779,7 +779,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row2col5label">
+                  <widget class="ClickableLabel" name="row2col5label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -810,7 +810,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row2col6label">
+                  <widget class="ClickableLabel" name="row2col6label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -841,7 +841,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row2col7label">
+                  <widget class="ClickableLabel" name="row2col7label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -893,7 +893,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row3col0label">
+                  <widget class="ClickableLabel" name="row3col0label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -924,7 +924,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row3col1label">
+                  <widget class="ClickableLabel" name="row3col1label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -955,7 +955,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row3col2label">
+                  <widget class="ClickableLabel" name="row3col2label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -986,7 +986,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row3col3label">
+                  <widget class="ClickableLabel" name="row3col3label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1017,7 +1017,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row3col4label">
+                  <widget class="ClickableLabel" name="row3col4label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1048,7 +1048,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row3col5label">
+                  <widget class="ClickableLabel" name="row3col5label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1079,7 +1079,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row3col6label">
+                  <widget class="ClickableLabel" name="row3col6label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1110,7 +1110,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row3col7label">
+                  <widget class="ClickableLabel" name="row3col7label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1162,7 +1162,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row4col0label">
+                  <widget class="ClickableLabel" name="row4col0label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1193,7 +1193,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row4col1label">
+                  <widget class="ClickableLabel" name="row4col1label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1224,7 +1224,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row4col2label">
+                  <widget class="ClickableLabel" name="row4col2label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1255,7 +1255,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row4col3label">
+                  <widget class="ClickableLabel" name="row4col3label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1286,7 +1286,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row4col4label">
+                  <widget class="ClickableLabel" name="row4col4label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1317,7 +1317,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row4col5label">
+                  <widget class="ClickableLabel" name="row4col5label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1348,7 +1348,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row4col6label">
+                  <widget class="ClickableLabel" name="row4col6label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1379,7 +1379,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row4col7label">
+                  <widget class="ClickableLabel" name="row4col7label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1431,7 +1431,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row5col0label">
+                  <widget class="ClickableLabel" name="row5col0label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1462,7 +1462,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row5col1label">
+                  <widget class="ClickableLabel" name="row5col1label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1493,7 +1493,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row5col2label">
+                  <widget class="ClickableLabel" name="row5col2label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1524,7 +1524,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row5col3label">
+                  <widget class="ClickableLabel" name="row5col3label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1555,7 +1555,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row5col4label">
+                  <widget class="ClickableLabel" name="row5col4label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1586,7 +1586,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row5col5label">
+                  <widget class="ClickableLabel" name="row5col5label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1617,7 +1617,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row5col6label">
+                  <widget class="ClickableLabel" name="row5col6label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1648,7 +1648,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row5col7label">
+                  <widget class="ClickableLabel" name="row5col7label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1700,7 +1700,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row6col0label">
+                  <widget class="ClickableLabel" name="row6col0label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1731,7 +1731,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row6col1label">
+                  <widget class="ClickableLabel" name="row6col1label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1762,7 +1762,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row6col2label">
+                  <widget class="ClickableLabel" name="row6col2label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1793,7 +1793,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row6col3label">
+                  <widget class="ClickableLabel" name="row6col3label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1824,7 +1824,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row6col4label">
+                  <widget class="ClickableLabel" name="row6col4label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1855,7 +1855,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row6col5label">
+                  <widget class="ClickableLabel" name="row6col5label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1886,7 +1886,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row6col6label">
+                  <widget class="ClickableLabel" name="row6col6label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1917,7 +1917,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row6col7label">
+                  <widget class="ClickableLabel" name="row6col7label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -1969,7 +1969,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row7col0label">
+                  <widget class="ClickableLabel" name="row7col0label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -2000,7 +2000,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row7col1label">
+                  <widget class="ClickableLabel" name="row7col1label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -2031,7 +2031,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row7col2label">
+                  <widget class="ClickableLabel" name="row7col2label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -2062,7 +2062,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row7col3label">
+                  <widget class="ClickableLabel" name="row7col3label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -2093,7 +2093,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row7col4label">
+                  <widget class="ClickableLabel" name="row7col4label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -2124,7 +2124,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row7col5label">
+                  <widget class="ClickableLabel" name="row7col5label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -2155,7 +2155,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row7col6label">
+                  <widget class="ClickableLabel" name="row7col6label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -2186,7 +2186,7 @@
                   <number>0</number>
                  </property>
                  <item>
-                  <widget class="QLabel" name="row7col7label">
+                  <widget class="ClickableLabel" name="row7col7label">
                    <property name="text">
                     <string>TextLabel</string>
                    </property>
@@ -2256,6 +2256,13 @@
   <widget class="QStatusBar" name="statusBar"/>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>ClickableLabel</class>
+   <extends>QLabel</extends>
+   <header>clickablelabel.h</header>
+  </customwidget>
+ </customwidgets>
  <resources>
   <include location="ChessAppQt.qrc"/>
  </resources>

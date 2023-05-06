@@ -16,7 +16,7 @@ public:
 
 	void setupBoard();
 	void run();
-
+	
 	std::vector<std::vector<Square> >& getBoard();
 };
 
