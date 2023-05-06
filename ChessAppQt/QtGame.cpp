@@ -56,3 +56,8 @@ void QtGame::run()
 {
 	setupBoard();
 }
+
+std::vector<std::vector<Square>>& QtGame::getBoard()
+{
+	return trackedBoard->getBoard();
+}

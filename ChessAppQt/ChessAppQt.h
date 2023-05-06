@@ -1,6 +1,7 @@
 #pragma once
 
 #include <QtWidgets/QMainWindow>
+#include <iostream>
 #include "ui_ChessAppQt.h"
 #include "QtGame.h"
 
@@ -14,6 +15,8 @@ public:
 
     void startGame();
     void updateBoard();
+
+    std::string getPathToPiece(Piece* piece) const;
 
 private:
     Ui::ChessAppQtClass ui;

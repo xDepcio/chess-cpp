@@ -100,12 +100,6 @@
       <Project>{6e5fe92a-8685-4658-8039-0d8514414656}</Project>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="ChessAppQt.rc" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="D:\Biblioteki\Pobrane\pawn.png" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
     <Import Project="$(QtMsBuild)\qt.targets" />
