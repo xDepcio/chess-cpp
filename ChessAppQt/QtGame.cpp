@@ -50,6 +50,8 @@ void QtGame::setupBoard()
 	boardPt->setPiece({ 7, 4 }, std::make_unique<King>(Piece::Color::White, 131));
 
 	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Piece::Color::White, 151));
+
+	//lastBoardState = boardPt->getBoard();
 }
 
 void QtGame::run()
@@ -57,7 +59,57 @@ void QtGame::run()
 	setupBoard();
 }
 
-std::vector<std::vector<Square>>& QtGame::getBoard()
+Piece::Color QtGame::getTurnColor() const
+{
+	return turn;
+}
+
+void QtGame::setTurnColor(Piece::Color color)
+{
+	turn = color;
+}
+
+Piece* QtGame::getPieceAtCoords(std::pair<int, int> const& coords) const
+{
+	return trackedBoard->getPiece(coords);
+}
+
+Board* QtGame::getBoard() const
+{
+	return trackedBoard;
+}
+
+std::vector<std::vector<Square>>& QtGame::getSquares()
 {
 	return trackedBoard->getBoard();
+}
+
+void QtGame::setClickedPiece(Piece* piece)
+{
+	clickedPiece = piece;
+}
+
+void QtGame::setClickedPieceCoords(std::pair<int, int> const& coords)
+{
+	clickedPieceCoords = coords;
+}
+
+bool QtGame::isMoveValid(std::pair<int, int> const& from, std::pair<int, int> const& to)
+{
+	return trackedBoard->getPiece(from)->isMoveValid(trackedBoard, from, to);
+}
+
+void QtGame::move(std::pair<int, int> const& from, std::pair<int, int> const& to)
+{
+	trackedBoard->move(from, to);
+}
+
+Piece* QtGame::getClickedPiece() const
+{
+	return clickedPiece;
+}
+
+std::pair<int, int> QtGame::getClickedPieceCoords() const
+{
+	return clickedPieceCoords;
 }

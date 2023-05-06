@@ -16,6 +16,7 @@ public:
 
     void startGame();
     void updateBoard();
+    void updateSquares(std::vector<std::pair<int, int>>& coordsToUpdate);
     void connectSquares();
 
     std::string getPathToPiece(Piece* piece) const;

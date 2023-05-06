@@ -11,12 +11,33 @@ class QtGame
 {
 private:
 	Board* trackedBoard;
+	Piece::Color turn;
+	Piece* clickedPiece;
+	std::pair<int, int> clickedPieceCoords;
+
 public:
-	QtGame() : trackedBoard(nullptr) {};
+	QtGame() : trackedBoard(nullptr), turn(Piece::Color::White), clickedPiece(nullptr), clickedPieceCoords({}) {};
 
 	void setupBoard();
 	void run();
+
+	Piece::Color getTurnColor() const;
+	void setTurnColor(Piece::Color color);
+
+	Piece* getPieceAtCoords(std::pair<int, int> const& coords) const;
 	
-	std::vector<std::vector<Square> >& getBoard();
+	std::vector<std::vector<Square> >& getSquares();
+
+	bool isMoveValid(std::pair<int, int> const& from, std::pair<int, int> const& to);
+
+	void move(std::pair<int, int> const& from, std::pair<int, int> const& to);
+
+	void setClickedPiece(Piece* piece);
+	void setClickedPieceCoords(std::pair<int, int> const& coords);
+
+	Piece* getClickedPiece() const;
+	std::pair<int, int> getClickedPieceCoords() const;
+
+	Board* getBoard() const;
 };
 

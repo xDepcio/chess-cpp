@@ -32,7 +32,7 @@ void ChessAppQt::updateBoard()
         ui.row7col0label, ui.row7col1label, ui.row7col2label, ui.row7col3label, ui.row7col4label, ui.row7col5label, ui.row7col6label, ui.row7col7label,
     };
 
-    std::vector<std::vector<Square>>& squares = playedGame->getBoard();
+    std::vector<std::vector<Square>>& squares = playedGame->getSquares();
 
     int qtSquareNum = 0;
     for (auto& row : squares)
@@ -42,11 +42,40 @@ void ChessAppQt::updateBoard()
             std::string pathToPiece = getPathToPiece(sqr.getPiece());
             QString qImagePath = QString::fromStdString(pathToPiece);
             QPixmap pixmap(qImagePath);
-            pixmap = pixmap.scaled(qtSquares[qtSquareNum]->size()*2, Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            pixmap = pixmap.scaled(qtSquares[qtSquareNum]->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
             qtSquares[qtSquareNum]->setPixmap(pixmap);
             qtSquares[qtSquareNum]->setAlignment(Qt::AlignCenter);
             qtSquareNum++;
         }
+    }
+}
+
+void ChessAppQt::updateSquares(std::vector<std::pair<int, int>>& coordsToUpdate)
+{
+    std::vector<std::vector<ClickableLabel*>> qtSquares = {
+        { ui.row0col0label, ui.row0col1label, ui.row0col2label, ui.row0col3label, ui.row0col4label, ui.row0col5label, ui.row0col6label, ui.row0col7label },
+        { ui.row1col0label, ui.row1col1label, ui.row1col2label, ui.row1col3label, ui.row1col4label, ui.row1col5label, ui.row1col6label, ui.row1col7label },
+        { ui.row2col0label, ui.row2col1label, ui.row2col2label, ui.row2col3label, ui.row2col4label, ui.row2col5label, ui.row2col6label, ui.row2col7label },
+        { ui.row3col0label, ui.row3col1label, ui.row3col2label, ui.row3col3label, ui.row3col4label, ui.row3col5label, ui.row3col6label, ui.row3col7label },
+        { ui.row4col0label, ui.row4col1label, ui.row4col2label, ui.row4col3label, ui.row4col4label, ui.row4col5label, ui.row4col6label, ui.row4col7label },
+        { ui.row5col0label, ui.row5col1label, ui.row5col2label, ui.row5col3label, ui.row5col4label, ui.row5col5label, ui.row5col6label, ui.row5col7label },
+        { ui.row6col0label, ui.row6col1label, ui.row6col2label, ui.row6col3label, ui.row6col4label, ui.row6col5label, ui.row6col6label, ui.row6col7label },
+        { ui.row7col0label, ui.row7col1label, ui.row7col2label, ui.row7col3label, ui.row7col4label, ui.row7col5label, ui.row7col6label, ui.row7col7label },
+    };
+    std::vector<std::vector<Square>>& squares = playedGame->getSquares();
+
+    for (auto& coord : coordsToUpdate)
+    {
+        Piece* piece = squares[coord.first][coord.second].getPiece();
+        ClickableLabel* label = qtSquares[coord.first][coord.second];
+
+        std::string pathToPiece = getPathToPiece(piece);
+        QString qImagePath = QString::fromStdString(pathToPiece);
+        QPixmap pixmap(qImagePath);
+        pixmap = pixmap.scaled(label->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+        label->setPixmap(pixmap);
+        label->setAlignment(Qt::AlignCenter);
+
     }
 }
 
@@ -67,17 +96,11 @@ void ChessAppQt::connectSquares()
     int colNum = 0;
     for (auto& row : qtSquares)
     {
+        colNum = 0;
         for (auto& sqr : row)
         {
-            //connect(sqr, &ClickableLabel::clicked, this, &ChessAppQt::handleBoardFieldClick);
-            sqr->setProperty("row", rowNum);
-            sqr->setProperty("col", colNum);
-
-            connect(sqr, &ClickableLabel::clicked, this, [this, sqr]() {
-                int rowNumPassed = sqr->property("row").toInt();
-                int colNumPassed = sqr->property("col").toInt();
-
-                handleBoardFieldClick({ rowNumPassed, colNumPassed });
+            connect(sqr, &ClickableLabel::clicked, this, [this, sqr, rowNum, colNum]() {
+                handleBoardFieldClick({ rowNum, colNum });
             });
 
             colNum++;
@@ -116,6 +139,38 @@ std::string ChessAppQt::getPathToPiece(Piece* piece) const
 
 void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
 {
-    throw std::runtime_error("xd");
+    Piece* clickedPiece = playedGame->getPieceAtCoords(fieldCoords);
+    Piece* prevClicked = playedGame->getClickedPiece();
+    auto prevCoords = playedGame->getClickedPieceCoords();
+
+    if ( (prevClicked == nullptr) || (prevClicked->getColor() != playedGame->getTurnColor() && clickedPiece == nullptr) || (prevClicked->getColor() != playedGame->getTurnColor() && clickedPiece->getColor() != playedGame->getTurnColor() ) ) // prev and now clicked on empty
+    {
+        playedGame->setClickedPiece(clickedPiece);
+        playedGame->setClickedPieceCoords(fieldCoords);
+    }
+    else if ( (prevClicked->getColor() == playedGame->getTurnColor() && clickedPiece == nullptr) || (prevClicked->getColor() == playedGame->getTurnColor() && clickedPiece->getColor() != playedGame->getTurnColor()) )
+    {
+        // valid move and move
+        if (playedGame->isMoveValid(prevCoords, fieldCoords))
+        {
+            playedGame->move(prevCoords, fieldCoords);
+            playedGame->setTurnColor(playedGame->getTurnColor() == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
+            std::vector<std::pair<int, int>> toUpdate = { prevCoords, fieldCoords };
+            updateSquares(toUpdate);
+        }
+        playedGame->setClickedPiece(nullptr);
+        playedGame->setClickedPieceCoords({});
+    }
+    else if (clickedPiece->getColor() == playedGame->getTurnColor()) // clicked on own
+    {
+        // display valid moves
+        auto validMoves = playedGame->getPieceAtCoords(fieldCoords)->getValidMoves(playedGame->getBoard(), fieldCoords);
+        playedGame->setClickedPiece(clickedPiece);
+        playedGame->setClickedPieceCoords(fieldCoords);
+    }
+    else
+    {
+        throw std::runtime_error(":(");
+    }
 }
 
