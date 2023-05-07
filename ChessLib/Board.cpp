@@ -267,7 +267,7 @@ std::vector<std::pair<int, int>> Board::getHorizontalMoves(std::pair<int, int> a
 	{
 		checkCol += dir;
 		Board::moveState mvFeedback = addMoveIfValid(atCoords, { row, checkCol }, validHorizontalMoves, ignoreCheck);
-		if (mvFeedback.status == Board::moveState::Status::invalid)
+		if (mvFeedback.status == Board::moveState::Status::invalid || mvFeedback.reason == Board::moveState::Reason::valid_takes_enemy)
 		{
 			dir += 2;
 			checkCol = col;
@@ -292,7 +292,7 @@ std::vector<std::pair<int, int>> Board::getVerticalMoves(std::pair<int, int> atC
 	{
 		checkRow += dir;
 		Board::moveState mvFeedback = addMoveIfValid(atCoords, { checkRow, col }, validVerticalMoves, ignoreCheck);
-		if (mvFeedback.status == Board::moveState::Status::invalid)
+		if (mvFeedback.status == Board::moveState::Status::invalid || mvFeedback.reason == Board::moveState::Reason::valid_takes_enemy)
 		{
 			dir += 2;
 			checkRow = row;
@@ -374,12 +374,12 @@ std::vector<std::pair<int, int>> Board::getDiagonalMoves(std::pair<int, int> atC
 		if (!leftInvalid)
 		{
 			Board::moveState mvFeedbackLeft = addMoveIfValid(atCoords, { checkRow, checkColLeft }, validDiagonalMoves, ignoreCheck);
-			leftInvalid = mvFeedbackLeft.status == Board::moveState::Status::invalid;
+			leftInvalid = mvFeedbackLeft.status == Board::moveState::Status::invalid || mvFeedbackLeft.reason == Board::moveState::Reason::valid_takes_enemy;
 		}
 		if (!rightInvalid)
 		{
 			Board::moveState mvFeedbackRight = addMoveIfValid(atCoords, { checkRow, checkColRight }, validDiagonalMoves, ignoreCheck);
-			rightInvalid = mvFeedbackRight.status == Board::moveState::Status::invalid;
+			rightInvalid = mvFeedbackRight.status == Board::moveState::Status::invalid || mvFeedbackRight.reason == Board::moveState::Reason::valid_takes_enemy;
 		}
 
 		if (leftInvalid && rightInvalid)

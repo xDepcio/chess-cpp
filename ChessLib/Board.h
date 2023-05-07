@@ -43,7 +43,7 @@ public:
 
 	bool areCoordinatesValid(std::pair<int, int> coordinates) const;
 
-private:
+protected:
 	int width;
 	int height;
 	std::vector<std::vector<Square> > squares = { };

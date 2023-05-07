@@ -167,6 +167,11 @@ namespace ChessUnitTests
 	TEST_CLASS(BoardUnitTests)
 	{
 	public:
+		class Board_ : private Board
+		{
+			Board_(int w, int h) : Board(w, h) {};
+			friend BoardUnitTests;
+		};
 		
 		TEST_METHOD(Board_getPawnMoves_forwardsPathClear)
 		{
@@ -243,6 +248,32 @@ namespace ChessUnitTests
 			b.move({ 1,6 }, { 2,6 });
 
 			Assert::IsTrue(bothStoreSameVals({ {3,7} }, b.getPawnMoves({ 2,6 })));
+		}
+		TEST_METHOD(Board_getRookMoves)
+		{
+			Board b(8, 8);
+			Board* bp = &b;
+			presetBoard(b, BoardPresets::STANDARD);
+			std::pair<int, int> rookCoords = { 2, 0 };
+			b.setPiece(rookCoords, std::make_unique<Rook>(Piece::Color::Black));
+
+			Assert::IsTrue(
+				bothStoreSameVals(
+					{ {3,0}, {4,0}, {5,0}, {6,0}, {2,1}, {2,2}, {2,3}, {2,4}, {2,5}, {2,6}, {2,7} },
+					b.getPiece(rookCoords)->getValidMoves(bp, rookCoords)
+				)
+			);
+		}
+		TEST_METHOD(Board_getBishopMoves)
+		{
+			Board b(8, 8);
+			Board* bp = &b;
+			presetBoard(b, BoardPresets::STANDARD);
+			std::pair<int, int> bishopCoords = { 1, 1 };
+			b.setPiece(bishopCoords, std::make_unique<Bishop>(Piece::Color::Black));
+			auto moves = b.getPiece(bishopCoords)->getValidMoves(bp, bishopCoords);
+
+			Assert::IsTrue(bothStoreSameVals({ {2,2}, {3,3}, {4,4}, {5,5}, {6,6}, {2,0} }, moves));
 		}
 	};
 }
