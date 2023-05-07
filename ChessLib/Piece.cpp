@@ -36,9 +36,19 @@ bool Piece::hasMadeFirstMove() const
     return madeFirstMove;
 }
 
+void Piece::setMadeFirstMove(bool boolean)
+{
+    madeFirstMove = boolean;
+}
+
 void Piece::handleGotTaken(Piece* takenBy)
 {
     // TODO... Do something when piece is taken
+}
+
+Piece::Type Piece::getType() const
+{
+    return type;
 }
 
 Piece::Color Piece::otherColor() const

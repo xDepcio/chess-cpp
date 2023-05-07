@@ -4,6 +4,7 @@ Board::Board(int width, int height)
 {
 	this->width = width;
 	this->height = height;
+	movesTracker = new MovesTracker(this);
 
 	for (int j = 0; j < height; j++)
 	{
@@ -13,6 +14,11 @@ Board::Board(int width, int height)
 			squares[j].push_back(Square());
 		}
 	}
+}
+
+Board::~Board()
+{
+	delete movesTracker;
 }
 
 std::unique_ptr<Piece> Board::setPiece(std::pair<int, int> cords, std::unique_ptr<Piece> piece)
@@ -400,10 +406,29 @@ std::vector<std::pair<int, int>> Board::getDiagonalMoves(std::pair<int, int> atC
 void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 {
 	// moves found piece (doesn't check if move is valid)
-	if (this->getPiece(from))
+	Piece* movedPiece = this->getPiece(from);
+	Piece* takenPiece = this->getPiece(to);
+
+	if (movedPiece)
 	{
+		bool tookPiece = this->getPiece(to) != nullptr;
+		bool takenPieceMoved = takenPiece != nullptr && takenPiece->hasMadeFirstMove();
+
+		MovesTracker::Move mv(
+			movedPiece->getType(),
+			takenPiece == nullptr ? Piece::Type::NONE : takenPiece->getType(), 
+			movedPiece->getColor(), 
+			from, 
+			to, 
+			takenPiece ? takenPiece->hasMadeFirstMove() : false
+		);
+		
+		movesTracker->addMove(mv);
+
 		this->getPiece(from)->handleGotMoved();
 		setPiece(to, setPiece(from, nullptr));
+
+		this->getPiece(to)->setMadeFirstMove(true);
 
 		// If current moved checked enemy
 		if (isCheck(getPiece(to)->otherColor()))
@@ -518,6 +543,11 @@ bool Board::areCoordinatesValid(std::pair<int, int> coordinates) const
 		return false;
 	
 	return true;
+}
+
+MovesTracker* Board::getMovesTracker() const
+{
+	return movesTracker;
 }
 
 Board::moveState Board::addMoveIfValid(std::pair<int, int>& from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)

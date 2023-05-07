@@ -15,8 +15,19 @@ public:
 		Black
 	};
 
-	Piece(Color withColor) : color(withColor), pieceSignature("x"), debugId(0) {};
-	Piece(Color withColor, int id) : color(withColor), pieceSignature("x"), debugId(id) {};
+	enum class Type
+	{
+		NONE,
+		PAWN,
+		KNIGHT,
+		ROOK,
+		BISHOP,
+		KING,
+		QUEEN
+	};
+
+	Piece(Color withColor) : color(withColor), pieceSignature("x"), debugId(0), type(Type::NONE) {};
+	Piece(Color withColor, int id) : color(withColor), pieceSignature("x"), debugId(id), type(Type::NONE) {};
 
 	bool isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const;
 
@@ -32,7 +43,11 @@ public:
 
 	bool hasMadeFirstMove() const;
 
+	void setMadeFirstMove(bool boolean);
+
 	void handleGotTaken(Piece* takenBy);
+
+	Type getType() const;
 
 	Color otherColor() const;
 
@@ -41,4 +56,5 @@ protected:
 	std::string pieceSignature;
 	int debugId;
 	bool madeFirstMove = false;
+	Type type;
 };

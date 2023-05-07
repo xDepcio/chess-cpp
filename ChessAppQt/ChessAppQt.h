@@ -21,6 +21,8 @@ public:
     void displayMoves(std::vector<std::pair<int, int>> const& moves);
     void clearDisplayMoves(std::vector<std::pair<int, int>> const& moves);
 
+    void connectTrackerBtns();
+
     std::string getPathToPiece(Piece* piece) const;
 
     void handleBoardFieldClick(std::pair<int, int> const& fieldCoords);

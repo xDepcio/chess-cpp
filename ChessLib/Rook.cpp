@@ -3,11 +3,13 @@
 Rook::Rook(Color withColor) : Piece(withColor)
 {
     Piece::pieceSignature = "r";
+    type = Type::ROOK;
 }
 
 Rook::Rook(Color withColor, int id) : Piece(withColor, id)
 {
     Piece::pieceSignature = "r";
+    type = Type::ROOK;
 }
 
 std::vector<std::pair<int, int>> Rook::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const

@@ -3,10 +3,12 @@
 Pawn::Pawn(Color withColor) : Piece(withColor)
 {
     Piece::pieceSignature = "p";
+    type = Type::PAWN;
 }
 Pawn::Pawn(Color withColor, int id) : Piece(withColor, id)
 {
     Piece::pieceSignature = "p";
+    type = Type::PAWN;
 }
 
 //bool Pawn::isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const

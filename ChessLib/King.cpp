@@ -3,11 +3,13 @@
 King::King(Color withColor) : Piece(withColor)
 {
 	Piece::pieceSignature = "K";
+	Piece::type = Type::KING;
 }
 
 King::King(Color withColor, int id) : Piece(withColor, id)
 {
 	Piece::pieceSignature = "K";
+	Piece::type = Type::KING;
 }
 
 

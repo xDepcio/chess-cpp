@@ -3,11 +3,13 @@
 Queen::Queen(Color withColor) : Piece(withColor)
 {
 	Piece::pieceSignature = "q";
+    type = Type::QUEEN;
 }
 
 Queen::Queen(Color withColor, int id) : Piece(withColor, id)
 {
 	Piece::pieceSignature = "q";
+    type = Type::QUEEN;
 }
 
 std::vector<std::pair<int, int>> Queen::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const

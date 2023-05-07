@@ -10,12 +10,14 @@
 #include "Rook.h"
 #include "Bishop.h"
 #include "Queen.h"
+#include "MovesTracker.h"
 
 class Board
 {
 public:
 
 	Board(int width, int height);
+	~Board();
 
 	std::unique_ptr<Piece> setPiece(std::pair<int, int> cords, std::unique_ptr<Piece> piece);
 
@@ -45,10 +47,13 @@ public:
 
 	bool areCoordinatesValid(std::pair<int, int> coordinates) const;
 
+	MovesTracker* getMovesTracker() const;
+
 protected:
 	int width;
 	int height;
 	std::vector<std::vector<Square> > squares = { };
+	MovesTracker* movesTracker;
 
 	struct moveState
 	{

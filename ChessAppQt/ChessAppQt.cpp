@@ -5,6 +5,7 @@ ChessAppQt::ChessAppQt(QWidget *parent)
 {
     ui.setupUi(this);
     startGame();
+    connectTrackerBtns();
 }
 
 ChessAppQt::~ChessAppQt()
@@ -150,6 +151,23 @@ void ChessAppQt::clearDisplayMoves(std::vector<std::pair<int, int>> const& moves
     }
 
     displayedSquares = {};
+}
+
+void ChessAppQt::connectTrackerBtns()
+{
+    connect(ui.nextMoveBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->getBoard()->getMovesTracker()->next();
+        auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
+        std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
+        updateSquares(movesToUpdate);
+    });
+
+    connect(ui.prevMoveBtn, &QPushButton::clicked, this, [this]() {
+        auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
+        std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
+        playedGame->getBoard()->getMovesTracker()->previous();
+        updateSquares(movesToUpdate);
+    });
 }
 
 std::string ChessAppQt::getPathToPiece(Piece* piece) const
