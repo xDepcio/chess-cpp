@@ -414,6 +414,11 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 				throw std::runtime_error("CHECKMATE NOT HANDLED YET!");
 			}
 		}
+		// If move stalemated anyone
+		else if (isStalemate(Piece::Color::Black) || isStalemate(Piece::Color::White))
+		{
+			throw std::domain_error("BRUH :((");
+		}
 	}
 }
 
@@ -426,6 +431,7 @@ bool Board::isCheck(Piece::Color const piecesColor)
 	auto rookChecksVer = getVerticalMoves(kingCoords, true);
 	auto rookChecksHor = getHorizontalMoves(kingCoords, true);
 	auto bishopChecks = getDiagonalMoves(kingCoords, true);
+	auto kingMoves = getKingMoves(kingCoords, true);
 
 	std::vector<std::pair<int, int>> rookChecks;
 	rookChecks.insert(rookChecks.end(), rookChecksVer.begin(), rookChecksVer.end());
@@ -459,6 +465,12 @@ bool Board::isCheck(Piece::Color const piecesColor)
 			return true;
 	}
 
+	for (auto& move : kingMoves)
+	{
+		if (King* k = dynamic_cast<King*>(getPiece(move)))
+			return true;
+	}
+
 	return false;
 }
 
@@ -466,7 +478,7 @@ bool Board::isCheckMate(Piece::Color const piecesColor)
 {
 	for (int row = 0; row < squares.size(); row++)
 	{
-		for (int col = 0; col < squares[0].size(); col++)
+		for (int col = 0; col < squares[row].size(); col++)
 		{
 			Square& sqr = squares[row][col];
 			Piece* piece = sqr.getPiece();
@@ -476,6 +488,22 @@ bool Board::isCheckMate(Piece::Color const piecesColor)
 				if (validMoves.size() > 0)
 					return false;
 			}
+		}
+	}
+	return true;
+}
+
+bool Board::isStalemate(Piece::Color const piecesColor)
+{
+	for (int row = 0; row < squares.size(); row++)
+	{
+		for (int col = 0; col < squares[row].size(); col++)
+		{
+			Square& sqr = squares[row][col];
+			Piece* piece = sqr.getPiece();
+
+			if (piece != nullptr && piece->getColor() == piecesColor && piece->getValidMoves(this, { row, col }).size() != 0)
+				return false;
 		}
 	}
 	return true;
