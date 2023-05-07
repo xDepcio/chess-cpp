@@ -110,6 +110,48 @@ void ChessAppQt::connectSquares()
 
 }
 
+void ChessAppQt::displayMoves(std::vector<std::pair<int, int>> const& moves)
+{
+    std::vector<std::vector<QWidget*>> qtSquares = {
+        { ui.row0col0, ui.row0col1, ui.row0col2, ui.row0col3, ui.row0col4, ui.row0col5, ui.row0col6, ui.row0col7 },
+        { ui.row1col0, ui.row1col1, ui.row1col2, ui.row1col3, ui.row1col4, ui.row1col5, ui.row1col6, ui.row1col7 },
+        { ui.row2col0, ui.row2col1, ui.row2col2, ui.row2col3, ui.row2col4, ui.row2col5, ui.row2col6, ui.row2col7 },
+        { ui.row3col0, ui.row3col1, ui.row3col2, ui.row3col3, ui.row3col4, ui.row3col5, ui.row3col6, ui.row3col7 },
+        { ui.row4col0, ui.row4col1, ui.row4col2, ui.row4col3, ui.row4col4, ui.row4col5, ui.row4col6, ui.row4col7 },
+        { ui.row5col0, ui.row5col1, ui.row5col2, ui.row5col3, ui.row5col4, ui.row5col5, ui.row5col6, ui.row5col7 },
+        { ui.row6col0, ui.row6col1, ui.row6col2, ui.row6col3, ui.row6col4, ui.row6col5, ui.row6col6, ui.row6col7 },
+        { ui.row7col0, ui.row7col1, ui.row7col2, ui.row7col3, ui.row7col4, ui.row7col5, ui.row7col6, ui.row7col7 },
+    };
+
+    displayedSquares = moves;
+
+    for (auto& move : moves)
+    {
+        qtSquares[move.first][move.second]->setStyleSheet("background-color: rgb(0, 0, 0);");
+    }
+}
+
+void ChessAppQt::clearDisplayMoves(std::vector<std::pair<int, int>> const& moves)
+{
+    std::vector<std::vector<QWidget*>> qtSquares = {
+        { ui.row0col0, ui.row0col1, ui.row0col2, ui.row0col3, ui.row0col4, ui.row0col5, ui.row0col6, ui.row0col7 },
+        { ui.row1col0, ui.row1col1, ui.row1col2, ui.row1col3, ui.row1col4, ui.row1col5, ui.row1col6, ui.row1col7 },
+        { ui.row2col0, ui.row2col1, ui.row2col2, ui.row2col3, ui.row2col4, ui.row2col5, ui.row2col6, ui.row2col7 },
+        { ui.row3col0, ui.row3col1, ui.row3col2, ui.row3col3, ui.row3col4, ui.row3col5, ui.row3col6, ui.row3col7 },
+        { ui.row4col0, ui.row4col1, ui.row4col2, ui.row4col3, ui.row4col4, ui.row4col5, ui.row4col6, ui.row4col7 },
+        { ui.row5col0, ui.row5col1, ui.row5col2, ui.row5col3, ui.row5col4, ui.row5col5, ui.row5col6, ui.row5col7 },
+        { ui.row6col0, ui.row6col1, ui.row6col2, ui.row6col3, ui.row6col4, ui.row6col5, ui.row6col6, ui.row6col7 },
+        { ui.row7col0, ui.row7col1, ui.row7col2, ui.row7col3, ui.row7col4, ui.row7col5, ui.row7col6, ui.row7col7 },
+    };
+
+    for (auto& move : moves)
+    {
+        qtSquares[move.first][move.second]->setStyleSheet((move.first + move.second) % 2 == 0 ? "background-color: rgb(226, 232, 217);" : "background-color: rgb(32, 58, 3);");
+    }
+
+    displayedSquares = {};
+}
+
 std::string ChessAppQt::getPathToPiece(Piece* piece) const
 {
     if (piece == nullptr)
@@ -143,12 +185,26 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
     Piece* prevClicked = playedGame->getClickedPiece();
     auto prevCoords = playedGame->getClickedPieceCoords();
 
-    if ( (prevClicked == nullptr) || (prevClicked->getColor() != playedGame->getTurnColor() && clickedPiece == nullptr) || (prevClicked->getColor() != playedGame->getTurnColor() && clickedPiece->getColor() != playedGame->getTurnColor() ) ) // prev and now clicked on empty
+    //bool prevCurrSame = clickedPiece->getColor() == prevClicked->getColor();
+    //bool prevCurrNull = clickedPiece == nullptr && prevClicked == nullptr;
+    //bool prevNullCurrOwn = prevClicked == nullptr && clickedPiece->getColor() == playedGame->getTurnColor();
+    //bool prevNullCurrEnemy = prevClicked == nullptr && clickedPiece->getColor() != playedGame->getTurnColor();
+    //bool prevCurrOwn = clickedPiece->getColor() == playedGame->getTurnColor() && prevClicked->getColor() == playedGame->getTurnColor();
+
+    clearDisplayMoves(displayedSquares);
+    if ( 
+        (prevClicked == nullptr && clickedPiece == nullptr) || 
+        (prevClicked == nullptr && clickedPiece->getColor() != playedGame->getTurnColor()) || 
+        (prevClicked != nullptr && prevClicked->getColor() != playedGame->getTurnColor() && clickedPiece == nullptr) ||
+        (prevClicked != nullptr && prevClicked->getColor() != playedGame->getTurnColor() && clickedPiece->getColor() != playedGame->getTurnColor()) 
+        ) // prev and now clicked on empty
     {
         playedGame->setClickedPiece(clickedPiece);
         playedGame->setClickedPieceCoords(fieldCoords);
     }
-    else if ( (prevClicked->getColor() == playedGame->getTurnColor() && clickedPiece == nullptr) || (prevClicked->getColor() == playedGame->getTurnColor() && clickedPiece->getColor() != playedGame->getTurnColor()) )
+    else if ( 
+        (prevClicked != nullptr && prevClicked->getColor() == playedGame->getTurnColor() && clickedPiece == nullptr) ||
+        (prevClicked != nullptr && prevClicked->getColor() == playedGame->getTurnColor() && clickedPiece->getColor() != playedGame->getTurnColor()) )
     {
         // valid move and move
         if (playedGame->isMoveValid(prevCoords, fieldCoords))
@@ -165,6 +221,7 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
     {
         // display valid moves
         auto validMoves = playedGame->getPieceAtCoords(fieldCoords)->getValidMoves(playedGame->getBoard(), fieldCoords);
+        displayMoves(validMoves);
         playedGame->setClickedPiece(clickedPiece);
         playedGame->setClickedPieceCoords(fieldCoords);
     }
