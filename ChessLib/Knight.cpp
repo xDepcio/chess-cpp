@@ -14,5 +14,7 @@ Knight::Knight(Color withColor, int id) : Piece(withColor, id)
 
 std::vector<std::pair<int, int>> Knight::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
+	if (!board->getMovesTracker()->onLatestMove())
+		return {};
 	return board->getKnightMoves(atCoords, ignoreCheck);
 }

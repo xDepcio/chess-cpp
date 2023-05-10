@@ -550,6 +550,16 @@ MovesTracker* Board::getMovesTracker() const
 	return movesTracker;
 }
 
+Piece::Color Board::getTurn() const
+{
+	return turn;
+}
+
+void Board::setTurn(Piece::Color const turnColor)
+{
+	turn = turnColor;
+}
+
 Board::moveState Board::addMoveIfValid(std::pair<int, int>& from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
 {
 	moveState feedback = moveState();

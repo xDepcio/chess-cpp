@@ -49,11 +49,16 @@ public:
 
 	MovesTracker* getMovesTracker() const;
 
+	Piece::Color getTurn() const;
+
+	void setTurn(Piece::Color const turnColor);
+
 protected:
 	int width;
 	int height;
 	std::vector<std::vector<Square> > squares = { };
 	MovesTracker* movesTracker;
+	Piece::Color turn = Piece::Color::White;
 
 	struct moveState
 	{

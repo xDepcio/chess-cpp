@@ -11,18 +11,14 @@ class QtGame
 {
 private:
 	Board* trackedBoard;
-	Piece::Color turn;
 	Piece* clickedPiece;
 	std::pair<int, int> clickedPieceCoords;
 
 public:
-	QtGame() : trackedBoard(nullptr), turn(Piece::Color::White), clickedPiece(nullptr), clickedPieceCoords({}) {};
+	QtGame() : trackedBoard(nullptr), clickedPiece(nullptr), clickedPieceCoords({}) {};
 
 	void setupBoard();
 	void run();
-
-	Piece::Color getTurnColor() const;
-	void setTurnColor(Piece::Color color);
 
 	Piece* getPieceAtCoords(std::pair<int, int> const& coords) const;
 	

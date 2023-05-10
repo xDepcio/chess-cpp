@@ -14,6 +14,8 @@ Queen::Queen(Color withColor, int id) : Piece(withColor, id)
 
 std::vector<std::pair<int, int>> Queen::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
+    if (!board->getMovesTracker()->onLatestMove())
+        return {};
     std::vector<std::pair<int, int>> moves;
     auto horizontalMoves = board->getHorizontalMoves(atCoords, ignoreCheck);
     moves.insert(moves.end(), horizontalMoves.begin(), horizontalMoves.end());

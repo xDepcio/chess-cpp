@@ -14,5 +14,7 @@ Bishop::Bishop(Color withColor, int id) : Piece(withColor, id)
 
 std::vector<std::pair<int, int>> Bishop::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
+	if (!board->getMovesTracker()->onLatestMove())
+		return {};
 	return board->getDiagonalMoves(atCoords, ignoreCheck);
 }

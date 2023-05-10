@@ -59,16 +59,6 @@ void QtGame::run()
 	setupBoard();
 }
 
-Piece::Color QtGame::getTurnColor() const
-{
-	return turn;
-}
-
-void QtGame::setTurnColor(Piece::Color color)
-{
-	turn = color;
-}
-
 Piece* QtGame::getPieceAtCoords(std::pair<int, int> const& coords) const
 {
 	return trackedBoard->getPiece(coords);

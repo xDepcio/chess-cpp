@@ -16,5 +16,7 @@ King::King(Color withColor, int id) : Piece(withColor, id)
 
 std::vector<std::pair<int, int>> King::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
+	if (!board->getMovesTracker()->onLatestMove())
+		return {};
 	return board->getKingMoves(atCoords, ignoreCheck);
 }

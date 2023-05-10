@@ -160,6 +160,12 @@ void ChessAppQt::connectTrackerBtns()
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
         std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
         updateSquares(movesToUpdate);
+        if (playedGame->getBoard()->getMovesTracker()->onLatestMove())
+        {
+            ui.nextMoveBtn->setDisabled(true);
+            return;
+        }
+        ui.prevMoveBtn->setDisabled(false);
     });
 
     connect(ui.prevMoveBtn, &QPushButton::clicked, this, [this]() {
@@ -167,6 +173,12 @@ void ChessAppQt::connectTrackerBtns()
         std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
         playedGame->getBoard()->getMovesTracker()->previous();
         updateSquares(movesToUpdate);
+        if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() == -1)
+        {
+            ui.prevMoveBtn->setDisabled(true);
+            return;
+        }
+        ui.nextMoveBtn->setDisabled(false);
     });
 }
 
@@ -202,40 +214,41 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
     Piece* clickedPiece = playedGame->getPieceAtCoords(fieldCoords);
     Piece* prevClicked = playedGame->getClickedPiece();
     auto prevCoords = playedGame->getClickedPieceCoords();
+    auto turn = playedGame->getBoard()->getTurn();
 
     //bool prevCurrSame = clickedPiece->getColor() == prevClicked->getColor();
     //bool prevCurrNull = clickedPiece == nullptr && prevClicked == nullptr;
-    //bool prevNullCurrOwn = prevClicked == nullptr && clickedPiece->getColor() == playedGame->getTurnColor();
-    //bool prevNullCurrEnemy = prevClicked == nullptr && clickedPiece->getColor() != playedGame->getTurnColor();
-    //bool prevCurrOwn = clickedPiece->getColor() == playedGame->getTurnColor() && prevClicked->getColor() == playedGame->getTurnColor();
+    //bool prevNullCurrOwn = prevClicked == nullptr && clickedPiece->getColor() == turn;
+    //bool prevNullCurrEnemy = prevClicked == nullptr && clickedPiece->getColor() != turn;
+    //bool prevCurrOwn = clickedPiece->getColor() == turn && prevClicked->getColor() == turn;
 
     clearDisplayMoves(displayedSquares);
-    if ( 
-        (prevClicked == nullptr && clickedPiece == nullptr) || 
-        (prevClicked == nullptr && clickedPiece->getColor() != playedGame->getTurnColor()) || 
-        (prevClicked != nullptr && prevClicked->getColor() != playedGame->getTurnColor() && clickedPiece == nullptr) ||
-        (prevClicked != nullptr && prevClicked->getColor() != playedGame->getTurnColor() && clickedPiece->getColor() != playedGame->getTurnColor()) 
+    if (
+        (prevClicked == nullptr && clickedPiece == nullptr) ||
+        (prevClicked == nullptr && clickedPiece->getColor() != turn) ||
+        (prevClicked != nullptr && prevClicked->getColor() != turn && clickedPiece == nullptr) ||
+        (prevClicked != nullptr && prevClicked->getColor() != turn && clickedPiece->getColor() != turn)
         ) // prev and now clicked on empty
     {
         playedGame->setClickedPiece(clickedPiece);
         playedGame->setClickedPieceCoords(fieldCoords);
     }
-    else if ( 
-        (prevClicked != nullptr && prevClicked->getColor() == playedGame->getTurnColor() && clickedPiece == nullptr) ||
-        (prevClicked != nullptr && prevClicked->getColor() == playedGame->getTurnColor() && clickedPiece->getColor() != playedGame->getTurnColor()) )
+    else if (
+        (prevClicked != nullptr && prevClicked->getColor() == turn && clickedPiece == nullptr) ||
+        (prevClicked != nullptr && prevClicked->getColor() == turn && clickedPiece->getColor() != turn))
     {
         // valid move and move
         if (playedGame->isMoveValid(prevCoords, fieldCoords))
         {
             playedGame->move(prevCoords, fieldCoords);
-            playedGame->setTurnColor(playedGame->getTurnColor() == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
+            playedGame->getBoard()->setTurn(turn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
             std::vector<std::pair<int, int>> toUpdate = { prevCoords, fieldCoords };
             updateSquares(toUpdate);
         }
         playedGame->setClickedPiece(nullptr);
         playedGame->setClickedPieceCoords({});
     }
-    else if (clickedPiece->getColor() == playedGame->getTurnColor()) // clicked on own
+    else if (clickedPiece->getColor() == turn) // clicked on own
     {
         // display valid moves
         auto validMoves = playedGame->getPieceAtCoords(fieldCoords)->getValidMoves(playedGame->getBoard(), fieldCoords);

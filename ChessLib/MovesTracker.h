@@ -29,18 +29,21 @@ public:
 	MovesTracker(Board* boardToTrack) : trackedBoard(boardToTrack) {};
 
 	Move getPointedMove() const;
+	int getPointedMoveIndex() const;
+
+	bool onLatestMove() const;
 
 	void addMove(Move const& move);
 	void next();
 	void previous();
 	void revertMove(Move const& move);
 	void makeMove(Move const& move);
+	void updateToLatest();
 
 private:
 	std::vector<Move> moves = {};
 	Board* trackedBoard = nullptr;
-	bool onLatestMove = true;
-	int pointedMoveNum = 0;
+	int pointedMoveNum = -1;
 
 	std::unique_ptr<Piece> makePieceFromType(Piece::Type type, Piece::Color color);
 };

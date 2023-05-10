@@ -1,9 +1,20 @@
 #include "MovesTracker.h"
 #include "Board.h"
+#include "Helpers.h"
 
 MovesTracker::Move MovesTracker::getPointedMove() const
 {
 	return moves[pointedMoveNum];
+}
+
+int MovesTracker::getPointedMoveIndex() const
+{
+	return pointedMoveNum;
+}
+
+bool MovesTracker::onLatestMove() const
+{
+	return pointedMoveNum == moves.size() - 1;
 }
 
 void MovesTracker::addMove(Move const& move)
@@ -24,6 +35,14 @@ void MovesTracker::makeMove(Move const& move)
 	trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
 }
 
+void MovesTracker::updateToLatest()
+{
+	while (pointedMoveNum < moves.size())
+	{
+		next();
+	}
+}
+
 void MovesTracker::previous()
 {
 	Move moveToRevert = moves[pointedMoveNum];
@@ -34,7 +53,7 @@ void MovesTracker::previous()
 void MovesTracker::revertMove(Move const& move)
 {
 	trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
-	trackedBoard->setPiece(move.to, makePieceFromType(move.takenPiece, move.pieceColor));
+	trackedBoard->setPiece(move.to, makePieceFromType(move.takenPiece, helpers::otherColor(move.pieceColor)));
 }
 
 std::unique_ptr<Piece> MovesTracker::makePieceFromType(Piece::Type type, Piece::Color color)
