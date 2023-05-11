@@ -47,9 +47,14 @@ public:
 
 	void handleGotTaken(Piece* takenBy);
 
+	virtual void move(Board* board, std::pair<int, int> to);
+
 	Type getType() const;
 
 	Color otherColor() const;
+
+	std::pair<int, int> coords() const;
+	void setCoords(std::pair<int, int> newCoords);
 
 protected:
 	Color color;
@@ -57,4 +62,5 @@ protected:
 	int debugId;
 	bool madeFirstMove = false;
 	Type type;
+	std::pair<int, int> coordinates;
 };

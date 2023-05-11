@@ -1,4 +1,5 @@
 #include "Piece.h"
+#include "Board.h"
 
 class Board;
 
@@ -46,6 +47,11 @@ void Piece::handleGotTaken(Piece* takenBy)
     // TODO... Do something when piece is taken
 }
 
+void Piece::move(Board* board, std::pair<int, int> to)
+{
+    board->move(coordinates, to);
+}
+
 Piece::Type Piece::getType() const
 {
     return type;
@@ -54,5 +60,15 @@ Piece::Type Piece::getType() const
 Piece::Color Piece::otherColor() const
 {
     return color == Color::White ? Color::Black : Color::White;
+}
+
+std::pair<int, int> Piece::coords() const
+{
+    return coordinates;
+}
+
+void Piece::setCoords(std::pair<int, int> newCoords)
+{
+    coordinates = newCoords;
 }
 

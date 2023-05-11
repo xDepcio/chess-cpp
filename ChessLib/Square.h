@@ -5,7 +5,7 @@
 class Square
 {
 public:
-	Square() : piece(nullptr) {};
+	Square(std::pair<int, int> coords) : piece(nullptr), coords(coords) {};
 
 	// Returns Piece that previously occupied the square
 	std::unique_ptr<Piece> setPiece(std::unique_ptr<Piece> pieceToSet);
@@ -14,4 +14,5 @@ public:
 
 private:
 	std::unique_ptr<Piece> piece;
+	std::pair<int, int> coords;
 };

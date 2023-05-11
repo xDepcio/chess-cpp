@@ -52,8 +52,21 @@ void MovesTracker::previous()
 
 void MovesTracker::revertMove(Move const& move)
 {
-	trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
-	trackedBoard->setPiece(move.to, makePieceFromType(move.takenPiece, helpers::otherColor(move.pieceColor)));
+	//if (move.castle != King::Castle::NONE)
+	//{
+	//	trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
+	//	trackedBoard->setPiece(move.to, nullptr);
+
+	//	std::pair<int, int> rookCurrCoords = { move.from.first, move.castle == King::Castle::LONG ? 3 : 5};
+	//	std::pair<int, int> rookPrevCoords = { move.from.first, move.castle == King::Castle::LONG ? 0 : 7};
+	//	trackedBoard->setPiece(rookPrevCoords, makePieceFromType(Piece::Type::ROOK, move.pieceColor));
+	//	trackedBoard->setPiece(rookCurrCoords, nullptr);
+	//}
+	//else
+	//{
+		trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
+		trackedBoard->setPiece(move.to, makePieceFromType(move.takenPiece, Helpers::getOtherColor(move.pieceColor)));
+	//}
 }
 
 std::unique_ptr<Piece> MovesTracker::makePieceFromType(Piece::Type type, Piece::Color color)
@@ -70,6 +83,8 @@ std::unique_ptr<Piece> MovesTracker::makePieceFromType(Piece::Type type, Piece::
 		return std::make_unique<Queen>(color);
 	case Piece::Type::KNIGHT:
 		return std::make_unique<Knight>(color);
+	//case Piece::Type::KING:
+		//return std::make_unique<King>(color);
 	case Piece::Type::NONE:
 		return nullptr;
 	default:

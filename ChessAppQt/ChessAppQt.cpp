@@ -158,8 +158,8 @@ void ChessAppQt::connectTrackerBtns()
     connect(ui.nextMoveBtn, &QPushButton::clicked, this, [this]() {
         playedGame->getBoard()->getMovesTracker()->next();
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
-        std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
-        updateSquares(movesToUpdate);
+        //std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
+        updateSquares(move.affectedSquares);
         if (playedGame->getBoard()->getMovesTracker()->onLatestMove())
         {
             ui.nextMoveBtn->setDisabled(true);
@@ -170,9 +170,9 @@ void ChessAppQt::connectTrackerBtns()
 
     connect(ui.prevMoveBtn, &QPushButton::clicked, this, [this]() {
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
-        std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
+        //std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
         playedGame->getBoard()->getMovesTracker()->previous();
-        updateSquares(movesToUpdate);
+        updateSquares(move.affectedSquares);
         if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() == -1)
         {
             ui.prevMoveBtn->setDisabled(true);
@@ -240,10 +240,12 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
         // valid move and move
         if (playedGame->isMoveValid(prevCoords, fieldCoords))
         {
-            playedGame->move(prevCoords, fieldCoords);
+            //playedGame->move(prevCoords, fieldCoords);
+            prevClicked->move(playedGame->getBoard(), fieldCoords);
             playedGame->getBoard()->setTurn(turn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
-            std::vector<std::pair<int, int>> toUpdate = { prevCoords, fieldCoords };
-            updateSquares(toUpdate);
+            //std::vector<std::pair<int, int>> toUpdate = { prevCoords, fieldCoords };
+            auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove().affectedSquares;
+            updateSquares(affectedSqrs);
         }
         playedGame->setClickedPiece(nullptr);
         playedGame->setClickedPieceCoords({});

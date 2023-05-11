@@ -11,7 +11,7 @@ Board::Board(int width, int height)
 		squares.push_back(std::vector<Square>());
 		for (int i = 0; i < width; i++)
 		{
-			squares[j].push_back(Square());
+			squares[j].push_back(Square({j, i}));
 		}
 	}
 }
@@ -186,20 +186,6 @@ std::vector<std::pair<int, int>> Board::getKnightMoves(std::pair<int, int> atCoo
 	for (auto& move : movesToCheck)
 	{
 		addMoveIfValid(atCoords, move, validKnightMoves, ignoreCheck);
-		//if (areCoordinatesValid(move))
-		//{
-		//	Piece* pieceToBeTaken = getPiece(move);
-		//	if (pieceToBeTaken == nullptr || pieceToBeTaken->getColor() != knightAtCoords->getColor())
-		//	{
-		//		auto taken = setPiece(move, setPiece(atCoords, nullptr));
-		//		if (ignoreCheck || !isCheck(knightAtCoords->getColor()))
-		//		{
-		//			validKnightMoves.push_back(move);
-		//		}
-		//		setPiece(atCoords, setPiece(move, std::move(taken)));
-		//	}
-
-		//}
 	}
 
 	return validKnightMoves;
@@ -207,59 +193,6 @@ std::vector<std::pair<int, int>> Board::getKnightMoves(std::pair<int, int> atCoo
 
 std::vector<std::pair<int, int>> Board::getHorizontalMoves(std::pair<int, int> atCoords, bool ignoreCheck)
 {
-	//int row = atCoords.first;
-	//int col = atCoords.second;
-	//Piece* pieceAtCoords = squares[row][col].getPiece();
-
-	//std::vector<std::pair<int, int>> validHorizontalMoves;
-
-	//bool areSquaresLeft = true;
-	//int dir = -1;
-	//int checkCol = col;
-	//while (areSquaresLeft)
-	//{
-	//	checkCol += dir;
-	//	if (areCoordinatesValid({ row, checkCol }))
-	//	{
-	//		Piece* pieceAtSquare = squares[row][checkCol].getPiece();
-	//		if (pieceAtSquare == nullptr)
-	//		{
-	//			auto taken = setPiece({ row, checkCol }, setPiece(atCoords, nullptr));
-	//			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
-	//			{
-	//				validHorizontalMoves.push_back({ row, checkCol });
-	//			}
-	//			setPiece(atCoords, setPiece({ row, checkCol }, std::move(taken)));
-	//		}
-	//		else if (pieceAtSquare->getColor() != pieceAtCoords->getColor())
-	//		{
-	//			auto taken = setPiece({ row, checkCol }, setPiece(atCoords, nullptr));
-	//			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
-	//			{
-	//				validHorizontalMoves.push_back({ row, checkCol });
-	//			}
-	//			setPiece(atCoords, setPiece({ row, checkCol }, std::move(taken)));
-	//			checkCol = col;
-	//			dir += 2;
-	//		}
-	//		else
-	//		{
-	//			checkCol = col;
-	//			dir += 2;
-	//		}
-
-	//	}
-	//	else
-	//	{
-	//		checkCol = col;
-	//		dir += 2;
-	//	}
-	//	if (dir > 1)
-	//	{
-	//		areSquaresLeft = false;
-	//	}
-	//}
-
 	int row = atCoords.first;
 	int col = atCoords.second;
 	Piece* pieceAtCoords = squares[row][col].getPiece();
@@ -305,55 +238,53 @@ std::vector<std::pair<int, int>> Board::getVerticalMoves(std::pair<int, int> atC
 		}
 	}
 
-	//while (areSquaresLeft)
-	//{
-	//	checkRow += dir;
-	//	if (areCoordinatesValid({ checkRow, col }))
-	//	{
-	//		Piece* pieceAtSquare = squares[checkRow][col].getPiece();
-	//		// Square is empty
-	//		if (pieceAtSquare == nullptr)
-	//		{
-	//			auto taken = setPiece({ checkRow, col }, setPiece(atCoords, nullptr));
-	//			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
-	//			{
-	//				validVerticalMoves.push_back({ checkRow, col });
-	//			}
-	//			setPiece(atCoords, setPiece({ checkRow, col }, std::move(taken)));
-	//		}
-	//		// Square has enemy's piece
-	//		else if (pieceAtSquare->getColor() != pieceAtCoords->getColor())
-	//		{
-	//			auto taken = setPiece({ checkRow, col }, setPiece(atCoords, nullptr));
-	//			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
-	//			{
-	//				validVerticalMoves.push_back({ checkRow, col });
-	//			}
-	//			setPiece(atCoords, setPiece({ checkRow, col }, std::move(taken)));
-	//			checkRow = row;
-	//			dir += 2;
-	//		}
-	//		// Square has your piece
-	//		else
-	//		{
-	//			checkRow = row;
-	//			dir += 2;
-	//		}
-
-	//	}
-	//	// coords out of board
-	//	else
-	//	{
-	//		checkRow = row;
-	//		dir += 2;
-	//	}
-	//	if (dir > 1)
-	//	{
-	//		areSquaresLeft = false;
-	//	}
-	//}
-
 	return validVerticalMoves;
+}
+
+std::vector<std::pair<int, int>> Board::getCastleMoves(Piece::Color kingColor)
+{
+	auto kingCoords = getKingLocation(kingColor);
+	Piece* king = getPiece(kingCoords);
+	std::vector<std::pair<int, int>> moves = {};
+
+	if (king->hasMadeFirstMove() || isCheck(kingColor))
+		return moves;
+
+	if (!getPiece({ kingCoords.first, 0 })->hasMadeFirstMove())
+	{
+		if (!getPiece({ kingCoords.first, 3 }) && !getPiece({ kingCoords.first, 2 }) && !getPiece({ kingCoords.first, 1 }))
+		{
+			setPiece({ kingCoords.first, 3 }, setPiece(kingCoords, nullptr));
+			if (!isCheck(kingColor))
+			{
+				setPiece(kingCoords, setPiece({ kingCoords.first, 3 }, nullptr));
+				addMoveIfValid(kingCoords, { kingCoords.first, 2 }, moves);
+			}
+			else
+			{
+				setPiece(kingCoords, setPiece({ kingCoords.first, 3 }, nullptr));
+			}
+		}
+	}
+
+	if (!getPiece({ kingCoords.first, 7 })->hasMadeFirstMove())
+	{
+		if (!getPiece({ kingCoords.first, 5 }) && !getPiece({ kingCoords.first, 6 }))
+		{
+			setPiece({ kingCoords.first, 5 }, setPiece(kingCoords, nullptr));
+			if (!isCheck(kingColor))
+			{
+				setPiece(kingCoords, setPiece({ kingCoords.first, 5 }, nullptr));
+				addMoveIfValid(kingCoords, { kingCoords.first, 6 }, moves);
+			}
+			else
+			{
+				setPiece(kingCoords, setPiece({ kingCoords.first, 5 }, nullptr));
+			}
+		}
+	}
+
+	return moves;
 }
 
 std::vector<std::pair<int, int>> Board::getDiagonalMoves(std::pair<int, int> atCoords, bool ignoreCheck)
@@ -420,7 +351,9 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 			movedPiece->getColor(), 
 			from, 
 			to, 
-			takenPiece ? takenPiece->hasMadeFirstMove() : false
+			takenPiece ? takenPiece->hasMadeFirstMove() : false,
+			King::Castle::NONE,
+			{from, to}
 		);
 		
 		movesTracker->addMove(mv);
@@ -560,7 +493,7 @@ void Board::setTurn(Piece::Color const turnColor)
 	turn = turnColor;
 }
 
-Board::moveState Board::addMoveIfValid(std::pair<int, int>& from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
+Board::moveState Board::addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
 {
 	moveState feedback = moveState();
 	
