@@ -32,7 +32,28 @@ void MovesTracker::next()
 
 void MovesTracker::makeMove(Move const& move)
 {
-	trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+	if (move.castle != King::Castle::NONE)
+	{
+		std::pair<int, int> rookCoords = { move.from.first, move.to.second == 2 ? 0 : 7 };
+		int dirSign = Helpers::sgn<int>(move.from.second - rookCoords.second);
+
+		std::pair<int, int> newKingCoords = {
+			move.from.first,
+			move.from.second - 2 * dirSign
+		};
+
+		std::pair<int, int> newRookCoords = {
+			move.from.first,
+			newKingCoords.second + dirSign
+		};
+
+		trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+		trackedBoard->setPiece(newRookCoords, trackedBoard->setPiece(rookCoords, nullptr));
+	}
+	else
+	{
+		trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+	}
 }
 
 void MovesTracker::updateToLatest()
@@ -52,21 +73,21 @@ void MovesTracker::previous()
 
 void MovesTracker::revertMove(Move const& move)
 {
-	//if (move.castle != King::Castle::NONE)
-	//{
-	//	trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
-	//	trackedBoard->setPiece(move.to, nullptr);
+	if (move.castle != King::Castle::NONE)
+	{
+		trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
+		trackedBoard->setPiece(move.to, nullptr);
 
-	//	std::pair<int, int> rookCurrCoords = { move.from.first, move.castle == King::Castle::LONG ? 3 : 5};
-	//	std::pair<int, int> rookPrevCoords = { move.from.first, move.castle == King::Castle::LONG ? 0 : 7};
-	//	trackedBoard->setPiece(rookPrevCoords, makePieceFromType(Piece::Type::ROOK, move.pieceColor));
-	//	trackedBoard->setPiece(rookCurrCoords, nullptr);
-	//}
-	//else
-	//{
+		std::pair<int, int> rookCurrCoords = { move.from.first, move.castle == King::Castle::LONG ? 3 : 5};
+		std::pair<int, int> rookPrevCoords = { move.from.first, move.castle == King::Castle::LONG ? 0 : 7};
+		trackedBoard->setPiece(rookPrevCoords, makePieceFromType(Piece::Type::ROOK, move.pieceColor));
+		trackedBoard->setPiece(rookCurrCoords, nullptr);
+	}
+	else
+	{
 		trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
 		trackedBoard->setPiece(move.to, makePieceFromType(move.takenPiece, Helpers::getOtherColor(move.pieceColor)));
-	//}
+	}
 }
 
 std::unique_ptr<Piece> MovesTracker::makePieceFromType(Piece::Type type, Piece::Color color)
@@ -83,8 +104,8 @@ std::unique_ptr<Piece> MovesTracker::makePieceFromType(Piece::Type type, Piece::
 		return std::make_unique<Queen>(color);
 	case Piece::Type::KNIGHT:
 		return std::make_unique<Knight>(color);
-	//case Piece::Type::KING:
-		//return std::make_unique<King>(color);
+	case Piece::Type::KING:
+		return std::make_unique<King>(color);
 	case Piece::Type::NONE:
 		return nullptr;
 	default:

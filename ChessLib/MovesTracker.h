@@ -15,7 +15,7 @@ public:
 		std::pair<int, int> from;
 		std::pair<int, int> to;
 		bool takenPieceMoved;
-		//King::Castle castle;
+		King::Castle castle;
 		std::vector<std::pair<int, int>> affectedSquares;
 
 		Move(
@@ -29,7 +29,7 @@ public:
 			std::vector<std::pair<int, int>> affectedSquares = {}
 		) : pieceType(pieceType), takenPiece(takenPiece),
 			pieceColor(pieceColor), from(from), to(to), takenPieceMoved(takenPieceMoved),
-			//castle(castle), 
+			castle(castle), 
 			affectedSquares(affectedSquares) {};
 	};
 
