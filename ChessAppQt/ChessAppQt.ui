@@ -21,7 +21,7 @@
        <enum>Qt::LeftToRight</enum>
       </property>
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="page">
        <layout class="QHBoxLayout" name="horizontalLayout_9">
@@ -2262,30 +2262,43 @@
        </layout>
       </widget>
       <widget class="QWidget" name="page_2">
-       <widget class="QPushButton" name="pushButton">
+       <widget class="QPushButton" name="menuPlayBtn">
         <property name="geometry">
          <rect>
-          <x>160</x>
-          <y>90</y>
-          <width>75</width>
-          <height>24</height>
+          <x>390</x>
+          <y>110</y>
+          <width>91</width>
+          <height>31</height>
          </rect>
         </property>
         <property name="text">
          <string>graj</string>
         </property>
        </widget>
-       <widget class="QPushButton" name="pushButton_2">
+       <widget class="QPushButton" name="menuHistoryBtn">
         <property name="geometry">
          <rect>
-          <x>140</x>
+          <x>390</x>
           <y>160</y>
-          <width>75</width>
-          <height>24</height>
+          <width>91</width>
+          <height>31</height>
          </rect>
         </property>
         <property name="text">
-         <string>PushButton</string>
+         <string>Przegląd partii</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="menuAddonsBtn">
+        <property name="geometry">
+         <rect>
+          <x>390</x>
+          <y>210</y>
+          <width>91</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Dodatki</string>
         </property>
        </widget>
       </widget>

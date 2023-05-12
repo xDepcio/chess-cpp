@@ -14,6 +14,8 @@ public:
     ChessAppQt(QWidget *parent = nullptr);
     ~ChessAppQt();
 
+    void connectMenuBtns();
+
     void startGame();
     void updateBoard();
     void updateSquares(std::vector<std::pair<int, int>>& coordsToUpdate);

@@ -4,12 +4,22 @@ ChessAppQt::ChessAppQt(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
-    startGame();
-    connectTrackerBtns();
+    connectMenuBtns();
+    {
+        startGame();
+        connectTrackerBtns();
+    }
 }
 
 ChessAppQt::~ChessAppQt()
 {}
+
+void ChessAppQt::connectMenuBtns()
+{
+    connect(ui.menuPlayBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(0);
+    });
+}
 
 void ChessAppQt::startGame()
 {
