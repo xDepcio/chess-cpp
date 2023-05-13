@@ -1,10 +1,12 @@
 #pragma once
-
 #include <QtWidgets/QMainWindow>
 #include <iostream>
 #include "ui_ChessAppQt.h"
-#include "QtGame.h"
-#include "ClickableLabel.h"
+//#include "QtGame.h"
+//#include "ClickableLabel.h"
+
+class QtGame;
+class Piece;
 
 class ChessAppQt : public QMainWindow
 {

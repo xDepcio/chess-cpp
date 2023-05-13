@@ -460,7 +460,7 @@ bool Board::isCheck(Piece::Color const piecesColor)
 
 		// checked by pawn
 		Pawn* p = dynamic_cast<Pawn*>(getPiece(move));
-		int dir = piecesColor == Piece::Color::White ? 1 : -1;
+		int dir = piecesColor == Piece::Color::White ? -1 : 1;
 		if ((move.first - kingCoords.first) * dir == 1 && p)
 			return true;
 	}

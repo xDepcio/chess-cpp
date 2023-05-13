@@ -1,11 +1,17 @@
 #pragma once
-#include "../../../../../Chess/ChessLib/Board.h"
-#include "../../../../../Chess/ChessLib/Bishop.h"
-#include "../../../../../Chess/ChessLib/King.h"
-#include "../../../../../Chess/ChessLib/Knight.h"
-#include "../../../../../Chess/ChessLib/Pawn.h"
-#include "../../../../../Chess/ChessLib/Piece.h"
-#include "../../../../../Chess/ChessLib/Queen.h"
+#include <iostream>
+#include <vector>
+//#include "../../../../../Chess/ChessLib/Board.h"
+//#include "../../../../../Chess/ChessLib/Bishop.h"
+//#include "../../../../../Chess/ChessLib/King.h"
+//#include "../../../../../Chess/ChessLib/Knight.h"
+//#include "../../../../../Chess/ChessLib/Pawn.h"
+//#include "../../../../../Chess/ChessLib/Piece.h"
+//#include "../../../../../Chess/ChessLib/Queen.h"
+
+class Piece;
+class Board;
+class Square;
 
 class QtGame
 {

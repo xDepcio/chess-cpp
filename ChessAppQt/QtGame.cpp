@@ -1,4 +1,11 @@
 #include "QtGame.h"
+#include "../../Chess/ChessLib/Board.h"
+#include "../../Chess/ChessLib/Pawn.h"
+#include "../../Chess/ChessLib/Knight.h"
+#include "../../Chess/ChessLib/Bishop.h"
+#include "../../Chess/ChessLib/Rook.h"
+#include "../../Chess/ChessLib/King.h"
+#include "../../Chess/ChessLib/Queen.h"
 
 void QtGame::setupBoard()
 {
