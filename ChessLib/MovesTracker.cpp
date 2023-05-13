@@ -1,6 +1,7 @@
 #include "MovesTracker.h"
 #include "Board.h"
 #include "Helpers.h"
+#include <sstream>
 
 MovesTracker::Move MovesTracker::getPointedMove() const
 {
@@ -64,6 +65,24 @@ void MovesTracker::updateToLatest()
 	}
 }
 
+std::string MovesTracker::toPgn() const
+{
+	// TODO... not finished
+	std::ostringstream result;
+	for (int i = 0; i < moves.size(); i++)
+	{
+		if (i % 2 == 0)
+			result << i/2 + 1 << ". ";
+		auto move = moves[i];
+		if (move.castle == King::Castle::NONE)
+		{
+			result << coordsToString(move.to) << " ";
+		}
+	}
+
+	return result.str();
+}
+
 void MovesTracker::previous()
 {
 	Move moveToRevert = moves[pointedMoveNum];
@@ -112,4 +131,12 @@ std::unique_ptr<Piece> MovesTracker::makePieceFromType(Piece::Type type, Piece::
 		throw std::runtime_error(":()()");
 		break;
 	}
+}
+
+std::string MovesTracker::coordsToString(std::pair<int, int> const& coords) const
+{
+	std::ostringstream oss;
+	std::vector<char> cols = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h' };
+	oss << cols[coords.second] << 8 - coords.first;
+	return oss.str();
 }

@@ -35,6 +35,7 @@ public:
 	std::vector<std::pair<int, int>> getHorizontalMoves(std::pair<int, int> atCoords, bool ignoreCheck = false);
 	std::vector<std::pair<int, int>> getVerticalMoves(std::pair<int, int> atCoords, bool ignoreCheck = false);
 	std::vector<std::pair<int, int>> getCastleMoves(Piece::Color kingColor);
+	std::vector<std::pair<int, int>> getEnPassantMoves(std::pair<int, int> pawnCoords);
 
 
 	std::vector<std::pair<int, int>> getDiagonalMoves(std::pair<int, int> atCoords, bool ignoreCheck);
@@ -55,12 +56,15 @@ public:
 
 	void setTurn(Piece::Color const turnColor);
 
+	void invalidateEnPassantesOnNextMove();
+
 protected:
 	int width;
 	int height;
 	std::vector<std::vector<Square> > squares = { };
 	MovesTracker* movesTracker;
 	Piece::Color turn = Piece::Color::White;
+	bool shouldInvalidateEnPassantes = false;
 
 	struct moveState
 	{
@@ -81,4 +85,5 @@ protected:
 	};
 
 	moveState addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck = false);
+	void invalidateEnPassantes(Piece::Color piecesColorToInvalidate);
 };

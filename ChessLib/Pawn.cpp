@@ -1,5 +1,20 @@
 #include "Pawn.h"
 
+bool Pawn::isEnPassantMove(std::pair<int, int> const& move) const
+{
+    if (!validEnPassantLeft && !validEnPassantRight)
+        return false;
+
+    if (coordinates.second == move.second)
+        return false;
+
+    if (validEnPassantLeft && move.second == coordinates.second - 1)
+        return true;
+
+    if (validEnPassantRight && move.second == coordinates.second + 1)
+        return true;
+}
+
 Pawn::Pawn(Color withColor) : Piece(withColor)
 {
     Piece::pieceSignature = "p";
@@ -9,6 +24,26 @@ Pawn::Pawn(Color withColor, int id) : Piece(withColor, id)
 {
     Piece::pieceSignature = "p";
     type = Type::PAWN;
+}
+
+void Pawn::setValidEnPassantLeft(bool valid)
+{
+    validEnPassantLeft = valid;
+}
+
+void Pawn::setValidEnPassantRight(bool valid)
+{
+    validEnPassantRight = valid;
+}
+
+bool Pawn::canEnPassantLeft() const
+{
+    return validEnPassantLeft;
+}
+
+bool Pawn::canEnPassantRight() const
+{
+    return validEnPassantRight;
 }
 
 //bool Pawn::isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const
@@ -29,5 +64,44 @@ std::vector<std::pair<int, int>> Pawn::getValidMoves(Board* board, std::pair<int
 {
     if (!board->getMovesTracker()->onLatestMove())
         return {};
-    return board->getPawnMoves(atCoords, ignoreCheck);
+
+    auto enPassantMoves = board->getEnPassantMoves(coordinates);
+    auto standarMoves = board->getPawnMoves(atCoords, ignoreCheck);
+    enPassantMoves.insert(enPassantMoves.end(), standarMoves.begin(), standarMoves.end());
+    return enPassantMoves;
+}
+
+void Pawn::move(Board* board, std::pair<int, int> to)
+{
+    if (isEnPassantMove(to))
+    {
+        enPassantMove(board, to);
+        return;
+    }
+
+    if (!hasMadeFirstMove() && std::abs(coordinates.first - to.first) == 2)
+    {
+        if (board->areCoordinatesValid({ to.first, to.second - 1 }))
+        {
+            if (Pawn* pLeft = dynamic_cast<Pawn*>(board->getPiece({ to.first, to.second - 1 })))
+                pLeft->setValidEnPassantRight(true);
+        }
+
+        if (board->areCoordinatesValid({ to.first, to.second + 1 }))
+        {
+            if (Pawn* pRight = dynamic_cast<Pawn*>(board->getPiece({ to.first, to.second + 1 })))
+                pRight->setValidEnPassantLeft(true);
+        }
+    }
+    board->move(coordinates, to);
+}
+
+void Pawn::enPassantMove(Board* board, std::pair<int, int> const& to)
+{
+    board->setPiece(to, board->setPiece(coordinates, nullptr));
+    
+    std::pair<int, int> takenPawnCoords = { getColor() == Piece::Color::White ? to.first + 1 : to.first - 1, to.second };
+    board->setPiece(takenPawnCoords, nullptr);
+
+
 }

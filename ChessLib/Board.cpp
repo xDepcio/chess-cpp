@@ -287,6 +287,35 @@ std::vector<std::pair<int, int>> Board::getCastleMoves(Piece::Color kingColor)
 	return moves;
 }
 
+std::vector<std::pair<int, int>> Board::getEnPassantMoves(std::pair<int, int> pawnCoords)
+{
+	Pawn* pawn = dynamic_cast<Pawn*>(getPiece(pawnCoords));
+	if (!pawn)
+		return {};
+
+	std::vector<std::pair<int, int>> validMoves;
+	if (pawn->canEnPassantLeft())
+	{
+		validMoves.push_back(
+			{
+				pawn->getColor() == Piece::Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+				pawnCoords.second - 1
+			}
+		);
+	}
+	if (pawn->canEnPassantRight())
+	{
+		validMoves.push_back(
+			{
+				pawn->getColor() == Piece::Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+				pawnCoords.second + 1
+			}
+		);
+	}
+
+	return validMoves;
+}
+
 std::vector<std::pair<int, int>> Board::getDiagonalMoves(std::pair<int, int> atCoords, bool ignoreCheck)
 {
 	int row = atCoords.first;
@@ -376,6 +405,11 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 		else if (isStalemate(Piece::Color::Black) || isStalemate(Piece::Color::White))
 		{
 			throw std::domain_error("BRUH :((");
+		}
+		// invalidate previously avalible enpassantes
+		if (shouldInvalidateEnPassantes)
+		{
+			invalidateEnPassantes(movedPiece->getColor());
 		}
 	}
 }
@@ -493,6 +527,11 @@ void Board::setTurn(Piece::Color const turnColor)
 	turn = turnColor;
 }
 
+void Board::invalidateEnPassantesOnNextMove()
+{
+	shouldInvalidateEnPassantes = true;
+}
+
 Board::moveState Board::addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
 {
 	moveState feedback = moveState();
@@ -530,4 +569,20 @@ Board::moveState Board::addMoveIfValid(std::pair<int, int> from, std::pair<int, 
 	feedback.status = Board::moveState::Status::invalid;
 	feedback.reason = Board::moveState::Reason::invalid_takes_own;
 	return feedback;
+}
+
+void Board::invalidateEnPassantes(Piece::Color piecesColorToInvalidate)
+{
+	for (auto& row : squares)
+	{
+		for (auto& sqr : row)
+		{
+			Pawn* p = dynamic_cast<Pawn*>(sqr.getPiece());
+			if (p && p->getColor() == piecesColorToInvalidate)
+			{
+				p->setValidEnPassantLeft(false);
+				p->setValidEnPassantRight(false);
+			}
+		}
+	}
 }
