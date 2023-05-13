@@ -1,4 +1,6 @@
 #include "Queen.h"
+#include "MovesTracker.h"
+#include "Board.h"
 
 Queen::Queen(Color withColor) : Piece(withColor)
 {

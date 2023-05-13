@@ -1,4 +1,6 @@
 #include "Rook.h"
+#include "MovesTracker.h"
+#include "Board.h"
 
 Rook::Rook(Color withColor) : Piece(withColor)
 {

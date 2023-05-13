@@ -1,6 +1,7 @@
 #pragma once
 //#include "Piece.h"
 #include "King.h"
+#include "Pawn.h"
 
 // Tracks board moves and allows checking them step by step
 class MovesTracker
@@ -17,7 +18,7 @@ public:
 		bool takenPieceMoved;
 		King::Castle castle;
 		std::vector<std::pair<int, int>> affectedSquares;
-		//Pawn::EnPassant enPassant;
+		Pawn::EnPassant enPassant;
 
 		Move(
 			Piece::Type pieceType,
@@ -27,12 +28,12 @@ public:
 			std::pair<int, int> to,
 			bool takenPieceMoved,
 			King::Castle castle = King::Castle::NONE,
-			std::vector<std::pair<int, int>> affectedSquares = {}
-			//Pawn::EnPassant enPassant = Pawn::EnPassant::NONE
+			std::vector<std::pair<int, int>> affectedSquares = {},
+			Pawn::EnPassant enPassant = Pawn::EnPassant::NONE
 		) : pieceType(pieceType), takenPiece(takenPiece),
 			pieceColor(pieceColor), from(from), to(to), takenPieceMoved(takenPieceMoved),
-			castle(castle), affectedSquares(affectedSquares)
-			//enPassant(enPassant) 
+			castle(castle), affectedSquares(affectedSquares),
+			enPassant(enPassant)
 		{};
 	};
 

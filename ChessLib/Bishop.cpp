@@ -1,4 +1,6 @@
 #include "Bishop.h"
+#include "MovesTracker.h"
+#include "Board.h"
 
 Bishop::Bishop(Color withColor) : Piece(withColor)
 {

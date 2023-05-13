@@ -1,4 +1,6 @@
 #include "Knight.h"
+#include "MovesTracker.h"
+#include "Board.h"
 
 Knight::Knight(Color withColor) : Piece(withColor)
 {

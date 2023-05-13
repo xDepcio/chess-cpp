@@ -1,6 +1,7 @@
 #pragma once
 #include "Piece.h"
-#include "Board.h"
+//#include "Board.h"
+
 class Knight : public Piece
 {
 private:

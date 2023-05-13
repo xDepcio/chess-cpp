@@ -1,6 +1,7 @@
 #include "King.h"
 #include "Board.h"
 #include "Helpers.h"
+#include "MovesTracker.h"
 
 King::King(Color withColor) : Piece(withColor)
 {

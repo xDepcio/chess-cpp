@@ -2,6 +2,12 @@
 #include "Board.h"
 #include "Helpers.h"
 #include <sstream>
+#include "Queen.h"
+#include "Bishop.h"
+#include "King.h"
+#include "Knight.h"
+#include "Rook.h"
+#include "Pawn.h"
 
 MovesTracker::Move MovesTracker::getPointedMove() const
 {

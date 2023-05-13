@@ -1,4 +1,6 @@
 #include "Pawn.h"
+#include "MovesTracker.h"
+#include "Board.h"
 
 bool Pawn::isEnPassantMove(std::pair<int, int> const& move) const
 {
@@ -13,6 +15,8 @@ bool Pawn::isEnPassantMove(std::pair<int, int> const& move) const
 
     if (validEnPassantRight && move.second == coordinates.second + 1)
         return true;
+
+    return false;
 }
 
 Pawn::Pawn(Color withColor) : Piece(withColor)

@@ -1,13 +1,4 @@
 #pragma once
-#include <iostream>
-#include "Board.h"
-#include <vector>
-#include <iomanip>
-#include <sstream>
-#include "Knight.h"
-#include "Rook.h"
-#include "Bishop.h"
-#include "Queen.h"
 
 class Game
 {

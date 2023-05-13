@@ -1,4 +1,12 @@
 #include "Board.h"
+#include "MovesTracker.h"
+#include "Queen.h"
+#include "Bishop.h"
+#include "King.h"
+#include "Knight.h"
+#include "Rook.h"
+#include "Pawn.h"
+#include "Square.h"
 
 Board::Board(int width, int height)
 {

@@ -1,4 +1,15 @@
+#include <iostream>
+#include <vector>
+#include <iomanip>
+#include <sstream>
 #include "Game.h"
+#include "Queen.h"
+#include "Bishop.h"
+#include "King.h"
+#include "Knight.h"
+#include "Rook.h"
+#include "Pawn.h"
+#include "Board.h"
 
 void Game::run()
 {
