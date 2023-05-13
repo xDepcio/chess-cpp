@@ -1,16 +1,9 @@
 #pragma once
 #include "Piece.h"
-//#include "Square.h"
-//#include "Pawn.h"
-//#include "King.h"
 #include <vector>
 #include <iostream>
 #include <typeinfo>
-//#include "Knight.h"
-//#include "Rook.h"
-//#include "Bishop.h"
-//#include "Queen.h"
-//#include "MovesTracker.h"
+
 class MovesTracker;
 class Queen;
 class Bishop;

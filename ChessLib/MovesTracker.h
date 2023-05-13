@@ -1,9 +1,11 @@
 #pragma once
-//#include "Piece.h"
 #include "King.h"
 #include "Pawn.h"
 
 // Tracks board moves and allows checking them step by step
+// IDEA: Make Move struct store pointer to taken (if any was taken) piece, then when reverting move just use
+//		 this pointer in board.serPiece() method. This way Pieces will preserve their states
+//		 like hasMoved, isValidEnpassand etc..
 class MovesTracker
 {
 
