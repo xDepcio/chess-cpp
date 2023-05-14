@@ -61,7 +61,7 @@ private:
 	Board* trackedBoard = nullptr;
 	int pointedMoveNum = -1;
 
-	std::unique_ptr<Piece> makePieceFromType(Piece::Type type, Piece::Color color);
+	//std::unique_ptr<Piece> makePieceFromType(Piece::Type type, Piece::Color color);
 	std::string coordsToString(std::pair<int, int> const& coords) const;
 };
 
