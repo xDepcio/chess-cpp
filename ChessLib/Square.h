@@ -11,6 +11,7 @@ public:
 	std::unique_ptr<Piece> setPiece(std::unique_ptr<Piece> pieceToSet);
 
 	Piece* getPiece() const;
+	std::unique_ptr<Piece> getPieceUniquePtr();
 
 private:
 	std::unique_ptr<Piece> piece;

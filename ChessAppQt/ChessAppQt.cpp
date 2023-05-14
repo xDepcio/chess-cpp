@@ -179,7 +179,7 @@ void ChessAppQt::connectTrackerBtns()
         playedGame->getBoard()->getMovesTracker()->next();
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
         //std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
-        updateSquares(move.affectedSquares);
+        updateSquares(move->affectedSquares);
         if (playedGame->getBoard()->getMovesTracker()->onLatestMove())
         {
             ui.nextMoveBtn->setDisabled(true);
@@ -192,7 +192,7 @@ void ChessAppQt::connectTrackerBtns()
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
         //std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
         playedGame->getBoard()->getMovesTracker()->previous();
-        updateSquares(move.affectedSquares);
+        updateSquares(move->affectedSquares);
         if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() == -1)
         {
             ui.prevMoveBtn->setDisabled(true);
@@ -264,7 +264,7 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
             prevClicked->move(playedGame->getBoard(), fieldCoords);
             playedGame->getBoard()->setTurn(turn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
             //std::vector<std::pair<int, int>> toUpdate = { prevCoords, fieldCoords };
-            auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove().affectedSquares;
+            auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares;
             updateSquares(affectedSqrs);
         }
         playedGame->setClickedPiece(nullptr);

@@ -14,6 +14,7 @@ public:
 	{
 		Piece::Type pieceType;
 		Piece::Type takenPiece;
+		std::unique_ptr<Piece> takenPiecePtr;
 		Piece::Color pieceColor;
 		std::pair<int, int> from;
 		std::pair<int, int> to;
@@ -25,6 +26,7 @@ public:
 		Move(
 			Piece::Type pieceType,
 			Piece::Type takenPiece,
+			std::unique_ptr<Piece> takenPiecePtr,
 			Piece::Color pieceColor,
 			std::pair<int, int> from,
 			std::pair<int, int> to,
@@ -32,7 +34,7 @@ public:
 			King::Castle castle = King::Castle::NONE,
 			std::vector<std::pair<int, int>> affectedSquares = {},
 			Pawn::EnPassant enPassant = Pawn::EnPassant::NONE
-		) : pieceType(pieceType), takenPiece(takenPiece),
+		) : pieceType(pieceType), takenPiece(takenPiece), takenPiecePtr(std::move(takenPiecePtr)),
 			pieceColor(pieceColor), from(from), to(to), takenPieceMoved(takenPieceMoved),
 			castle(castle), affectedSquares(affectedSquares),
 			enPassant(enPassant)
@@ -41,21 +43,21 @@ public:
 
 	MovesTracker(Board* boardToTrack) : trackedBoard(boardToTrack) {};
 
-	Move getPointedMove() const;
+	Move* getPointedMove() const;
 	int getPointedMoveIndex() const;
 
 	bool onLatestMove() const;
 
-	void addMove(Move const& move);
+	void addMove(std::unique_ptr<Move> movePtr);
 	void next();
 	void previous();
-	void revertMove(Move const& move);
-	void makeMove(Move const& move);
+	void revertMove(Move* move);
+	void makeMove(Move* move);
 	void updateToLatest();
 	std::string toPgn() const;
 
 private:
-	std::vector<Move> moves = {};
+	std::vector<std::unique_ptr<Move>> moves = {};
 	Board* trackedBoard = nullptr;
 	int pointedMoveNum = -1;
 

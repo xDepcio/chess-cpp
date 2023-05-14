@@ -105,18 +105,19 @@ void Pawn::enPassantMove(Board* board, std::pair<int, int> const& to)
 {
     std::pair<int, int> takenPawnCoords = { getColor() == Piece::Color::White ? to.first + 1 : to.first - 1, to.second };
 
-    MovesTracker::Move move(
+    auto movePtr = std::make_unique<MovesTracker::Move>(
         Piece::Type::PAWN,
         Piece::Type::PAWN,
+        board->getPieceUniquePtr(takenPawnCoords),
         getColor(),
         coordinates,
         to,
         true,
         King::Castle::NONE,
-        { coordinates, to, takenPawnCoords },
+        std::vector<std::pair<int, int>>({ coordinates, to, takenPawnCoords }),
         coordinates.second - to.second == 1 ? EnPassant::LEFT : EnPassant::RIGHT
     );
-    board->getMovesTracker()->addMove(move);
+    board->getMovesTracker()->addMove(std::move(movePtr));
 
     board->setPiece(to, board->setPiece(coordinates, nullptr));
     board->setPiece(takenPawnCoords, nullptr);

@@ -9,9 +9,9 @@
 #include "Rook.h"
 #include "Pawn.h"
 
-MovesTracker::Move MovesTracker::getPointedMove() const
+MovesTracker::Move* MovesTracker::getPointedMove() const
 {
-	return moves[pointedMoveNum];
+	return moves[pointedMoveNum].get();
 }
 
 int MovesTracker::getPointedMoveIndex() const
@@ -24,48 +24,48 @@ bool MovesTracker::onLatestMove() const
 	return pointedMoveNum == moves.size() - 1;
 }
 
-void MovesTracker::addMove(Move const& move)
+void MovesTracker::addMove(std::unique_ptr<Move> movePtr)
 {
-	moves.push_back(move);
+	moves.push_back(std::move(movePtr));
 	pointedMoveNum = moves.size() - 1;
 }
 
 void MovesTracker::next()
 {
 	pointedMoveNum++;
-	Move moveToMake = moves[pointedMoveNum];
+	Move* moveToMake = moves[pointedMoveNum].get();
 	makeMove(moveToMake);
 }
 
-void MovesTracker::makeMove(Move const& move)
+void MovesTracker::makeMove(Move* move)
 {
-	if (move.enPassant != Pawn::EnPassant::NONE)
+	if (move->enPassant != Pawn::EnPassant::NONE)
 	{
-		std::pair<int, int> takenPawnCoords = { move.pieceColor == Piece::Color::White ? move.to.first + 1 : move.to.first - 1, move.to.second };
-		trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+		std::pair<int, int> takenPawnCoords = { move->pieceColor == Piece::Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second };
+		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 		trackedBoard->setPiece(takenPawnCoords, nullptr);
 	}
-	else if (move.castle != King::Castle::NONE)
+	else if (move->castle != King::Castle::NONE)
 	{
-		std::pair<int, int> rookCoords = { move.from.first, move.to.second == 2 ? 0 : 7 };
-		int dirSign = Helpers::sgn<int>(move.from.second - rookCoords.second);
+		std::pair<int, int> rookCoords = { move->from.first, move->to.second == 2 ? 0 : 7 };
+		int dirSign = Helpers::sgn<int>(move->from.second - rookCoords.second);
 
 		std::pair<int, int> newKingCoords = {
-			move.from.first,
-			move.from.second - 2 * dirSign
+			move->from.first,
+			move->from.second - 2 * dirSign
 		};
 
 		std::pair<int, int> newRookCoords = {
-			move.from.first,
+			move->from.first,
 			newKingCoords.second + dirSign
 		};
 
-		trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 		trackedBoard->setPiece(newRookCoords, trackedBoard->setPiece(rookCoords, nullptr));
 	}
 	else
 	{
-		trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 	}
 }
 
@@ -85,10 +85,10 @@ std::string MovesTracker::toPgn() const
 	{
 		if (i % 2 == 0)
 			result << i/2 + 1 << ". ";
-		auto move = moves[i];
-		if (move.castle == King::Castle::NONE)
+		auto move = moves[i].get();
+		if (move->castle == King::Castle::NONE)
 		{
-			result << coordsToString(move.to) << " ";
+			result << coordsToString(move->to) << " ";
 		}
 	}
 
@@ -97,36 +97,36 @@ std::string MovesTracker::toPgn() const
 
 void MovesTracker::previous()
 {
-	Move moveToRevert = moves[pointedMoveNum];
+	Move* moveToRevert = moves[pointedMoveNum].get();
 	revertMove(moveToRevert);
 	pointedMoveNum--;
 }
 
-void MovesTracker::revertMove(Move const& move)
+void MovesTracker::revertMove(Move* move)
 {
-	if (move.enPassant != Pawn::EnPassant::NONE)
+	if (move->enPassant != Pawn::EnPassant::NONE)
 	{
-		trackedBoard->setPiece(move.from, trackedBoard->setPiece(move.to, nullptr));
+		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 		
 		trackedBoard->setPiece(
-			{ move.pieceColor == Piece::Color::White ? move.to.first + 1 : move.to.first - 1, move.to.second },
-			makePieceFromType(Piece::Type::PAWN, Helpers::getOtherColor(move.pieceColor))
+			{ move->pieceColor == Piece::Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second },
+			makePieceFromType(Piece::Type::PAWN, Helpers::getOtherColor(move->pieceColor))
 		);
 	}
-	else if (move.castle != King::Castle::NONE)
+	else if (move->castle != King::Castle::NONE)
 	{
-		trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
-		trackedBoard->setPiece(move.to, nullptr);
+		trackedBoard->setPiece(move->from, makePieceFromType(move->pieceType, move->pieceColor));
+		trackedBoard->setPiece(move->to, nullptr);
 
-		std::pair<int, int> rookCurrCoords = { move.from.first, move.castle == King::Castle::LONG ? 3 : 5};
-		std::pair<int, int> rookPrevCoords = { move.from.first, move.castle == King::Castle::LONG ? 0 : 7};
-		trackedBoard->setPiece(rookPrevCoords, makePieceFromType(Piece::Type::ROOK, move.pieceColor));
+		std::pair<int, int> rookCurrCoords = { move->from.first, move->castle == King::Castle::LONG ? 3 : 5};
+		std::pair<int, int> rookPrevCoords = { move->from.first, move->castle == King::Castle::LONG ? 0 : 7};
+		trackedBoard->setPiece(rookPrevCoords, makePieceFromType(Piece::Type::ROOK, move->pieceColor));
 		trackedBoard->setPiece(rookCurrCoords, nullptr);
 	}
 	else
 	{
-		trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
-		trackedBoard->setPiece(move.to, makePieceFromType(move.takenPiece, Helpers::getOtherColor(move.pieceColor)));
+		trackedBoard->setPiece(move->from, makePieceFromType(move->pieceType, move->pieceColor));
+		trackedBoard->setPiece(move->to, makePieceFromType(move->takenPiece, Helpers::getOtherColor(move->pieceColor)));
 	}
 }
 

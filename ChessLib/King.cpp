@@ -58,17 +58,18 @@ void King::castleMove(Board* board, std::pair<int, int> rookCoords)
 	board->setPiece(newRookCoords, board->setPiece(rookCoords, nullptr));
 
 
-	MovesTracker::Move move(
+	auto mvPtr = std::make_unique<MovesTracker::Move>(
 		Piece::Type::KING,
 		Piece::Type::NONE,
+		nullptr,
 		color,
 		oldCoords,
 		coordinates,
 		false,
 		dirSign == 1 ? King::Castle::LONG : King::Castle::SHORT,
-		{ oldCoords, rookCoords, coordinates, newRookCoords }
+		std::vector<std::pair<int, int>>({ oldCoords, rookCoords, coordinates, newRookCoords })
 	);
 
-	board->getMovesTracker()->addMove(move);
+	board->getMovesTracker()->addMove(std::move(mvPtr));
 	
 }

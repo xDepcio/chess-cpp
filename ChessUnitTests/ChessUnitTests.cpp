@@ -1,7 +1,13 @@
 #include "pch.h"
 #include "CppUnitTest.h"
-#include "../ChessLib/Board.h"
 #include <unordered_set>
+#include "../ChessLib/Board.h"
+#include "../ChessLib/King.h"
+#include "../ChessLib/Pawn.h"
+#include "../ChessLib/Knight.h"
+#include "../ChessLib/Bishop.h"
+#include "../ChessLib/Rook.h"
+#include "../ChessLib/Queen.h"
 
 using namespace Microsoft::VisualStudio::CppUnitTestFramework;
 

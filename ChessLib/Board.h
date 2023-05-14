@@ -27,6 +27,7 @@ public:
 	void printBoard() const;
 
 	Piece* getPiece(std::pair<int, int> coords) const;
+	std::unique_ptr<Piece> getPieceUniquePtr(const std::pair<int, int>& pieceCoords);
 
 	std::pair<int, int> getKingLocation(Piece::Color const kingColor) const;
 

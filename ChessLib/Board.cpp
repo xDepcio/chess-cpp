@@ -67,6 +67,11 @@ Piece* Board::getPiece(std::pair<int, int> coords) const
 	return squares[coords.first][coords.second].getPiece();
 }
 
+std::unique_ptr<Piece> Board::getPieceUniquePtr(const std::pair<int, int>& pieceCoords)
+{
+	return squares[pieceCoords.first][pieceCoords.second].getPieceUniquePtr();
+}
+
 std::pair<int, int> Board::getKingLocation(Piece::Color const kingColor) const
 {
 	int rowNum = 0;
@@ -382,18 +387,19 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 		bool tookPiece = this->getPiece(to) != nullptr;
 		bool takenPieceMoved = takenPiece != nullptr && takenPiece->hasMadeFirstMove();
 
-		MovesTracker::Move mv(
+		auto mvPtr = std::make_unique<MovesTracker::Move>(
 			movedPiece->getType(),
-			takenPiece == nullptr ? Piece::Type::NONE : takenPiece->getType(), 
-			movedPiece->getColor(), 
+			takenPiece == nullptr ? Piece::Type::NONE : takenPiece->getType(),
+			getPieceUniquePtr(to),
+			movedPiece->getColor(),
 			from, 
 			to, 
 			takenPiece ? takenPiece->hasMadeFirstMove() : false,
 			King::Castle::NONE,
-			{from, to}
+			std::vector<std::pair<int, int>>({from, to})
 		);
-		
-		movesTracker->addMove(mv);
+
+		movesTracker->addMove(std::move(mvPtr));
 
 		this->getPiece(from)->handleGotMoved();
 		setPiece(to, setPiece(from, nullptr));
