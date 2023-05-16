@@ -7,6 +7,7 @@
 
 class QtGame;
 class Piece;
+class SkinsManager;
 
 class ChessAppQt : public QMainWindow
 {
@@ -27,7 +28,9 @@ public:
 
     void connectTrackerBtns();
 
-    std::string getPathToPiece(Piece* piece) const;
+    void setupSkinsManagement();
+
+    //std::string getPathToPiece(Piece* piece) const;
 
     void handleBoardFieldClick(std::pair<int, int> const& fieldCoords);
 
@@ -35,4 +38,5 @@ private:
     std::vector<std::pair<int, int>> displayedSquares;
     Ui::ChessAppQtClass ui;
     QtGame* playedGame;
+    std::unique_ptr<SkinsManager> skinsManager;
 };

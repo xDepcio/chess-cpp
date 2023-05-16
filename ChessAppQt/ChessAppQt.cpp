@@ -1,5 +1,6 @@
 #include "ChessAppQt.h"
 #include "QtGame.h"
+#include <qresource.h>
 #include "../../Chess/ChessLib/Square.h"
 #include "../../Chess/ChessLib/Board.h"
 #include "../../Chess/ChessLib/MovesTracker.h"
@@ -9,11 +10,13 @@
 #include "../../Chess/ChessLib/Rook.h"
 #include "../../Chess/ChessLib/King.h"
 #include "../../Chess/ChessLib/Queen.h"
+#include "SkinsManager.h"
 
 ChessAppQt::ChessAppQt(QWidget *parent)
     : QMainWindow(parent)
 {
     ui.setupUi(this);
+    setupSkinsManagement();
     connectMenuBtns();
     {
         startGame();
@@ -60,7 +63,7 @@ void ChessAppQt::updateBoard()
     {
         for (auto& sqr : row)
         {
-            std::string pathToPiece = getPathToPiece(sqr.getPiece());
+            std::string pathToPiece = skinsManager.get()->getPathToPiece(sqr.getPiece());
             QString qImagePath = QString::fromStdString(pathToPiece);
             QPixmap pixmap(qImagePath);
             pixmap = pixmap.scaled(qtSquares[qtSquareNum]->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -90,8 +93,10 @@ void ChessAppQt::updateSquares(std::vector<std::pair<int, int>>& coordsToUpdate)
         Piece* piece = squares[coord.first][coord.second].getPiece();
         ClickableLabel* label = qtSquares[coord.first][coord.second];
 
-        std::string pathToPiece = getPathToPiece(piece);
+        std::string pathToPiece = skinsManager.get()->getPathToPiece(piece);
+
         QString qImagePath = QString::fromStdString(pathToPiece);
+        
         QPixmap pixmap(qImagePath);
         pixmap = pixmap.scaled(label->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         label->setPixmap(pixmap);
@@ -178,7 +183,6 @@ void ChessAppQt::connectTrackerBtns()
     connect(ui.nextMoveBtn, &QPushButton::clicked, this, [this]() {
         playedGame->getBoard()->getMovesTracker()->next();
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
-        //std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
         updateSquares(move->affectedSquares);
         if (playedGame->getBoard()->getMovesTracker()->onLatestMove())
         {
@@ -190,7 +194,6 @@ void ChessAppQt::connectTrackerBtns()
 
     connect(ui.prevMoveBtn, &QPushButton::clicked, this, [this]() {
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
-        //std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
         playedGame->getBoard()->getMovesTracker()->previous();
         updateSquares(move->affectedSquares);
         if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() == -1)
@@ -202,32 +205,37 @@ void ChessAppQt::connectTrackerBtns()
     });
 }
 
-std::string ChessAppQt::getPathToPiece(Piece* piece) const
+void ChessAppQt::setupSkinsManagement()
 {
-    if (piece == nullptr)
-        return "";
-    
-    // TODO... Change to universal path
-    std::string base = "C:/Users/Olek/Desktop/pieces/";
-    
-
-    if (dynamic_cast<Pawn*>(piece))
-        base += "pawn";
-    if (dynamic_cast<Knight*>(piece))
-        base += "knight";
-    if (dynamic_cast<Bishop*>(piece))
-        base += "bishop";
-    if (dynamic_cast<Queen*>(piece))
-        base += "queen";
-    if (dynamic_cast<King*>(piece))
-        base += "king";
-    if (dynamic_cast<Rook*>(piece))
-        base += "rook";
-
-    base += piece->getColor() == Piece::Color::White ? "-white.png" : "-black.png";
-
-    return base;
+    skinsManager = std::move(std::make_unique<SkinsManager>());
+    skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STARWARS);
 }
+
+//std::string ChessAppQt::getPathToPiece(Piece* piece) const
+//{
+    //if (piece == nullptr)
+    //    return "";
+    //
+    //// TODO... Change to universal path
+    //std::string base = "C:/Users/Olek/Desktop/pieces/";
+    //
+    //if (dynamic_cast<Pawn*>(piece))
+    //    base += "pawn";
+    //if (dynamic_cast<Knight*>(piece))
+    //    base += "knight";
+    //if (dynamic_cast<Bishop*>(piece))
+    //    base += "bishop";
+    //if (dynamic_cast<Queen*>(piece))
+    //    base += "queen";
+    //if (dynamic_cast<King*>(piece))
+    //    base += "king";
+    //if (dynamic_cast<Rook*>(piece))
+    //    base += "rook";
+
+    //base += piece->getColor() == Piece::Color::White ? "-white.png" : "-black.png";
+
+    //return base;
+//}
 
 void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
 {
@@ -235,12 +243,6 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
     Piece* prevClicked = playedGame->getClickedPiece();
     auto prevCoords = playedGame->getClickedPieceCoords();
     auto turn = playedGame->getBoard()->getTurn();
-
-    //bool prevCurrSame = clickedPiece->getColor() == prevClicked->getColor();
-    //bool prevCurrNull = clickedPiece == nullptr && prevClicked == nullptr;
-    //bool prevNullCurrOwn = prevClicked == nullptr && clickedPiece->getColor() == turn;
-    //bool prevNullCurrEnemy = prevClicked == nullptr && clickedPiece->getColor() != turn;
-    //bool prevCurrOwn = clickedPiece->getColor() == turn && prevClicked->getColor() == turn;
 
     clearDisplayMoves(displayedSquares);
     if (
@@ -260,10 +262,8 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
         // valid move and move
         if (playedGame->isMoveValid(prevCoords, fieldCoords))
         {
-            //playedGame->move(prevCoords, fieldCoords);
             prevClicked->move(playedGame->getBoard(), fieldCoords);
             playedGame->getBoard()->setTurn(turn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
-            //std::vector<std::pair<int, int>> toUpdate = { prevCoords, fieldCoords };
             auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares;
             updateSquares(affectedSqrs);
         }
