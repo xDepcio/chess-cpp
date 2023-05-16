@@ -30,6 +30,8 @@ public:
 
     void setupSkinsManagement();
 
+    void startNewChessGame();
+
     //std::string getPathToPiece(Piece* piece) const;
 
     void handleBoardFieldClick(std::pair<int, int> const& fieldCoords);

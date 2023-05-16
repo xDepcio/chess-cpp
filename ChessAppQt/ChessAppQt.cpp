@@ -18,10 +18,8 @@ ChessAppQt::ChessAppQt(QWidget *parent)
     ui.setupUi(this);
     setupSkinsManagement();
     connectMenuBtns();
-    {
-        startGame();
-        connectTrackerBtns();
-    }
+    connectSquares();
+    connectTrackerBtns();
 }
 
 ChessAppQt::~ChessAppQt()
@@ -30,18 +28,15 @@ ChessAppQt::~ChessAppQt()
 void ChessAppQt::connectMenuBtns()
 {
     connect(ui.menuPlayBtn, &QPushButton::clicked, this, [this]() {
+        startNewChessGame();
         ui.stackedWidget->setCurrentIndex(0);
+    });
+
+    connect(ui.menuSkinsBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(1);
     });
 }
 
-void ChessAppQt::startGame()
-{
-    connectSquares();
-
-    playedGame = new QtGame();
-    playedGame->run();
-    updateBoard();
-}
 
 void ChessAppQt::updateBoard()
 {
@@ -209,33 +204,27 @@ void ChessAppQt::setupSkinsManagement()
 {
     skinsManager = std::move(std::make_unique<SkinsManager>());
     skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STARWARS);
+
+    connect(ui.skinsBackBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(2);
+    });
+
+    connect(ui.radioBtnStandard, &QRadioButton::clicked, this, [this]() {
+        skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD);
+    });
+
+    connect(ui.radioBtnStarWars, &QRadioButton::clicked, this, [this]() {
+        skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STARWARS);
+    });
 }
 
-//std::string ChessAppQt::getPathToPiece(Piece* piece) const
-//{
-    //if (piece == nullptr)
-    //    return "";
-    //
-    //// TODO... Change to universal path
-    //std::string base = "C:/Users/Olek/Desktop/pieces/";
-    //
-    //if (dynamic_cast<Pawn*>(piece))
-    //    base += "pawn";
-    //if (dynamic_cast<Knight*>(piece))
-    //    base += "knight";
-    //if (dynamic_cast<Bishop*>(piece))
-    //    base += "bishop";
-    //if (dynamic_cast<Queen*>(piece))
-    //    base += "queen";
-    //if (dynamic_cast<King*>(piece))
-    //    base += "king";
-    //if (dynamic_cast<Rook*>(piece))
-    //    base += "rook";
+void ChessAppQt::startNewChessGame()
+{
+    playedGame = new QtGame();
+    playedGame->run();
+    updateBoard();
+}
 
-    //base += piece->getColor() == Piece::Color::White ? "-white.png" : "-black.png";
-
-    //return base;
-//}
 
 void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
 {
