@@ -7,6 +7,11 @@
 #include "../../Chess/ChessLib/King.h"
 #include "../../Chess/ChessLib/Queen.h"
 
+QtGame::~QtGame()
+{
+	delete trackedBoard;
+}
+
 void QtGame::setupBoard()
 {
 	Board* boardPt = new Board(8, 8);
@@ -106,9 +111,9 @@ bool QtGame::isMoveValid(std::pair<int, int> const& from, std::pair<int, int> co
 	return trackedBoard->getPiece(from)->isMoveValid(trackedBoard, from, to);
 }
 
-void QtGame::move(std::pair<int, int> const& from, std::pair<int, int> const& to)
+void QtGame::move(Piece* piece, std::pair<int, int> const& to)
 {
-	trackedBoard->move(from, to);
+	piece->move(trackedBoard, to);
 	switch (trackedBoard->getBoardState())
 	{
 	case Board::BoardState::STALEMATE:

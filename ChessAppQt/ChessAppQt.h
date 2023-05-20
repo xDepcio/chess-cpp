@@ -19,7 +19,6 @@ public:
 
     void connectMenuBtns();
 
-    void startGame();
     void updateBoard();
     void updateSquares(std::vector<std::pair<int, int>>& coordsToUpdate);
     void connectSquares();
@@ -35,6 +34,9 @@ public:
     void handleChessGameStateChange();
 
     void handleBoardFieldClick(std::pair<int, int> const& fieldCoords);
+
+    void handleRestartBtn();
+    void connectRestartBtn();
 
 private:
     std::vector<std::pair<int, int>> displayedSquares;

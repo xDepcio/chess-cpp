@@ -19,6 +19,7 @@ ChessAppQt::ChessAppQt(QWidget *parent) : QMainWindow(parent)
     connectMenuBtns();
     connectSquares();
     connectTrackerBtns();
+    connectRestartBtn();
 }
 
 ChessAppQt::~ChessAppQt()
@@ -181,7 +182,11 @@ void ChessAppQt::connectTrackerBtns()
         if (playedGame->getBoard()->getMovesTracker()->onLatestMove())
         {
             ui.nextMoveBtn->setDisabled(true);
-            return;
+            //return;
+        }
+        else
+        {
+            ui.nextMoveBtn->setDisabled(false);
         }
         ui.prevMoveBtn->setDisabled(false);
     });
@@ -190,10 +195,14 @@ void ChessAppQt::connectTrackerBtns()
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
         playedGame->getBoard()->getMovesTracker()->previous();
         updateSquares(move->affectedSquares);
-        if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() == -1)
+        if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() <= -1)
         {
             ui.prevMoveBtn->setDisabled(true);
-            return;
+            //return;
+        }
+        else
+        {
+            ui.prevMoveBtn->setDisabled(false);
         }
         ui.nextMoveBtn->setDisabled(false);
     });
@@ -219,6 +228,9 @@ void ChessAppQt::setupSkinsManagement()
 
 void ChessAppQt::startNewChessGame()
 {
+    ui.nextMoveBtn->setDisabled(true);
+    ui.prevMoveBtn->setDisabled(true);
+
     playedGame = new QtGame();
     playedGame->run();
     updateBoard();
@@ -237,6 +249,8 @@ void ChessAppQt::handleChessGameStateChange()
     case QtGame::GameState::STALEMATE:
         ui.gameEndLabel->setText("♚ Remis! ♔");
         break;
+    case QtGame::GameState::PLAYED:
+        ui.prevMoveBtn->setDisabled(false);
     default:
         break;
     }
@@ -269,7 +283,7 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
         if (playedGame->isMoveValid(prevCoords, fieldCoords))
         {
             //prevClicked->move(playedGame->getBoard(), fieldCoords);
-            playedGame->move(prevClicked->coords(), fieldCoords);
+            playedGame->move(prevClicked, fieldCoords);
             playedGame->getBoard()->setTurn(turn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
             auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares;
             updateSquares(affectedSqrs);
@@ -290,5 +304,16 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
     {
         throw std::runtime_error(":(");
     }
+}
+
+void ChessAppQt::handleRestartBtn()
+{
+    delete playedGame;
+    startNewChessGame();
+}
+
+void ChessAppQt::connectRestartBtn()
+{
+    connect(ui.restartBtn, &QPushButton::clicked, this, &ChessAppQt::handleRestartBtn);
 }
 

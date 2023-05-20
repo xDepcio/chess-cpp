@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>954</width>
+    <width>952</width>
     <height>691</height>
    </rect>
   </property>
@@ -2261,7 +2261,14 @@
               <item>
                <widget class="QLabel" name="gameEndLabel">
                 <property name="text">
-                 <string>Białe wygwywają</string>
+                 <string/>
+                </property>
+               </widget>
+              </item>
+              <item>
+               <widget class="QPushButton" name="restartBtn">
+                <property name="text">
+                 <string>Zacznij od nowa</string>
                 </property>
                </widget>
               </item>
@@ -2422,7 +2429,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>954</width>
+     <width>952</width>
      <height>22</height>
     </rect>
    </property>
