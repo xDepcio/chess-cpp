@@ -15,12 +15,15 @@ class Square;
 
 class QtGame
 {
-private:
-	Board* trackedBoard;
-	Piece* clickedPiece;
-	std::pair<int, int> clickedPieceCoords;
-
 public:
+	enum class GameState
+	{
+		CHECKMATED_BLACK,
+		CHECKMATED_WHITE,
+		STALEMATE,
+		PLAYED
+	};
+
 	QtGame() : trackedBoard(nullptr), clickedPiece(nullptr), clickedPieceCoords({}) {};
 
 	void setupBoard();
@@ -41,5 +44,15 @@ public:
 	std::pair<int, int> getClickedPieceCoords() const;
 
 	Board* getBoard() const;
+
+	void setGameState(const GameState state);
+
+	GameState getGameState() const;
+
+private:
+	Board* trackedBoard;
+	Piece* clickedPiece;
+	std::pair<int, int> clickedPieceCoords;
+	GameState gameState = GameState::PLAYED;
 };
 

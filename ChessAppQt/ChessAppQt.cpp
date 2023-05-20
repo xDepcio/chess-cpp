@@ -1,4 +1,4 @@
-#include "ChessAppQt.h"
+﻿#include "ChessAppQt.h"
 #include "QtGame.h"
 #include <qresource.h>
 #include "../ChessLib/Square.h"
@@ -12,8 +12,7 @@
 #include "../ChessLib/Queen.h"
 #include "SkinsManager.h"
 
-ChessAppQt::ChessAppQt(QWidget *parent)
-    : QMainWindow(parent)
+ChessAppQt::ChessAppQt(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
     setupSkinsManagement();
@@ -203,7 +202,7 @@ void ChessAppQt::connectTrackerBtns()
 void ChessAppQt::setupSkinsManagement()
 {
     skinsManager = std::move(std::make_unique<SkinsManager>());
-    skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STARWARS);
+    skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD);
 
     connect(ui.skinsBackBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(2);
@@ -223,6 +222,24 @@ void ChessAppQt::startNewChessGame()
     playedGame = new QtGame();
     playedGame->run();
     updateBoard();
+}
+
+void ChessAppQt::handleChessGameStateChange()
+{
+    switch (playedGame->getGameState())
+    {
+    case QtGame::GameState::CHECKMATED_BLACK:
+        ui.gameEndLabel->setText("♔ Białe wygrywają!");
+        break;
+    case QtGame::GameState::CHECKMATED_WHITE:
+        ui.gameEndLabel->setText("♚ Czarne wygrywają!");
+        break;
+    case QtGame::GameState::STALEMATE:
+        ui.gameEndLabel->setText("♚ Remis! ♔");
+        break;
+    default:
+        break;
+    }
 }
 
 
@@ -251,10 +268,12 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
         // valid move and move
         if (playedGame->isMoveValid(prevCoords, fieldCoords))
         {
-            prevClicked->move(playedGame->getBoard(), fieldCoords);
+            //prevClicked->move(playedGame->getBoard(), fieldCoords);
+            playedGame->move(prevClicked->coords(), fieldCoords);
             playedGame->getBoard()->setTurn(turn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
             auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares;
             updateSquares(affectedSqrs);
+            handleChessGameStateChange();
         }
         playedGame->setClickedPiece(nullptr);
         playedGame->setClickedPieceCoords({});

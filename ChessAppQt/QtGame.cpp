@@ -76,6 +76,16 @@ Board* QtGame::getBoard() const
 	return trackedBoard;
 }
 
+void QtGame::setGameState(const GameState state)
+{
+	gameState = state;
+}
+
+QtGame::GameState QtGame::getGameState() const
+{
+	return gameState;
+}
+
 std::vector<std::vector<Square>>& QtGame::getSquares()
 {
 	return trackedBoard->getBoard();
@@ -99,6 +109,20 @@ bool QtGame::isMoveValid(std::pair<int, int> const& from, std::pair<int, int> co
 void QtGame::move(std::pair<int, int> const& from, std::pair<int, int> const& to)
 {
 	trackedBoard->move(from, to);
+	switch (trackedBoard->getBoardState())
+	{
+	case Board::BoardState::STALEMATE:
+		gameState = GameState::STALEMATE;
+		break;
+	case Board::BoardState::CHECKMATED_BLACK:
+		gameState = GameState::CHECKMATED_BLACK;
+		break;
+	case Board::BoardState::CHECKMATED_WHITE:
+		gameState = GameState::CHECKMATED_WHITE;
+		break;
+	default:
+		break;
+	}
 }
 
 Piece* QtGame::getClickedPiece() const

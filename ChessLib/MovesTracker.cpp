@@ -42,6 +42,7 @@ void MovesTracker::makeMove(Move* move)
 	if (move->enPassant != Pawn::EnPassant::NONE)
 	{
 		std::pair<int, int> takenPawnCoords = { move->pieceColor == Piece::Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second };
+		move->takenPiecePtr = std::move(trackedBoard->getPieceUniquePtr(takenPawnCoords));
 		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 		trackedBoard->setPiece(takenPawnCoords, nullptr);
 	}
@@ -65,6 +66,7 @@ void MovesTracker::makeMove(Move* move)
 	}
 	else
 	{
+		move->takenPiecePtr = std::move(trackedBoard->getPieceUniquePtr(move->to));
 		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 	}
 }

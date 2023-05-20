@@ -411,14 +411,13 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 		{
 			if (isCheckMate(getPiece(to)->otherColor()))
 			{
-				std::cout << "CHECK MATE!";
-				throw std::runtime_error("CHECKMATE NOT HANDLED YET!");
+				setBoardState(movedPiece->getColor() == Piece::Color::White ? BoardState::CHECKMATED_BLACK : BoardState::CHECKMATED_WHITE);
 			}
 		}
 		// If move stalemated anyone
 		else if (isStalemate(Piece::Color::Black) || isStalemate(Piece::Color::White))
 		{
-			throw std::domain_error("BRUH :((");
+			setBoardState(BoardState::STALEMATE);
 		}
 		// invalidate previously avalible enpassantes
 		if (shouldInvalidateEnPassantes)
@@ -544,6 +543,16 @@ void Board::setTurn(Piece::Color const turnColor)
 void Board::invalidateEnPassantesOnNextMove()
 {
 	shouldInvalidateEnPassantes = true;
+}
+
+void Board::setBoardState(BoardState stateToSet)
+{
+	boardState = stateToSet;
+}
+
+Board::BoardState Board::getBoardState() const
+{
+	return boardState;
 }
 
 Board::moveState Board::addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)

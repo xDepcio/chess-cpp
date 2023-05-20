@@ -32,7 +32,7 @@ public:
 
     void startNewChessGame();
 
-    //std::string getPathToPiece(Piece* piece) const;
+    void handleChessGameStateChange();
 
     void handleBoardFieldClick(std::pair<int, int> const& fieldCoords);
 

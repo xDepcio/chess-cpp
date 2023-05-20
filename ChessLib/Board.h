@@ -16,6 +16,13 @@ class Square;
 class Board
 {
 public:
+	enum class BoardState
+	{
+		CHECKMATED_WHITE,
+		CHECKMATED_BLACK,
+		STALEMATE,
+		PLAYED
+	};
 
 	Board(int width, int height);
 	~Board();
@@ -60,6 +67,10 @@ public:
 
 	void invalidateEnPassantesOnNextMove();
 
+	void setBoardState(BoardState stateToSet);
+
+	BoardState getBoardState() const;
+
 protected:
 	int width;
 	int height;
@@ -67,6 +78,7 @@ protected:
 	MovesTracker* movesTracker;
 	Piece::Color turn = Piece::Color::White;
 	bool shouldInvalidateEnPassantes = false;
+	BoardState boardState = BoardState::PLAYED;
 
 	struct moveState
 	{
