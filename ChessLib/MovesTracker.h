@@ -1,11 +1,13 @@
 #pragma once
 #include "King.h"
 #include "Pawn.h"
+#include "Constants.h"
 
 // Tracks board moves and allows checking them step by step
 // IDEA: Make Move struct store pointer to taken (if any was taken) piece, then when reverting move just use
 //		 this pointer in board.serPiece() method. This way Pieces will preserve their states
 //		 like hasMoved, isValidEnpassand etc..
+// DONE ^
 class MovesTracker
 {
 
@@ -23,6 +25,8 @@ public:
 		std::vector<std::pair<int, int>> affectedSquares;
 		Pawn::EnPassant enPassant;
 		bool checkedEnemy;
+		Promotions promotion;
+		std::unique_ptr<Piece> promotedPawn;
 
 		Move(
 			Piece::Type pieceType,
@@ -35,11 +39,14 @@ public:
 			King::Castle castle = King::Castle::NONE,
 			std::vector<std::pair<int, int>> affectedSquares = {},
 			Pawn::EnPassant enPassant = Pawn::EnPassant::NONE,
-			bool checkedEnemy = false
+			bool checkedEnemy = false,
+			Promotions promotion = Promotions::NONE,
+			std::unique_ptr<Piece> promotedPawn = nullptr
 		) : pieceType(pieceType), takenPiece(takenPiece), takenPiecePtr(std::move(takenPiecePtr)),
 			pieceColor(pieceColor), from(from), to(to), takenPieceMoved(takenPieceMoved),
 			castle(castle), affectedSquares(affectedSquares),
-			enPassant(enPassant), checkedEnemy(checkedEnemy)
+			enPassant(enPassant), checkedEnemy(checkedEnemy), promotion(promotion), 
+			promotedPawn(std::move(promotedPawn))
 		{};
 	};
 

@@ -39,7 +39,28 @@ void MovesTracker::next()
 
 void MovesTracker::makeMove(Move* move)
 {
-	if (move->enPassant != Pawn::EnPassant::NONE)
+	if (move->promotion != Promotions::NONE)
+	{
+		move->promotedPawn = std::move(trackedBoard->getPieceUniquePtr(move->from));
+		switch (move->promotion)
+		{
+		case Promotions::ROOK:
+			trackedBoard->setPiece(move->to, std::make_unique<Rook>(move->pieceColor));
+			break;
+		case Promotions::KNGIHT:
+			trackedBoard->setPiece(move->to, std::make_unique<Knight>(move->pieceColor));
+			break;
+		case Promotions::BISHOP:
+			trackedBoard->setPiece(move->to, std::make_unique<Bishop>(move->pieceColor));
+			break;
+		case Promotions::QUEEN:
+			trackedBoard->setPiece(move->to, std::make_unique<Queen>(move->pieceColor));
+			break;
+		default:
+			break;
+		}
+	}
+	else if (move->enPassant != Pawn::EnPassant::NONE)
 	{
 		std::pair<int, int> takenPawnCoords = { move->pieceColor == Piece::Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second };
 		move->takenPiecePtr = std::move(trackedBoard->getPieceUniquePtr(takenPawnCoords));
@@ -106,7 +127,12 @@ void MovesTracker::previous()
 
 void MovesTracker::revertMove(Move* move)
 {
-	if (move->enPassant != Pawn::EnPassant::NONE)
+	if (move->promotion != Promotions::NONE)
+	{
+		trackedBoard->setPiece(move->from, std::move(move->promotedPawn));
+		trackedBoard->setPiece(move->to, std::move(move->takenPiecePtr));
+	}
+	else if (move->enPassant != Pawn::EnPassant::NONE)
 	{
 		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 		

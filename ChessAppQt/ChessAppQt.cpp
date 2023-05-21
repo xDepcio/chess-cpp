@@ -11,6 +11,7 @@
 #include "../ChessLib/King.h"
 #include "../ChessLib/Queen.h"
 #include "SkinsManager.h"
+#include "../ChessLib/Constants.h"
 
 ChessAppQt::ChessAppQt(QWidget *parent) : QMainWindow(parent)
 {
@@ -20,6 +21,7 @@ ChessAppQt::ChessAppQt(QWidget *parent) : QMainWindow(parent)
     connectSquares();
     connectTrackerBtns();
     connectRestartBtn();
+    setupPromotionBtns();
 }
 
 ChessAppQt::~ChessAppQt()
@@ -226,10 +228,37 @@ void ChessAppQt::setupSkinsManagement()
     });
 }
 
+void ChessAppQt::setupPromotionBtns()
+{
+    ui.promotionWidget->hide();
+
+    connect(ui.promotionQueenBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->choosePromotion(Promotions::QUEEN);
+        updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
+        ui.promotionWidget->hide();
+    });
+    connect(ui.promotionKnightBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->choosePromotion(Promotions::KNGIHT);
+        updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
+        ui.promotionWidget->hide();
+    });
+    connect(ui.promotionRookBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->choosePromotion(Promotions::ROOK);
+        updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
+        ui.promotionWidget->hide();
+    });
+    connect(ui.promotionBishopBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->choosePromotion(Promotions::BISHOP);
+        updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
+        ui.promotionWidget->hide();
+    });
+}
+
 void ChessAppQt::startNewChessGame()
 {
     ui.nextMoveBtn->setDisabled(true);
     ui.prevMoveBtn->setDisabled(true);
+    ui.promotionWidget->hide();
 
     playedGame = new QtGame();
     playedGame->run();
@@ -251,6 +280,10 @@ void ChessAppQt::handleChessGameStateChange()
         break;
     case QtGame::GameState::PLAYED:
         ui.prevMoveBtn->setDisabled(false);
+        break;
+    case QtGame::GameState::REQUEST_PROMOTION:
+        ui.promotionWidget->show();
+        break;
     default:
         break;
     }

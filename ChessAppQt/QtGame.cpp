@@ -91,6 +91,12 @@ QtGame::GameState QtGame::getGameState() const
 	return gameState;
 }
 
+void QtGame::choosePromotion(Promotions promotion)
+{
+	trackedBoard->receivePromotionChoice(promotion);
+	gameState = GameState::PLAYED;
+}
+
 std::vector<std::vector<Square>>& QtGame::getSquares()
 {
 	return trackedBoard->getBoard();
@@ -124,6 +130,12 @@ void QtGame::move(Piece* piece, std::pair<int, int> const& to)
 		break;
 	case Board::BoardState::CHECKMATED_WHITE:
 		gameState = GameState::CHECKMATED_WHITE;
+		break;
+	case Board::BoardState::REQUEST_PROMOTION:
+		gameState = GameState::REQUEST_PROMOTION;
+		break;
+	case Board::BoardState::PLAYED:
+		gameState = GameState::PLAYED;
 		break;
 	default:
 		break;

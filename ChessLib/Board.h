@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <typeinfo>
+#include "Constants.h"
 
 class MovesTracker;
 class Queen;
@@ -21,8 +22,16 @@ public:
 		CHECKMATED_WHITE,
 		CHECKMATED_BLACK,
 		STALEMATE,
-		PLAYED
+		PLAYED,
+		REQUEST_PROMOTION
 	};
+	//enum class Promotions
+	//{
+	//	ROOK,
+	//	QUEEN,
+	//	KNIGHT,
+	//	BISHOP
+	//};
 
 	Board(int width, int height);
 	~Board();
@@ -71,6 +80,9 @@ public:
 
 	BoardState getBoardState() const;
 
+	void requestPromotionChoice(std::pair<int, int> const& moveFrom, std::pair<int, int> const& moveTo);
+	void receivePromotionChoice(Promotions promotion);
+
 protected:
 	int width;
 	int height;
@@ -79,6 +91,8 @@ protected:
 	Piece::Color turn = Piece::Color::White;
 	bool shouldInvalidateEnPassantes = false;
 	BoardState boardState = BoardState::PLAYED;
+	std::pair<int, int> promoMoveFrom;
+	std::pair<int, int> promoMoveTo;
 
 	struct moveState
 	{

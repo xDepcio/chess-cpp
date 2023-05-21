@@ -2230,6 +2230,40 @@
             </spacer>
            </item>
            <item>
+            <widget class="QWidget" name="promotionWidget" native="true">
+             <layout class="QGridLayout" name="gridLayout">
+              <item row="0" column="0">
+               <widget class="QPushButton" name="promotionQueenBtn">
+                <property name="text">
+                 <string>Królowa</string>
+                </property>
+               </widget>
+              </item>
+              <item row="0" column="1">
+               <widget class="QPushButton" name="promotionRookBtn">
+                <property name="text">
+                 <string>Wieża</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="0">
+               <widget class="QPushButton" name="promotionKnightBtn">
+                <property name="text">
+                 <string>Koń</string>
+                </property>
+               </widget>
+              </item>
+              <item row="1" column="1">
+               <widget class="QPushButton" name="promotionBishopBtn">
+                <property name="text">
+                 <string>Goniec</string>
+                </property>
+               </widget>
+              </item>
+             </layout>
+            </widget>
+           </item>
+           <item>
             <widget class="QWidget" name="widget_3" native="true">
              <layout class="QHBoxLayout" name="horizontalLayout_11">
               <item>

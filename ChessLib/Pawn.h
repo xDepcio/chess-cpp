@@ -10,6 +10,7 @@ private:
 	bool validEnPassantRight = false;
 
 	bool isEnPassantMove(std::pair<int, int> const& move) const;
+	void promotionMove(Board* board, std::pair<int, int> const& to);
 public:
 	enum class EnPassant
 	{

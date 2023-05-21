@@ -1,6 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "../ChessLib/Constants.h"
 
 class Piece;
 class Board;
@@ -14,7 +15,8 @@ public:
 		CHECKMATED_BLACK,
 		CHECKMATED_WHITE,
 		STALEMATE,
-		PLAYED
+		PLAYED,
+		REQUEST_PROMOTION
 	};
 
 	QtGame() : trackedBoard(nullptr), clickedPiece(nullptr), clickedPieceCoords({}) {};
@@ -42,6 +44,8 @@ public:
 	void setGameState(const GameState state);
 
 	GameState getGameState() const;
+
+	void choosePromotion(Promotions promotion);
 
 private:
 	Board* trackedBoard;

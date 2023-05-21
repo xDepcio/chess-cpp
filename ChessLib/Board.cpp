@@ -555,6 +555,60 @@ Board::BoardState Board::getBoardState() const
 	return boardState;
 }
 
+void Board::requestPromotionChoice(std::pair<int, int> const& moveFrom, std::pair<int, int> const& moveTo)
+{
+	setBoardState(BoardState::REQUEST_PROMOTION);
+	promoMoveFrom = moveFrom;
+	promoMoveTo = moveTo;
+
+}
+
+void Board::receivePromotionChoice(Promotions promotion)
+{
+	auto movedPawn = getPiece(promoMoveFrom);
+	auto takenPiece = getPiece(promoMoveTo);
+	auto movedPawnColor = movedPawn->getColor();
+
+	auto mvPtr = std::make_unique<MovesTracker::Move>(
+		Piece::Type::PAWN,
+		takenPiece == nullptr ? Piece::Type::NONE : takenPiece->getType(),
+		getPieceUniquePtr(promoMoveTo),
+		movedPawn->getColor(),
+		promoMoveFrom,
+		promoMoveTo,
+		takenPiece ? takenPiece->hasMadeFirstMove() : false,
+		King::Castle::NONE,
+		std::vector<std::pair<int, int>>({ promoMoveFrom, promoMoveTo }),
+		Pawn::EnPassant::NONE,
+		false,
+		promotion,
+		getPieceUniquePtr(promoMoveFrom)
+	);
+
+
+	switch (promotion)
+	{
+	case Promotions::ROOK:
+		setPiece(promoMoveTo, std::make_unique<Rook>(movedPawnColor));
+		break;
+	case Promotions::QUEEN:
+		setPiece(promoMoveTo, std::make_unique<Queen>(movedPawnColor));
+		break;
+	case Promotions::KNGIHT:
+		setPiece(promoMoveTo, std::make_unique<Knight>(movedPawnColor));
+		break;
+	case Promotions::BISHOP:
+		setPiece(promoMoveTo, std::make_unique<Bishop>(movedPawnColor));
+		break;
+	case Promotions::NONE:
+		break;
+	default:
+		break;
+	}
+
+	movesTracker->addMove(std::move(mvPtr));
+}
+
 Board::moveState Board::addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
 {
 	moveState feedback = moveState();

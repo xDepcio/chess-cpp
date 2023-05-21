@@ -29,6 +29,8 @@ public:
 
     void setupSkinsManagement();
 
+    void setupPromotionBtns();
+
     void startNewChessGame();
 
     void handleChessGameStateChange();
