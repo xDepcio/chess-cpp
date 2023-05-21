@@ -2,6 +2,7 @@
 #include "Board.h"
 #include "Helpers.h"
 #include "MovesTracker.h"
+#include "Helpers.h"
 
 King::King(Color withColor) : Piece(withColor)
 {
@@ -56,6 +57,7 @@ void King::castleMove(Board* board, std::pair<int, int> rookCoords)
 
 	board->setPiece(newKingCoords, board->setPiece(coordinates, nullptr));
 	board->setPiece(newRookCoords, board->setPiece(rookCoords, nullptr));
+	setMadeFirstMove(true);
 
 
 	auto mvPtr = std::make_unique<MovesTracker::Move>(
@@ -67,7 +69,9 @@ void King::castleMove(Board* board, std::pair<int, int> rookCoords)
 		coordinates,
 		false,
 		dirSign == 1 ? Castle::LONG : Castle::SHORT,
-		std::vector<std::pair<int, int>>({ oldCoords, rookCoords, coordinates, newRookCoords })
+		std::vector<std::pair<int, int>>({ oldCoords, rookCoords, coordinates, newRookCoords }),
+		EnPassant::NONE,
+		board->isCheck(Helpers::getOtherColor(color))
 	);
 
 	board->getMovesTracker()->addMove(std::move(mvPtr));

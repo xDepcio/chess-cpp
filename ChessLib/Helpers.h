@@ -1,5 +1,5 @@
 #pragma once
-#include "Piece.h"
+#include "Constants.h"
 
 class Helpers
 {

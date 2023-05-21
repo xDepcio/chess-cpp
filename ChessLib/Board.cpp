@@ -396,7 +396,9 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 			to, 
 			takenPiece ? takenPiece->hasMadeFirstMove() : false,
 			Castle::NONE,
-			std::vector<std::pair<int, int>>({from, to})
+			std::vector<std::pair<int, int>>({from, to}),
+			EnPassant::NONE,
+			isCheck(movedPiece->otherColor())
 		);
 
 		movesTracker->addMove(std::move(mvPtr));

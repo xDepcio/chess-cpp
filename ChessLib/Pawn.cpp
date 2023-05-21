@@ -2,6 +2,7 @@
 #include "MovesTracker.h"
 #include "Board.h"
 #include "King.h"
+#include "Helpers.h"
 
 bool Pawn::isEnPassantMove(std::pair<int, int> const& move) const
 {
@@ -128,7 +129,8 @@ void Pawn::enPassantMove(Board* board, std::pair<int, int> const& to)
         true,
         Castle::NONE,
         std::vector<std::pair<int, int>>({ coordinates, to, takenPawnCoords }),
-        coordinates.second - to.second == 1 ? EnPassant::LEFT : EnPassant::RIGHT
+        coordinates.second - to.second == 1 ? EnPassant::LEFT : EnPassant::RIGHT,
+        board->isCheck(Helpers::getOtherColor(getColor()))
     );
     board->getMovesTracker()->addMove(std::move(movePtr));
 
