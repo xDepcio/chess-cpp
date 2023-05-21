@@ -100,23 +100,58 @@ void MovesTracker::updateToLatest()
 	}
 }
 
-std::string MovesTracker::toPgn() const
+void MovesTracker::saveToFile(const std::string& filePath)
 {
-	// TODO... not finished
-	std::ostringstream result;
-	for (int i = 0; i < moves.size(); i++)
-	{
-		if (i % 2 == 0)
-			result << i/2 + 1 << ". ";
-		auto move = moves[i].get();
-		if (move->castle == Castle::NONE && move->takenPiece == PieceType::NONE)
-		{
-			result << coordsToString(move->to) << " ";
-		}
-	}
-
-	return result.str();
+	// ...TODO
 }
+
+//std::string MovesTracker::toPgn() const
+//{
+//	// TODO... not finished
+//	std::ostringstream result;
+//	for (int i = 0; i < moves.size(); i++)
+//	{
+//		if (i % 2 == 0)
+//			result << i/2 + 1 << ". ";
+//		auto move = moves[i].get();
+//		if (move->castle == Castle::NONE && move->takenPiece == PieceType::NONE)
+//		{
+//			result << coordsToString(move->to) << " ";
+//		}
+//	}
+//
+//	return result.str();
+//}
+
+//void MovesTracker::loadFromPgn(std::string pgnString)
+//{
+//	bool nextIsMove = false;
+//	int charsSkip = 1;
+//	for (int charNum = 0; charNum < pgnString.size(); charNum += charsSkip)
+//	{
+//		charsSkip = 1;
+//		char currChar = pgnString[charNum];
+//
+//		if(nextIsMove)
+//
+//		if (isCharNum(currChar) && pgnString[charNum + 1] == '.')
+//		{
+//			nextIsMove = true;
+//			continue;
+//		}
+//	}
+//}
+//
+//bool isCharNum(char character)
+//{
+//	return character <= 57 && character >= 48;
+//}
+//
+//bool isPieceSign(char character)
+//{
+//	std::string charSigns = "prnbkq"
+//	return character <=
+//}
 
 void MovesTracker::previous()
 {

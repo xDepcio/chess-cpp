@@ -63,7 +63,9 @@ public:
 	void revertMove(Move* move);
 	void makeMove(Move* move);
 	void updateToLatest();
-	std::string toPgn() const;
+	//std::string toPgn() const;
+	//void loadFromPgn(std::string pgnString);
+	void saveToFile(const std::string& filePath);
 
 private:
 	std::vector<std::unique_ptr<Move>> moves = {};
