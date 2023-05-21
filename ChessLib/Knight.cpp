@@ -4,13 +4,13 @@
 
 Knight::Knight(Color withColor) : Piece(withColor)
 {
-	Piece::pieceSignature = "k";
+	Piece::pieceSignature = withColor == Piece::Color::Black ? "n" : "N";
 	type = Type::KNIGHT;
 }
 
 Knight::Knight(Color withColor, int id) : Piece(withColor, id)
 {
-	Piece::pieceSignature = "k";
+	Piece::pieceSignature = withColor == Piece::Color::Black ? "n" : "N";
 	type = Type::KNIGHT;
 }
 

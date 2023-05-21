@@ -88,7 +88,7 @@ std::string MovesTracker::toPgn() const
 		if (i % 2 == 0)
 			result << i/2 + 1 << ". ";
 		auto move = moves[i].get();
-		if (move->castle == King::Castle::NONE)
+		if (move->castle == King::Castle::NONE && move->takenPiece == Piece::Type::NONE)
 		{
 			result << coordsToString(move->to) << " ";
 		}
@@ -113,14 +113,10 @@ void MovesTracker::revertMove(Move* move)
 		trackedBoard->setPiece(
 			{ move->pieceColor == Piece::Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second },
 			std::move(move->takenPiecePtr)
-			//makePieceFromType(Piece::Type::PAWN, Helpers::getOtherColor(move->pieceColor))
 		);
 	}
 	else if (move->castle != King::Castle::NONE)
 	{
-		//trackedBoard->setPiece(move->from, makePieceFromType(move->pieceType, move->pieceColor));
-		//trackedBoard->setPiece(move->to, nullptr);
-
 		// Revert king move
 		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 
@@ -128,41 +124,13 @@ void MovesTracker::revertMove(Move* move)
 		std::pair<int, int> rookCurrCoords = { move->from.first, move->castle == King::Castle::LONG ? 3 : 5};
 		std::pair<int, int> rookPrevCoords = { move->from.first, move->castle == King::Castle::LONG ? 0 : 7};
 		trackedBoard->setPiece(rookPrevCoords, trackedBoard->setPiece(rookCurrCoords, nullptr));
-		//trackedBoard->setPiece(rookPrevCoords, makePieceFromType(Piece::Type::ROOK, move->pieceColor));
-		//trackedBoard->setPiece(rookCurrCoords, nullptr);
 	}
 	else
 	{
 		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 		trackedBoard->setPiece(move->to, std::move(move->takenPiecePtr));
-		//trackedBoard->setPiece(move->from, makePieceFromType(move->pieceType, move->pieceColor));
-		//trackedBoard->setPiece(move->to, makePieceFromType(move->takenPiece, Helpers::getOtherColor(move->pieceColor)));
 	}
 }
-
-//std::unique_ptr<Piece> MovesTracker::makePieceFromType(Piece::Type type, Piece::Color color)
-//{
-//	switch (type)
-//	{
-//	case Piece::Type::BISHOP:
-//		return std::make_unique<Bishop>(color);
-//	case Piece::Type::PAWN:
-//		return std::make_unique<Pawn>(color);
-//	case Piece::Type::ROOK:
-//		return std::make_unique<Rook>(color);
-//	case Piece::Type::QUEEN:
-//		return std::make_unique<Queen>(color);
-//	case Piece::Type::KNIGHT:
-//		return std::make_unique<Knight>(color);
-//	case Piece::Type::KING:
-//		return std::make_unique<King>(color);
-//	case Piece::Type::NONE:
-//		return nullptr;
-//	default:
-//		throw std::runtime_error(":()()");
-//		break;
-//	}
-//}
 
 std::string MovesTracker::coordsToString(std::pair<int, int> const& coords) const
 {

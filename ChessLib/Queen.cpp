@@ -4,13 +4,13 @@
 
 Queen::Queen(Color withColor) : Piece(withColor)
 {
-	Piece::pieceSignature = "q";
+    Piece::pieceSignature = withColor == Piece::Color::Black ? "q" : "Q";
     type = Type::QUEEN;
 }
 
 Queen::Queen(Color withColor, int id) : Piece(withColor, id)
 {
-	Piece::pieceSignature = "q";
+    Piece::pieceSignature = withColor == Piece::Color::Black ? "q" : "Q";
     type = Type::QUEEN;
 }
 

@@ -22,6 +22,7 @@ public:
 		King::Castle castle;
 		std::vector<std::pair<int, int>> affectedSquares;
 		Pawn::EnPassant enPassant;
+		bool checkedEnemy;
 
 		Move(
 			Piece::Type pieceType,
@@ -33,11 +34,12 @@ public:
 			bool takenPieceMoved,
 			King::Castle castle = King::Castle::NONE,
 			std::vector<std::pair<int, int>> affectedSquares = {},
-			Pawn::EnPassant enPassant = Pawn::EnPassant::NONE
+			Pawn::EnPassant enPassant = Pawn::EnPassant::NONE,
+			bool checkedEnemy = false
 		) : pieceType(pieceType), takenPiece(takenPiece), takenPiecePtr(std::move(takenPiecePtr)),
 			pieceColor(pieceColor), from(from), to(to), takenPieceMoved(takenPieceMoved),
 			castle(castle), affectedSquares(affectedSquares),
-			enPassant(enPassant)
+			enPassant(enPassant), checkedEnemy(checkedEnemy)
 		{};
 	};
 

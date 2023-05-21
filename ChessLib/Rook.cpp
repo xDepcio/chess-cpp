@@ -4,13 +4,13 @@
 
 Rook::Rook(Color withColor) : Piece(withColor)
 {
-    Piece::pieceSignature = "r";
+    Piece::pieceSignature = withColor == Piece::Color::Black ? "r" : "R";
     type = Type::ROOK;
 }
 
 Rook::Rook(Color withColor, int id) : Piece(withColor, id)
 {
-    Piece::pieceSignature = "r";
+    Piece::pieceSignature = withColor == Piece::Color::Black ? "r" : "R";
     type = Type::ROOK;
 }
 

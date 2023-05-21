@@ -22,12 +22,12 @@ bool Pawn::isEnPassantMove(std::pair<int, int> const& move) const
 
 Pawn::Pawn(Color withColor) : Piece(withColor)
 {
-    Piece::pieceSignature = "p";
+    Piece::pieceSignature = withColor == Piece::Color::Black ? "p" : "P";
     type = Type::PAWN;
 }
 Pawn::Pawn(Color withColor, int id) : Piece(withColor, id)
 {
-    Piece::pieceSignature = "p";
+    Piece::pieceSignature = withColor == Piece::Color::Black ? "p" : "P";
     type = Type::PAWN;
 }
 

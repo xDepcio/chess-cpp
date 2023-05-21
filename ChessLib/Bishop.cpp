@@ -4,13 +4,13 @@
 
 Bishop::Bishop(Color withColor) : Piece(withColor)
 {
-	Piece::pieceSignature = "b";
+	Piece::pieceSignature = withColor == Piece::Color::Black ? "b" : "B";
 	Piece::type = Type::BISHOP;
 }
 
 Bishop::Bishop(Color withColor, int id) : Piece(withColor, id)
 {
-	Piece::pieceSignature = "b";
+	Piece::pieceSignature = withColor == Piece::Color::Black ? "b" : "B";
 	Piece::type = Type::BISHOP;
 }
 
