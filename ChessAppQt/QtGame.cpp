@@ -81,20 +81,20 @@ Board* QtGame::getBoard() const
 	return trackedBoard;
 }
 
-void QtGame::setGameState(const GameState state)
+void QtGame::setBoardState(const BoardState state)
 {
-	gameState = state;
+	boardState = state;
 }
 
-QtGame::GameState QtGame::getGameState() const
+BoardState QtGame::getBoardState() const
 {
-	return gameState;
+	return boardState;
 }
 
 void QtGame::choosePromotion(Promotions promotion)
 {
 	trackedBoard->receivePromotionChoice(promotion);
-	gameState = GameState::PLAYED;
+	boardState = BoardState::PLAYED;
 }
 
 std::vector<std::vector<Square>>& QtGame::getSquares()
@@ -120,26 +120,7 @@ bool QtGame::isMoveValid(std::pair<int, int> const& from, std::pair<int, int> co
 void QtGame::move(Piece* piece, std::pair<int, int> const& to)
 {
 	piece->move(trackedBoard, to);
-	switch (trackedBoard->getBoardState())
-	{
-	case BoardState::STALEMATE:
-		gameState = GameState::STALEMATE;
-		break;
-	case BoardState::CHECKMATED_BLACK:
-		gameState = GameState::CHECKMATED_BLACK;
-		break;
-	case BoardState::CHECKMATED_WHITE:
-		gameState = GameState::CHECKMATED_WHITE;
-		break;
-	case BoardState::REQUEST_PROMOTION:
-		gameState = GameState::REQUEST_PROMOTION;
-		break;
-	case BoardState::PLAYED:
-		gameState = GameState::PLAYED;
-		break;
-	default:
-		break;
-	}
+	boardState = trackedBoard->getBoardState();
 }
 
 Piece* QtGame::getClickedPiece() const

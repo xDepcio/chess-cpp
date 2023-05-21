@@ -267,21 +267,21 @@ void ChessAppQt::startNewChessGame()
 
 void ChessAppQt::handleChessGameStateChange()
 {
-    switch (playedGame->getGameState())
+    switch (playedGame->getBoardState())
     {
-    case QtGame::GameState::CHECKMATED_BLACK:
+    case BoardState::CHECKMATED_BLACK:
         ui.gameEndLabel->setText("♔ Białe wygrywają!");
         break;
-    case QtGame::GameState::CHECKMATED_WHITE:
+    case BoardState::CHECKMATED_WHITE:
         ui.gameEndLabel->setText("♚ Czarne wygrywają!");
         break;
-    case QtGame::GameState::STALEMATE:
+    case BoardState::STALEMATE:
         ui.gameEndLabel->setText("♚ Remis! ♔");
         break;
-    case QtGame::GameState::PLAYED:
+    case BoardState::PLAYED:
         ui.prevMoveBtn->setDisabled(false);
         break;
-    case QtGame::GameState::REQUEST_PROMOTION:
+    case BoardState::REQUEST_PROMOTION:
         ui.promotionWidget->show();
         break;
     default:
