@@ -14,31 +14,31 @@ class MovesTracker
 public:
 	struct Move
 	{
-		Piece::Type pieceType;
-		Piece::Type takenPiece;
+		PieceType pieceType;
+		PieceType takenPiece;
 		std::unique_ptr<Piece> takenPiecePtr;
-		Piece::Color pieceColor;
+		Color pieceColor;
 		std::pair<int, int> from;
 		std::pair<int, int> to;
 		bool takenPieceMoved;
-		King::Castle castle;
+		Castle castle;
 		std::vector<std::pair<int, int>> affectedSquares;
-		Pawn::EnPassant enPassant;
+		EnPassant enPassant;
 		bool checkedEnemy;
 		Promotions promotion;
 		std::unique_ptr<Piece> promotedPawn;
 
 		Move(
-			Piece::Type pieceType,
-			Piece::Type takenPiece,
+			PieceType pieceType,
+			PieceType takenPiece,
 			std::unique_ptr<Piece> takenPiecePtr,
-			Piece::Color pieceColor,
+			Color pieceColor,
 			std::pair<int, int> from,
 			std::pair<int, int> to,
 			bool takenPieceMoved,
-			King::Castle castle = King::Castle::NONE,
+			Castle castle = Castle::NONE,
 			std::vector<std::pair<int, int>> affectedSquares = {},
-			Pawn::EnPassant enPassant = Pawn::EnPassant::NONE,
+			EnPassant enPassant = EnPassant::NONE,
 			bool checkedEnemy = false,
 			Promotions promotion = Promotions::NONE,
 			std::unique_ptr<Piece> promotedPawn = nullptr

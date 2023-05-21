@@ -5,14 +5,14 @@
 
 King::King(Color withColor) : Piece(withColor)
 {
-	Piece::pieceSignature = withColor == Piece::Color::Black ? "k" : "K";
-	Piece::type = Type::KING;
+	Piece::pieceSignature = withColor == Color::Black ? "k" : "K";
+	Piece::type = PieceType::KING;
 }
 
 King::King(Color withColor, int id) : Piece(withColor, id)
 {
-	Piece::pieceSignature = withColor == Piece::Color::Black ? "k" : "K";
-	Piece::type = Type::KING;
+	Piece::pieceSignature = withColor == Color::Black ? "k" : "K";
+	Piece::type = PieceType::KING;
 }
 
 
@@ -59,14 +59,14 @@ void King::castleMove(Board* board, std::pair<int, int> rookCoords)
 
 
 	auto mvPtr = std::make_unique<MovesTracker::Move>(
-		Piece::Type::KING,
-		Piece::Type::NONE,
+		PieceType::KING,
+		PieceType::NONE,
 		nullptr,
 		color,
 		oldCoords,
 		coordinates,
 		false,
-		dirSign == 1 ? King::Castle::LONG : King::Castle::SHORT,
+		dirSign == 1 ? Castle::LONG : Castle::SHORT,
 		std::vector<std::pair<int, int>>({ oldCoords, rookCoords, coordinates, newRookCoords })
 	);
 

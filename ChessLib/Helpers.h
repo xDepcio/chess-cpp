@@ -6,9 +6,9 @@ class Helpers
 public:
 	Helpers() {};
 
-	static Piece::Color getOtherColor(Piece::Color color)
+	static Color getOtherColor(Color color)
 	{
-		return color == Piece::Color::White ? Piece::Color::Black : Piece::Color::White;
+		return color == Color::White ? Color::Black : Color::White;
 	}
 
 	template <typename T> static int sgn(T val) {

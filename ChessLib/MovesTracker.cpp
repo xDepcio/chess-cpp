@@ -60,14 +60,14 @@ void MovesTracker::makeMove(Move* move)
 			break;
 		}
 	}
-	else if (move->enPassant != Pawn::EnPassant::NONE)
+	else if (move->enPassant != EnPassant::NONE)
 	{
-		std::pair<int, int> takenPawnCoords = { move->pieceColor == Piece::Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second };
+		std::pair<int, int> takenPawnCoords = { move->pieceColor == Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second };
 		move->takenPiecePtr = std::move(trackedBoard->getPieceUniquePtr(takenPawnCoords));
 		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 		trackedBoard->setPiece(takenPawnCoords, nullptr);
 	}
-	else if (move->castle != King::Castle::NONE)
+	else if (move->castle != Castle::NONE)
 	{
 		std::pair<int, int> rookCoords = { move->from.first, move->to.second == 2 ? 0 : 7 };
 		int dirSign = Helpers::sgn<int>(move->from.second - rookCoords.second);
@@ -109,7 +109,7 @@ std::string MovesTracker::toPgn() const
 		if (i % 2 == 0)
 			result << i/2 + 1 << ". ";
 		auto move = moves[i].get();
-		if (move->castle == King::Castle::NONE && move->takenPiece == Piece::Type::NONE)
+		if (move->castle == Castle::NONE && move->takenPiece == PieceType::NONE)
 		{
 			result << coordsToString(move->to) << " ";
 		}
@@ -132,23 +132,23 @@ void MovesTracker::revertMove(Move* move)
 		trackedBoard->setPiece(move->from, std::move(move->promotedPawn));
 		trackedBoard->setPiece(move->to, std::move(move->takenPiecePtr));
 	}
-	else if (move->enPassant != Pawn::EnPassant::NONE)
+	else if (move->enPassant != EnPassant::NONE)
 	{
 		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 		
 		trackedBoard->setPiece(
-			{ move->pieceColor == Piece::Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second },
+			{ move->pieceColor == Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second },
 			std::move(move->takenPiecePtr)
 		);
 	}
-	else if (move->castle != King::Castle::NONE)
+	else if (move->castle != Castle::NONE)
 	{
 		// Revert king move
 		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 
 		// Revert rook move
-		std::pair<int, int> rookCurrCoords = { move->from.first, move->castle == King::Castle::LONG ? 3 : 5};
-		std::pair<int, int> rookPrevCoords = { move->from.first, move->castle == King::Castle::LONG ? 0 : 7};
+		std::pair<int, int> rookCurrCoords = { move->from.first, move->castle == Castle::LONG ? 3 : 5};
+		std::pair<int, int> rookPrevCoords = { move->from.first, move->castle == Castle::LONG ? 0 : 7};
 		trackedBoard->setPiece(rookPrevCoords, trackedBoard->setPiece(rookCurrCoords, nullptr));
 	}
 	else

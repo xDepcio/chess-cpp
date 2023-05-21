@@ -27,13 +27,13 @@ void Pawn::promotionMove(Board* board, std::pair<int, int> const& to)
 
 Pawn::Pawn(Color withColor) : Piece(withColor)
 {
-    Piece::pieceSignature = withColor == Piece::Color::Black ? "p" : "P";
-    type = Type::PAWN;
+    Piece::pieceSignature = withColor == Color::Black ? "p" : "P";
+    type = PieceType::PAWN;
 }
 Pawn::Pawn(Color withColor, int id) : Piece(withColor, id)
 {
-    Piece::pieceSignature = withColor == Piece::Color::Black ? "p" : "P";
-    type = Type::PAWN;
+    Piece::pieceSignature = withColor == Color::Black ? "p" : "P";
+    type = PieceType::PAWN;
 }
 
 void Pawn::setValidEnPassantLeft(bool valid)
@@ -116,17 +116,17 @@ void Pawn::move(Board* board, std::pair<int, int> to)
 
 void Pawn::enPassantMove(Board* board, std::pair<int, int> const& to)
 {
-    std::pair<int, int> takenPawnCoords = { getColor() == Piece::Color::White ? to.first + 1 : to.first - 1, to.second };
+    std::pair<int, int> takenPawnCoords = { getColor() == Color::White ? to.first + 1 : to.first - 1, to.second };
 
     auto movePtr = std::make_unique<MovesTracker::Move>(
-        Piece::Type::PAWN,
-        Piece::Type::PAWN,
+        PieceType::PAWN,
+        PieceType::PAWN,
         board->getPieceUniquePtr(takenPawnCoords),
         getColor(),
         coordinates,
         to,
         true,
-        King::Castle::NONE,
+        Castle::NONE,
         std::vector<std::pair<int, int>>({ coordinates, to, takenPawnCoords }),
         coordinates.second - to.second == 1 ? EnPassant::LEFT : EnPassant::RIGHT
     );

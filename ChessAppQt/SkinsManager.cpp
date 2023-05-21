@@ -23,22 +23,22 @@ std::string SkinsManager::getPathToPiece(Piece* piece) const
 
 	switch (piece->getType())
 	{
-	case Piece::Type::PAWN:
+	case PieceType::PAWN:
 		base += "pawn-";
 		break;
-	case Piece::Type::BISHOP:
+	case PieceType::BISHOP:
 		base += "bishop-";
 		break;
-	case Piece::Type::KING:
+	case PieceType::KING:
 		base += "king-";
 		break;
-	case Piece::Type::KNIGHT:
+	case PieceType::KNIGHT:
 		base += "knight-";
 		break;
-	case Piece::Type::QUEEN:
+	case PieceType::QUEEN:
 		base += "queen-";
 		break;
-	case Piece::Type::ROOK:
+	case PieceType::ROOK:
 		base += "rook-";
 		break;
 	default:
@@ -48,10 +48,10 @@ std::string SkinsManager::getPathToPiece(Piece* piece) const
 
 	switch (piece->getColor())
 	{
-	case Piece::Color::Black:
+	case Color::Black:
 		base += "black.png";
 		break;
-	case Piece::Color::White:
+	case Color::White:
 		base += "white.png";
 		break;
 	default:

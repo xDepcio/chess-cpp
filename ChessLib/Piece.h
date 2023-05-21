@@ -1,31 +1,32 @@
 #pragma once
 #include <iostream>
 #include <vector>
+#include "Constants.h"
 
 class Board;
 
 class Piece
 {
 public:
-	enum class Color
-	{
-		White,
-		Black
-	};
+	//enum class Color
+	//{
+	//	White,
+	//	Black
+	//};
 
-	enum class Type
-	{
-		NONE,
-		PAWN,
-		KNIGHT,
-		ROOK,
-		BISHOP,
-		KING,
-		QUEEN
-	};
+	//enum class Type
+	//{
+	//	NONE,
+	//	PAWN,
+	//	KNIGHT,
+	//	ROOK,
+	//	BISHOP,
+	//	KING,
+	//	QUEEN
+	//};
 
-	Piece(Color withColor) : color(withColor), pieceSignature("x"), debugId(0), type(Type::NONE) {};
-	Piece(Color withColor, int id) : color(withColor), pieceSignature("x"), debugId(id), type(Type::NONE) {};
+	Piece(Color withColor) : color(withColor), pieceSignature("x"), debugId(0), type(PieceType::NONE) {};
+	Piece(Color withColor, int id) : color(withColor), pieceSignature("x"), debugId(id), type(PieceType::NONE) {};
 
 	bool isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const;
 
@@ -47,7 +48,7 @@ public:
 
 	virtual void move(Board* board, std::pair<int, int> to);
 
-	Type getType() const;
+	PieceType getType() const;
 
 	Color otherColor() const;
 
@@ -59,6 +60,6 @@ protected:
 	std::string pieceSignature;
 	int debugId;
 	bool madeFirstMove = false;
-	Type type;
+	PieceType type;
 	std::pair<int, int> coordinates;
 };

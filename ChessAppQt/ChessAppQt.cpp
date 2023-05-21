@@ -317,7 +317,7 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
         {
             //prevClicked->move(playedGame->getBoard(), fieldCoords);
             playedGame->move(prevClicked, fieldCoords);
-            playedGame->getBoard()->setTurn(turn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
+            playedGame->getBoard()->setTurn(turn == Color::White ? Color::Black : Color::White);
             auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares;
             updateSquares(affectedSqrs);
             handleChessGameStateChange();

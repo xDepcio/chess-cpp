@@ -12,12 +12,12 @@ private:
 	bool isEnPassantMove(std::pair<int, int> const& move) const;
 	void promotionMove(Board* board, std::pair<int, int> const& to);
 public:
-	enum class EnPassant
-	{
-		NONE,
-		LEFT,
-		RIGHT
-	};
+	//enum class EnPassant
+	//{
+	//	NONE,
+	//	LEFT,
+	//	RIGHT
+	//};
 
 	Pawn(Color withColor);
 	Pawn(Color withColor, int id);
