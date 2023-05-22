@@ -33,12 +33,18 @@ public:
 
     void startNewChessGame();
 
+    void startNewChessGameFromSave(std::string const& savePath);
+
     void handleChessGameStateChange();
 
     void handleBoardFieldClick(std::pair<int, int> const& fieldCoords);
 
     void handleRestartBtn();
     void connectRestartBtn();
+    void connectBackBtn();
+    void connectSaveBtn();
+    void loadSavedGames();
+    void connectSavesBackBtn();
 
 private:
     std::vector<std::pair<int, int>> displayedSquares;

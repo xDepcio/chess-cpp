@@ -39,6 +39,13 @@ public:
 
 	void choosePromotion(Promotions promotion);
 
+	void loadGameFromFile(std::string const& filePath);
+
+	void saveCurrentGameToFile(std::string const& dirPath);
+
+	std::string rawMovesToString(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves) const;
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMovesFromString(std::string rawMovesStr) const;
+
 private:
 	Board* trackedBoard;
 	Piece* clickedPiece;

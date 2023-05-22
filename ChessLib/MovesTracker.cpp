@@ -100,10 +100,10 @@ void MovesTracker::updateToLatest()
 	}
 }
 
-void MovesTracker::saveToFile(const std::string& filePath)
-{
-	// ...TODO
-}
+//void MovesTracker::saveToFile(const std::string& filePath)
+//{
+//	// ...TODO
+//}
 
 //std::string MovesTracker::toPgn() const
 //{
@@ -190,6 +190,29 @@ void MovesTracker::revertMove(Move* move)
 	{
 		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 		trackedBoard->setPiece(move->to, std::move(move->takenPiecePtr));
+	}
+}
+
+std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> MovesTracker::exportRaw() const
+{
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves;
+
+	for (auto& mv : moves)
+	{
+		rawMoves.push_back({ mv.get()->from, mv.get()->to });
+	}
+
+	return rawMoves;
+}
+
+void MovesTracker::importRaw(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> const& movesList)
+{
+	for (auto& move : movesList)
+	{
+		auto& from = move.first;
+		auto& to = move.second;
+
+		trackedBoard->getPiece(from)->move(trackedBoard, to);
 	}
 }
 

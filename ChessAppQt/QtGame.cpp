@@ -1,11 +1,18 @@
 #include "QtGame.h"
-#include "../../Chess/ChessLib/Board.h"
-#include "../../Chess/ChessLib/Pawn.h"
-#include "../../Chess/ChessLib/Knight.h"
-#include "../../Chess/ChessLib/Bishop.h"
-#include "../../Chess/ChessLib/Rook.h"
-#include "../../Chess/ChessLib/King.h"
-#include "../../Chess/ChessLib/Queen.h"
+#include "../ChessLib/Board.h"
+#include "../ChessLib/Pawn.h"
+#include "../ChessLib/Knight.h"
+#include "../ChessLib/Bishop.h"
+#include "../ChessLib/Rook.h"
+#include "../ChessLib/King.h"
+#include "../ChessLib/Queen.h"
+#include "../ChessLib/MovesTracker.h"
+#include <sstream>
+#include <fstream>
+#include <ctime>
+#include <filesystem>
+#include <algorithm>
+
 
 QtGame::~QtGame()
 {
@@ -95,6 +102,79 @@ void QtGame::choosePromotion(Promotions promotion)
 {
 	trackedBoard->receivePromotionChoice(promotion);
 	boardState = BoardState::PLAYED;
+}
+
+void QtGame::loadGameFromFile(std::string const& filePath)
+{
+	std::ifstream file(filePath);
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> moves;
+
+	if (file.is_open())
+	{
+		std::string line;
+		std::getline(file, line);
+		moves = rawMovesFromString(line);
+		file.close();
+
+		trackedBoard->getMovesTracker()->importRaw(moves);
+	}
+	else {
+		std::cout << "Failed to open the file." << std::endl;
+	}
+}
+
+void QtGame::saveCurrentGameToFile(std::string const& dirPath)
+{
+	if (!std::filesystem::exists(constants::SAVE_FILES_DIR))
+		std::filesystem::create_directory(constants::SAVE_FILES_DIR);
+
+	std::string movesStr = rawMovesToString(trackedBoard->getMovesTracker()->exportRaw());
+
+	std::time_t currentTime = std::time(nullptr);
+	std::string dateString = std::ctime(&currentTime);
+	dateString.pop_back();
+	std::replace(dateString.begin(), dateString.end(), ':', '.');
+
+	std::ostringstream path;
+	path << dirPath << "/" << dateString << ".txt";
+	std::ofstream file(path.str(), std::ios::app);
+
+	if (file.is_open())
+	{
+		file << movesStr;
+		file.close();
+	}
+	else
+	{
+		std::cerr << "Can't open the file\n";
+	}
+}
+
+std::string QtGame::rawMovesToString(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves) const
+{
+	std::ostringstream ss;
+
+	for (auto& move : rawMoves)
+	{
+		auto from = move.first;
+		auto to = move.second;
+
+		ss << from.first << from.second << to.first << to.second;
+	}
+
+	return ss.str();
+}
+
+std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> QtGame::rawMovesFromString(std::string rawMovesStr) const
+{
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> moves;
+
+	for (int i = 0; i < rawMovesStr.size(); i+=4)
+	{
+		moves.push_back({ {rawMovesStr[i] - 48, rawMovesStr[i + 1] - 48}, {rawMovesStr[i + 2] - 48, rawMovesStr[i + 3] - 48} });
+	}
+
+	return moves;
 }
 
 std::vector<std::vector<Square>>& QtGame::getSquares()

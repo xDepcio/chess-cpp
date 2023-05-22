@@ -1,4 +1,6 @@
 #pragma once
+#include <iostream>
+
 enum class Promotions
 {
 	ROOK,
@@ -47,3 +49,8 @@ enum class PieceType
 	KING,
 	QUEEN
 };
+
+namespace constants
+{
+	constexpr char SAVE_FILES_DIR[] = "./saves";
+}

@@ -12,6 +12,8 @@
 #include "../ChessLib/Queen.h"
 #include "SkinsManager.h"
 #include "../ChessLib/Constants.h"
+#include <filesystem>
+#include "../ChessLib/Constants.h"
 
 ChessAppQt::ChessAppQt(QWidget *parent) : QMainWindow(parent)
 {
@@ -22,6 +24,10 @@ ChessAppQt::ChessAppQt(QWidget *parent) : QMainWindow(parent)
     connectTrackerBtns();
     connectRestartBtn();
     setupPromotionBtns();
+    connectBackBtn();
+    connectSaveBtn();
+    //loadSavedGames();
+    connectSavesBackBtn();
 }
 
 ChessAppQt::~ChessAppQt()
@@ -36,6 +42,11 @@ void ChessAppQt::connectMenuBtns()
 
     connect(ui.menuSkinsBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(1);
+    });
+
+    connect(ui.menuHistoryBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(3);
+        loadSavedGames();
     });
 }
 
@@ -265,6 +276,20 @@ void ChessAppQt::startNewChessGame()
     updateBoard();
 }
 
+void ChessAppQt::startNewChessGameFromSave(std::string const& savePath)
+{
+    ui.stackedWidget->setCurrentIndex(0);
+
+    ui.nextMoveBtn->setDisabled(true);
+    ui.prevMoveBtn->setDisabled(true);
+    ui.promotionWidget->hide();
+
+    playedGame = new QtGame();
+    playedGame->run();
+    playedGame->loadGameFromFile(savePath);
+    updateBoard();
+}
+
 void ChessAppQt::handleChessGameStateChange()
 {
     switch (playedGame->getBoardState())
@@ -348,5 +373,57 @@ void ChessAppQt::handleRestartBtn()
 void ChessAppQt::connectRestartBtn()
 {
     connect(ui.restartBtn, &QPushButton::clicked, this, &ChessAppQt::handleRestartBtn);
+}
+
+void ChessAppQt::connectBackBtn()
+{
+    connect(ui.backBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(2);
+    });
+}
+
+void ChessAppQt::connectSaveBtn()
+{
+    connect(ui.saveBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->saveCurrentGameToFile(constants::SAVE_FILES_DIR);
+    });
+}
+
+void ChessAppQt::loadSavedGames()
+{
+    foreach(QObject * child, ui.savesHolderWidget->children()) {
+        // Check if the child widget is of type QWidget
+        if (QWidget* childWidget = qobject_cast<QWidget*>(child)) {
+            // Delete the child widget
+            delete childWidget;
+        }
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(constants::SAVE_FILES_DIR)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            QWidget* saveHolder = new QWidget();
+            ui.savesHolderLayout->addWidget(saveHolder);
+            QHBoxLayout* layout = new QHBoxLayout(saveHolder);
+
+            QLabel* label = new QLabel();
+            label->setText(QString::fromStdString(entry.path().filename().string()));
+            layout->addWidget(label);
+
+            QPushButton* button = new QPushButton(QString("Wczytaj"));
+            button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+            layout->addWidget(button);
+
+            connect(button, &QPushButton::clicked, this, [this, entry]() {
+                startNewChessGameFromSave(entry.path().string());
+            });
+        }
+    }
+}
+
+void ChessAppQt::connectSavesBackBtn()
+{
+    connect(ui.saveBackBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(2);
+    });
 }
 
