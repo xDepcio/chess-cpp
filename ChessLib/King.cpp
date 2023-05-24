@@ -2,17 +2,18 @@
 #include "Board.h"
 #include "Helpers.h"
 #include "MovesTracker.h"
+#include "Helpers.h"
 
 King::King(Color withColor) : Piece(withColor)
 {
-	Piece::pieceSignature = "K";
-	Piece::type = Type::KING;
+	Piece::pieceSignature = withColor == Color::Black ? "k" : "K";
+	Piece::type = PieceType::KING;
 }
 
 King::King(Color withColor, int id) : Piece(withColor, id)
 {
-	Piece::pieceSignature = "K";
-	Piece::type = Type::KING;
+	Piece::pieceSignature = withColor == Color::Black ? "k" : "K";
+	Piece::type = PieceType::KING;
 }
 
 
@@ -56,19 +57,23 @@ void King::castleMove(Board* board, std::pair<int, int> rookCoords)
 
 	board->setPiece(newKingCoords, board->setPiece(coordinates, nullptr));
 	board->setPiece(newRookCoords, board->setPiece(rookCoords, nullptr));
+	setMadeFirstMove(true);
 
 
-	MovesTracker::Move move(
-		Piece::Type::KING,
-		Piece::Type::NONE,
+	auto mvPtr = std::make_unique<MovesTracker::Move>(
+		PieceType::KING,
+		PieceType::NONE,
+		nullptr,
 		color,
 		oldCoords,
 		coordinates,
 		false,
-		dirSign == 1 ? King::Castle::LONG : King::Castle::SHORT,
-		{ oldCoords, rookCoords, coordinates, newRookCoords }
+		dirSign == 1 ? Castle::LONG : Castle::SHORT,
+		std::vector<std::pair<int, int>>({ oldCoords, rookCoords, coordinates, newRookCoords }),
+		EnPassant::NONE,
+		board->isCheck(Helpers::getOtherColor(color))
 	);
 
-	board->getMovesTracker()->addMove(move);
+	board->getMovesTracker()->addMove(std::move(mvPtr));
 	
 }

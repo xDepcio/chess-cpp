@@ -13,61 +13,61 @@
 
 void Game::run()
 {
-	Piece::Color playerTurn = Piece::Color::White;
+	Color playerTurn = Color::White;
 
 	Board board(8, 8), *boardPt;
 	boardPt = &board;
-	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Piece::Color::Black, 201));
-	boardPt->setPiece({ 1, 1 }, std::make_unique<Pawn>(Piece::Color::Black, 202));
-	boardPt->setPiece({ 1, 2 }, std::make_unique<Pawn>(Piece::Color::Black, 203));
-	boardPt->setPiece({ 1, 3 }, std::make_unique<Pawn>(Piece::Color::Black, 204));
-	boardPt->setPiece({ 1, 4 }, std::make_unique<Pawn>(Piece::Color::Black, 205));
-	boardPt->setPiece({ 1, 5 }, std::make_unique<Pawn>(Piece::Color::Black, 206));
-	boardPt->setPiece({ 1, 6 }, std::make_unique<Pawn>(Piece::Color::Black, 207));
-	boardPt->setPiece({ 1, 7 }, std::make_unique<Pawn>(Piece::Color::Black, 208));
+	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black, 201));
+	boardPt->setPiece({ 1, 1 }, std::make_unique<Pawn>(Color::Black, 202));
+	boardPt->setPiece({ 1, 2 }, std::make_unique<Pawn>(Color::Black, 203));
+	boardPt->setPiece({ 1, 3 }, std::make_unique<Pawn>(Color::Black, 204));
+	boardPt->setPiece({ 1, 4 }, std::make_unique<Pawn>(Color::Black, 205));
+	boardPt->setPiece({ 1, 5 }, std::make_unique<Pawn>(Color::Black, 206));
+	boardPt->setPiece({ 1, 6 }, std::make_unique<Pawn>(Color::Black, 207));
+	boardPt->setPiece({ 1, 7 }, std::make_unique<Pawn>(Color::Black, 208));
 
-	boardPt->setPiece({ 0, 1 }, std::make_unique<Knight>(Piece::Color::Black, 211));
-	boardPt->setPiece({ 0, 6 }, std::make_unique<Knight>(Piece::Color::Black, 212));
+	boardPt->setPiece({ 0, 1 }, std::make_unique<Knight>(Color::Black, 211));
+	boardPt->setPiece({ 0, 6 }, std::make_unique<Knight>(Color::Black, 212));
 
-	boardPt->setPiece({ 0, 2 }, std::make_unique<Bishop>(Piece::Color::Black, 242));
-	boardPt->setPiece({ 0, 5 }, std::make_unique<Bishop>(Piece::Color::Black, 242));
+	boardPt->setPiece({ 0, 2 }, std::make_unique<Bishop>(Color::Black, 242));
+	boardPt->setPiece({ 0, 5 }, std::make_unique<Bishop>(Color::Black, 242));
 
-	boardPt->setPiece({ 0, 0 }, std::make_unique<Rook>(Piece::Color::Black, 221));
-	boardPt->setPiece({ 0, 7 }, std::make_unique<Rook>(Piece::Color::Black, 222));
+	boardPt->setPiece({ 0, 0 }, std::make_unique<Rook>(Color::Black, 221));
+	boardPt->setPiece({ 0, 7 }, std::make_unique<Rook>(Color::Black, 222));
 	
-	boardPt->setPiece({ 0, 4 }, std::make_unique<King>(Piece::Color::Black, 231));
+	boardPt->setPiece({ 0, 4 }, std::make_unique<King>(Color::Black, 231));
 
-	boardPt->setPiece({ 0, 3 }, std::make_unique<Queen>(Piece::Color::Black, 251));
+	boardPt->setPiece({ 0, 3 }, std::make_unique<Queen>(Color::Black, 251));
 
 
-	boardPt->setPiece({ 6, 0 }, std::make_unique<Pawn>(Piece::Color::White, 101));
-	boardPt->setPiece({ 6, 1 }, std::make_unique<Pawn>(Piece::Color::White, 102));
-	boardPt->setPiece({ 6, 2 }, std::make_unique<Pawn>(Piece::Color::White, 103));
-	boardPt->setPiece({ 6, 3 }, std::make_unique<Pawn>(Piece::Color::White, 104));
-	boardPt->setPiece({ 6, 4 }, std::make_unique<Pawn>(Piece::Color::White, 105));
-	boardPt->setPiece({ 6, 5 }, std::make_unique<Pawn>(Piece::Color::White, 106));
-	boardPt->setPiece({ 6, 6 }, std::make_unique<Pawn>(Piece::Color::White, 107));
-	boardPt->setPiece({ 6, 7 }, std::make_unique<Pawn>(Piece::Color::White, 108));
+	boardPt->setPiece({ 6, 0 }, std::make_unique<Pawn>(Color::White, 101));
+	boardPt->setPiece({ 6, 1 }, std::make_unique<Pawn>(Color::White, 102));
+	boardPt->setPiece({ 6, 2 }, std::make_unique<Pawn>(Color::White, 103));
+	boardPt->setPiece({ 6, 3 }, std::make_unique<Pawn>(Color::White, 104));
+	boardPt->setPiece({ 6, 4 }, std::make_unique<Pawn>(Color::White, 105));
+	boardPt->setPiece({ 6, 5 }, std::make_unique<Pawn>(Color::White, 106));
+	boardPt->setPiece({ 6, 6 }, std::make_unique<Pawn>(Color::White, 107));
+	boardPt->setPiece({ 6, 7 }, std::make_unique<Pawn>(Color::White, 108));
 
-	boardPt->setPiece({ 7, 1 }, std::make_unique<Knight>(Piece::Color::White, 111));
-	boardPt->setPiece({ 7, 6 }, std::make_unique<Knight>(Piece::Color::White, 112));
+	boardPt->setPiece({ 7, 1 }, std::make_unique<Knight>(Color::White, 111));
+	boardPt->setPiece({ 7, 6 }, std::make_unique<Knight>(Color::White, 112));
 
-	boardPt->setPiece({ 7, 2 }, std::make_unique<Bishop>(Piece::Color::White, 142));
-	boardPt->setPiece({ 7, 5 }, std::make_unique<Bishop>(Piece::Color::White, 142));
+	boardPt->setPiece({ 7, 2 }, std::make_unique<Bishop>(Color::White, 142));
+	boardPt->setPiece({ 7, 5 }, std::make_unique<Bishop>(Color::White, 142));
 
-	boardPt->setPiece({ 7, 0 }, std::make_unique<Rook>(Piece::Color::White, 121));
-	boardPt->setPiece({ 7, 7 }, std::make_unique<Rook>(Piece::Color::White, 122));
+	boardPt->setPiece({ 7, 0 }, std::make_unique<Rook>(Color::White, 121));
+	boardPt->setPiece({ 7, 7 }, std::make_unique<Rook>(Color::White, 122));
 
-	boardPt->setPiece({ 7, 4 }, std::make_unique<King>(Piece::Color::White, 131));
+	boardPt->setPiece({ 7, 4 }, std::make_unique<King>(Color::White, 131));
 
-	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Piece::Color::White, 151));
+	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White, 151));
 
 	std::vector<std::string> messages;
 	do
 	{
 		clearTerminal();
 		std::cout << "===============================================\n";
-		std::cout << (playerTurn == Piece::Color::White ? "Whites turn" : "Blacks turn") << '\n' << '\n';
+		std::cout << (playerTurn == Color::White ? "Whites turn" : "Blacks turn") << '\n' << '\n';
 		std::cout << "q - quit\n";
 		std::cout << "type coordiantes in form (start-end). ex. d2-d4\n";
 		//std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
@@ -97,7 +97,7 @@ void Game::run()
 		else if (movedPiece->getColor() != playerTurn)
 		{
 			std::ostringstream ss;
-			ss << "Can't move " << (playerTurn == Piece::Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Piece::Color::White ? "Whites " : "Blacks ") << "turn.";
+			ss << "Can't move " << (playerTurn == Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Color::White ? "Whites " : "Blacks ") << "turn.";
 			messages.push_back(ss.str());
 		}
 		else
@@ -106,10 +106,10 @@ void Game::run()
 			{
 				boardPt->move(coords.first, coords.second);
 				std::ostringstream ss;
-				ss << (playerTurn == Piece::Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
+				ss << (playerTurn == Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
 					<< coords.second.first << ", " << coords.second.second;
 				messages.push_back(ss.str());
-				playerTurn = playerTurn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White;
+				playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
 			}
 			else
 			{

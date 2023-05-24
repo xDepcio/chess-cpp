@@ -9,9 +9,9 @@
 #include "Rook.h"
 #include "Pawn.h"
 
-MovesTracker::Move MovesTracker::getPointedMove() const
+MovesTracker::Move* MovesTracker::getPointedMove() const
 {
-	return moves[pointedMoveNum];
+	return moves[pointedMoveNum].get();
 }
 
 int MovesTracker::getPointedMoveIndex() const
@@ -24,48 +24,71 @@ bool MovesTracker::onLatestMove() const
 	return pointedMoveNum == moves.size() - 1;
 }
 
-void MovesTracker::addMove(Move const& move)
+void MovesTracker::addMove(std::unique_ptr<Move> movePtr)
 {
-	moves.push_back(move);
+	moves.push_back(std::move(movePtr));
 	pointedMoveNum = moves.size() - 1;
 }
 
 void MovesTracker::next()
 {
 	pointedMoveNum++;
-	Move moveToMake = moves[pointedMoveNum];
+	Move* moveToMake = moves[pointedMoveNum].get();
 	makeMove(moveToMake);
 }
 
-void MovesTracker::makeMove(Move const& move)
+void MovesTracker::makeMove(Move* move)
 {
-	if (move.enPassant != Pawn::EnPassant::NONE)
+	if (move->promotion != Promotions::NONE)
 	{
-		std::pair<int, int> takenPawnCoords = { move.pieceColor == Piece::Color::White ? move.to.first + 1 : move.to.first - 1, move.to.second };
-		trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+		move->promotedPawn = std::move(trackedBoard->getPieceUniquePtr(move->from));
+		switch (move->promotion)
+		{
+		case Promotions::ROOK:
+			trackedBoard->setPiece(move->to, std::make_unique<Rook>(move->pieceColor));
+			break;
+		case Promotions::KNGIHT:
+			trackedBoard->setPiece(move->to, std::make_unique<Knight>(move->pieceColor));
+			break;
+		case Promotions::BISHOP:
+			trackedBoard->setPiece(move->to, std::make_unique<Bishop>(move->pieceColor));
+			break;
+		case Promotions::QUEEN:
+			trackedBoard->setPiece(move->to, std::make_unique<Queen>(move->pieceColor));
+			break;
+		default:
+			break;
+		}
+	}
+	else if (move->enPassant != EnPassant::NONE)
+	{
+		std::pair<int, int> takenPawnCoords = { move->pieceColor == Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second };
+		move->takenPiecePtr = std::move(trackedBoard->getPieceUniquePtr(takenPawnCoords));
+		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 		trackedBoard->setPiece(takenPawnCoords, nullptr);
 	}
-	else if (move.castle != King::Castle::NONE)
+	else if (move->castle != Castle::NONE)
 	{
-		std::pair<int, int> rookCoords = { move.from.first, move.to.second == 2 ? 0 : 7 };
-		int dirSign = Helpers::sgn<int>(move.from.second - rookCoords.second);
+		std::pair<int, int> rookCoords = { move->from.first, move->to.second == 2 ? 0 : 7 };
+		int dirSign = Helpers::sgn<int>(move->from.second - rookCoords.second);
 
 		std::pair<int, int> newKingCoords = {
-			move.from.first,
-			move.from.second - 2 * dirSign
+			move->from.first,
+			move->from.second - 2 * dirSign
 		};
 
 		std::pair<int, int> newRookCoords = {
-			move.from.first,
+			move->from.first,
 			newKingCoords.second + dirSign
 		};
 
-		trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 		trackedBoard->setPiece(newRookCoords, trackedBoard->setPiece(rookCoords, nullptr));
 	}
 	else
 	{
-		trackedBoard->setPiece(move.to, trackedBoard->setPiece(move.from, nullptr));
+		move->takenPiecePtr = std::move(trackedBoard->getPieceUniquePtr(move->to));
+		trackedBoard->setPiece(move->to, trackedBoard->setPiece(move->from, nullptr));
 	}
 }
 
@@ -77,80 +100,119 @@ void MovesTracker::updateToLatest()
 	}
 }
 
-std::string MovesTracker::toPgn() const
-{
-	// TODO... not finished
-	std::ostringstream result;
-	for (int i = 0; i < moves.size(); i++)
-	{
-		if (i % 2 == 0)
-			result << i/2 + 1 << ". ";
-		auto move = moves[i];
-		if (move.castle == King::Castle::NONE)
-		{
-			result << coordsToString(move.to) << " ";
-		}
-	}
+//void MovesTracker::saveToFile(const std::string& filePath)
+//{
+//	// ...TODO
+//}
 
-	return result.str();
-}
+//std::string MovesTracker::toPgn() const
+//{
+//	// TODO... not finished
+//	std::ostringstream result;
+//	for (int i = 0; i < moves.size(); i++)
+//	{
+//		if (i % 2 == 0)
+//			result << i/2 + 1 << ". ";
+//		auto move = moves[i].get();
+//		if (move->castle == Castle::NONE && move->takenPiece == PieceType::NONE)
+//		{
+//			result << coordsToString(move->to) << " ";
+//		}
+//	}
+//
+//	return result.str();
+//}
+
+//void MovesTracker::loadFromPgn(std::string pgnString)
+//{
+//	bool nextIsMove = false;
+//	int charsSkip = 1;
+//	for (int charNum = 0; charNum < pgnString.size(); charNum += charsSkip)
+//	{
+//		charsSkip = 1;
+//		char currChar = pgnString[charNum];
+//
+//		if(nextIsMove)
+//
+//		if (isCharNum(currChar) && pgnString[charNum + 1] == '.')
+//		{
+//			nextIsMove = true;
+//			continue;
+//		}
+//	}
+//}
+//
+//bool isCharNum(char character)
+//{
+//	return character <= 57 && character >= 48;
+//}
+//
+//bool isPieceSign(char character)
+//{
+//	std::string charSigns = "prnbkq"
+//	return character <=
+//}
 
 void MovesTracker::previous()
 {
-	Move moveToRevert = moves[pointedMoveNum];
+	Move* moveToRevert = moves[pointedMoveNum].get();
 	revertMove(moveToRevert);
 	pointedMoveNum--;
 }
 
-void MovesTracker::revertMove(Move const& move)
+void MovesTracker::revertMove(Move* move)
 {
-	if (move.enPassant != Pawn::EnPassant::NONE)
+	if (move->promotion != Promotions::NONE)
 	{
-		trackedBoard->setPiece(move.from, trackedBoard->setPiece(move.to, nullptr));
+		trackedBoard->setPiece(move->from, std::move(move->promotedPawn));
+		trackedBoard->setPiece(move->to, std::move(move->takenPiecePtr));
+	}
+	else if (move->enPassant != EnPassant::NONE)
+	{
+		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 		
 		trackedBoard->setPiece(
-			{ move.pieceColor == Piece::Color::White ? move.to.first + 1 : move.to.first - 1, move.to.second },
-			makePieceFromType(Piece::Type::PAWN, Helpers::getOtherColor(move.pieceColor))
+			{ move->pieceColor == Color::White ? move->to.first + 1 : move->to.first - 1, move->to.second },
+			std::move(move->takenPiecePtr)
 		);
 	}
-	else if (move.castle != King::Castle::NONE)
+	else if (move->castle != Castle::NONE)
 	{
-		trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
-		trackedBoard->setPiece(move.to, nullptr);
+		// Revert king move
+		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
 
-		std::pair<int, int> rookCurrCoords = { move.from.first, move.castle == King::Castle::LONG ? 3 : 5};
-		std::pair<int, int> rookPrevCoords = { move.from.first, move.castle == King::Castle::LONG ? 0 : 7};
-		trackedBoard->setPiece(rookPrevCoords, makePieceFromType(Piece::Type::ROOK, move.pieceColor));
-		trackedBoard->setPiece(rookCurrCoords, nullptr);
+		// Revert rook move
+		std::pair<int, int> rookCurrCoords = { move->from.first, move->castle == Castle::LONG ? 3 : 5};
+		std::pair<int, int> rookPrevCoords = { move->from.first, move->castle == Castle::LONG ? 0 : 7};
+		trackedBoard->setPiece(rookPrevCoords, trackedBoard->setPiece(rookCurrCoords, nullptr));
 	}
 	else
 	{
-		trackedBoard->setPiece(move.from, makePieceFromType(move.pieceType, move.pieceColor));
-		trackedBoard->setPiece(move.to, makePieceFromType(move.takenPiece, Helpers::getOtherColor(move.pieceColor)));
+		trackedBoard->setPiece(move->from, trackedBoard->setPiece(move->to, nullptr));
+		trackedBoard->setPiece(move->to, std::move(move->takenPiecePtr));
 	}
 }
 
-std::unique_ptr<Piece> MovesTracker::makePieceFromType(Piece::Type type, Piece::Color color)
+std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> MovesTracker::exportRaw() const
 {
-	switch (type)
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves;
+
+	for (auto& mv : moves)
 	{
-	case Piece::Type::BISHOP:
-		return std::make_unique<Bishop>(color);
-	case Piece::Type::PAWN:
-		return std::make_unique<Pawn>(color);
-	case Piece::Type::ROOK:
-		return std::make_unique<Rook>(color);
-	case Piece::Type::QUEEN:
-		return std::make_unique<Queen>(color);
-	case Piece::Type::KNIGHT:
-		return std::make_unique<Knight>(color);
-	case Piece::Type::KING:
-		return std::make_unique<King>(color);
-	case Piece::Type::NONE:
-		return nullptr;
-	default:
-		throw std::runtime_error(":()()");
-		break;
+		rawMoves.push_back({ mv.get()->from, mv.get()->to });
+	}
+
+	return rawMoves;
+}
+
+void MovesTracker::importRaw(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> const& movesList)
+{
+	for (auto& move : movesList)
+	{
+		auto& from = move.first;
+		auto& to = move.second;
+
+		trackedBoard->getPiece(from)->move(trackedBoard, to);
 	}
 }
 

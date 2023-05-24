@@ -21,3 +21,8 @@ Piece* Square::getPiece() const
 {
 	return piece.get();
 }
+
+std::unique_ptr<Piece> Square::getPieceUniquePtr()
+{
+	return std::move(piece);
+}

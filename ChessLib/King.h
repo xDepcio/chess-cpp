@@ -6,12 +6,12 @@ class King : public Piece
 private:
 
 public:
-	enum class Castle
-	{
-		NONE,
-		LONG,
-		SHORT
-	};
+	//enum class Castle
+	//{
+	//	NONE,
+	//	LONG,
+	//	SHORT
+	//};
 
 	King(Color withColor);
 	King(Color withColor, int id);

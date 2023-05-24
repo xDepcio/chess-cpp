@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <typeinfo>
+#include "Constants.h"
 
 class MovesTracker;
 class Queen;
@@ -16,6 +17,21 @@ class Square;
 class Board
 {
 public:
+	//enum class BoardState
+	//{
+	//	CHECKMATED_WHITE,
+	//	CHECKMATED_BLACK,
+	//	STALEMATE,
+	//	PLAYED,
+	//	REQUEST_PROMOTION
+	//};
+	//enum class Promotions
+	//{
+	//	ROOK,
+	//	QUEEN,
+	//	KNIGHT,
+	//	BISHOP
+	//};
 
 	Board(int width, int height);
 	~Board();
@@ -27,15 +43,16 @@ public:
 	void printBoard() const;
 
 	Piece* getPiece(std::pair<int, int> coords) const;
+	std::unique_ptr<Piece> getPieceUniquePtr(const std::pair<int, int>& pieceCoords);
 
-	std::pair<int, int> getKingLocation(Piece::Color const kingColor) const;
+	std::pair<int, int> getKingLocation(Color const kingColor) const;
 
 	std::vector<std::pair<int, int>> getPawnMoves(std::pair<int, int> atCoords, bool ignoreCheck = false);
 	std::vector<std::pair<int, int>> getKingMoves(std::pair<int, int> atCoords, bool ignoreCheck = false);
 	std::vector<std::pair<int, int>> getKnightMoves(std::pair<int, int> atCoords, bool ignoreCheck = false);
 	std::vector<std::pair<int, int>> getHorizontalMoves(std::pair<int, int> atCoords, bool ignoreCheck = false);
 	std::vector<std::pair<int, int>> getVerticalMoves(std::pair<int, int> atCoords, bool ignoreCheck = false);
-	std::vector<std::pair<int, int>> getCastleMoves(Piece::Color kingColor);
+	std::vector<std::pair<int, int>> getCastleMoves(Color kingColor);
 	std::vector<std::pair<int, int>> getEnPassantMoves(std::pair<int, int> pawnCoords);
 
 
@@ -43,29 +60,39 @@ public:
 
 	void move(std::pair<int, int> from, std::pair<int, int> to);
 
-	bool isCheck(Piece::Color const piecesColor);
+	bool isCheck(Color const piecesColor);
 
-	bool isCheckMate(Piece::Color const piecesColor);
+	bool isCheckMate(Color const piecesColor);
 
-	bool isStalemate(Piece::Color const piecesColor);
+	bool isStalemate(Color const piecesColor);
 
 	bool areCoordinatesValid(std::pair<int, int> coordinates) const;
 
 	MovesTracker* getMovesTracker() const;
 
-	Piece::Color getTurn() const;
+	Color getTurn() const;
 
-	void setTurn(Piece::Color const turnColor);
+	void setTurn(Color const turnColor);
 
 	void invalidateEnPassantesOnNextMove();
+
+	void setBoardState(BoardState stateToSet);
+
+	BoardState getBoardState() const;
+
+	void requestPromotionChoice(std::pair<int, int> const& moveFrom, std::pair<int, int> const& moveTo);
+	void receivePromotionChoice(Promotions promotion);
 
 protected:
 	int width;
 	int height;
 	std::vector<std::vector<Square> > squares = { };
 	MovesTracker* movesTracker;
-	Piece::Color turn = Piece::Color::White;
+	Color turn = Color::White;
 	bool shouldInvalidateEnPassantes = false;
+	BoardState boardState = BoardState::PLAYED;
+	std::pair<int, int> promoMoveFrom;
+	std::pair<int, int> promoMoveTo;
 
 	struct moveState
 	{
@@ -86,5 +113,5 @@ protected:
 	};
 
 	moveState addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck = false);
-	void invalidateEnPassantes(Piece::Color piecesColorToInvalidate);
+	void invalidateEnPassantes(Color piecesColorToInvalidate);
 };

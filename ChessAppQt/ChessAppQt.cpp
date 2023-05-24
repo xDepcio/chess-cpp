@@ -1,24 +1,33 @@
-#include "ChessAppQt.h"
+﻿#include "ChessAppQt.h"
 #include "QtGame.h"
-#include "../../Chess/ChessLib/Square.h"
-#include "../../Chess/ChessLib/Board.h"
-#include "../../Chess/ChessLib/MovesTracker.h"
-#include "../../Chess/ChessLib/Pawn.h"
-#include "../../Chess/ChessLib/Knight.h"
-#include "../../Chess/ChessLib/Bishop.h"
-#include "../../Chess/ChessLib/Rook.h"
-#include "../../Chess/ChessLib/King.h"
-#include "../../Chess/ChessLib/Queen.h"
+#include <qresource.h>
+#include "../ChessLib/Square.h"
+#include "../ChessLib/Board.h"
+#include "../ChessLib/MovesTracker.h"
+#include "../ChessLib/Pawn.h"
+#include "../ChessLib/Knight.h"
+#include "../ChessLib/Bishop.h"
+#include "../ChessLib/Rook.h"
+#include "../ChessLib/King.h"
+#include "../ChessLib/Queen.h"
+#include "SkinsManager.h"
+#include "../ChessLib/Constants.h"
+#include <filesystem>
+#include "../ChessLib/Constants.h"
 
-ChessAppQt::ChessAppQt(QWidget *parent)
-    : QMainWindow(parent)
+ChessAppQt::ChessAppQt(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
+    setupSkinsManagement();
     connectMenuBtns();
-    {
-        startGame();
-        connectTrackerBtns();
-    }
+    connectSquares();
+    connectTrackerBtns();
+    connectRestartBtn();
+    setupPromotionBtns();
+    connectBackBtn();
+    connectSaveBtn();
+    //loadSavedGames();
+    connectSavesBackBtn();
 }
 
 ChessAppQt::~ChessAppQt()
@@ -27,18 +36,20 @@ ChessAppQt::~ChessAppQt()
 void ChessAppQt::connectMenuBtns()
 {
     connect(ui.menuPlayBtn, &QPushButton::clicked, this, [this]() {
+        startNewChessGame();
         ui.stackedWidget->setCurrentIndex(0);
+    });
+
+    connect(ui.menuSkinsBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(1);
+    });
+
+    connect(ui.menuHistoryBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(3);
+        loadSavedGames();
     });
 }
 
-void ChessAppQt::startGame()
-{
-    connectSquares();
-
-    playedGame = new QtGame();
-    playedGame->run();
-    updateBoard();
-}
 
 void ChessAppQt::updateBoard()
 {
@@ -60,7 +71,7 @@ void ChessAppQt::updateBoard()
     {
         for (auto& sqr : row)
         {
-            std::string pathToPiece = getPathToPiece(sqr.getPiece());
+            std::string pathToPiece = skinsManager.get()->getPathToPiece(sqr.getPiece());
             QString qImagePath = QString::fromStdString(pathToPiece);
             QPixmap pixmap(qImagePath);
             pixmap = pixmap.scaled(qtSquares[qtSquareNum]->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
@@ -90,8 +101,10 @@ void ChessAppQt::updateSquares(std::vector<std::pair<int, int>>& coordsToUpdate)
         Piece* piece = squares[coord.first][coord.second].getPiece();
         ClickableLabel* label = qtSquares[coord.first][coord.second];
 
-        std::string pathToPiece = getPathToPiece(piece);
+        std::string pathToPiece = skinsManager.get()->getPathToPiece(piece);
+
         QString qImagePath = QString::fromStdString(pathToPiece);
+        
         QPixmap pixmap(qImagePath);
         pixmap = pixmap.scaled(label->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         label->setPixmap(pixmap);
@@ -178,56 +191,129 @@ void ChessAppQt::connectTrackerBtns()
     connect(ui.nextMoveBtn, &QPushButton::clicked, this, [this]() {
         playedGame->getBoard()->getMovesTracker()->next();
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
-        //std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
-        updateSquares(move.affectedSquares);
+        updateSquares(move->affectedSquares);
         if (playedGame->getBoard()->getMovesTracker()->onLatestMove())
         {
             ui.nextMoveBtn->setDisabled(true);
-            return;
+            //return;
+        }
+        else
+        {
+            ui.nextMoveBtn->setDisabled(false);
         }
         ui.prevMoveBtn->setDisabled(false);
     });
 
     connect(ui.prevMoveBtn, &QPushButton::clicked, this, [this]() {
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
-        //std::vector<std::pair<int, int>> movesToUpdate = { move.from, move.to };
         playedGame->getBoard()->getMovesTracker()->previous();
-        updateSquares(move.affectedSquares);
-        if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() == -1)
+        updateSquares(move->affectedSquares);
+        if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() <= -1)
         {
             ui.prevMoveBtn->setDisabled(true);
-            return;
+            //return;
+        }
+        else
+        {
+            ui.prevMoveBtn->setDisabled(false);
         }
         ui.nextMoveBtn->setDisabled(false);
     });
 }
 
-std::string ChessAppQt::getPathToPiece(Piece* piece) const
+void ChessAppQt::setupSkinsManagement()
 {
-    if (piece == nullptr)
-        return "";
-    
-    // TODO... Change to universal path
-    std::string base = "C:/Users/Olek/Desktop/pieces/";
-    
+    skinsManager = std::move(std::make_unique<SkinsManager>());
+    skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD);
 
-    if (dynamic_cast<Pawn*>(piece))
-        base += "pawn";
-    if (dynamic_cast<Knight*>(piece))
-        base += "knight";
-    if (dynamic_cast<Bishop*>(piece))
-        base += "bishop";
-    if (dynamic_cast<Queen*>(piece))
-        base += "queen";
-    if (dynamic_cast<King*>(piece))
-        base += "king";
-    if (dynamic_cast<Rook*>(piece))
-        base += "rook";
+    connect(ui.skinsBackBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(2);
+    });
 
-    base += piece->getColor() == Piece::Color::White ? "-white.png" : "-black.png";
+    connect(ui.radioBtnStandard, &QRadioButton::clicked, this, [this]() {
+        skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD);
+    });
 
-    return base;
+    connect(ui.radioBtnStarWars, &QRadioButton::clicked, this, [this]() {
+        skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STARWARS);
+    });
 }
+
+void ChessAppQt::setupPromotionBtns()
+{
+    ui.promotionWidget->hide();
+
+    connect(ui.promotionQueenBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->choosePromotion(Promotions::QUEEN);
+        updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
+        ui.promotionWidget->hide();
+    });
+    connect(ui.promotionKnightBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->choosePromotion(Promotions::KNGIHT);
+        updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
+        ui.promotionWidget->hide();
+    });
+    connect(ui.promotionRookBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->choosePromotion(Promotions::ROOK);
+        updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
+        ui.promotionWidget->hide();
+    });
+    connect(ui.promotionBishopBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->choosePromotion(Promotions::BISHOP);
+        updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
+        ui.promotionWidget->hide();
+    });
+}
+
+void ChessAppQt::startNewChessGame()
+{
+    ui.nextMoveBtn->setDisabled(true);
+    ui.prevMoveBtn->setDisabled(true);
+    ui.promotionWidget->hide();
+
+    playedGame = new QtGame();
+    playedGame->run();
+    updateBoard();
+}
+
+void ChessAppQt::startNewChessGameFromSave(std::string const& savePath)
+{
+    ui.stackedWidget->setCurrentIndex(0);
+
+    ui.nextMoveBtn->setDisabled(true);
+    ui.prevMoveBtn->setDisabled(true);
+    ui.promotionWidget->hide();
+
+    playedGame = new QtGame();
+    playedGame->run();
+    playedGame->loadGameFromFile(savePath);
+    updateBoard();
+}
+
+void ChessAppQt::handleChessGameStateChange()
+{
+    switch (playedGame->getBoardState())
+    {
+    case BoardState::CHECKMATED_BLACK:
+        ui.gameEndLabel->setText("♔ Białe wygrywają!");
+        break;
+    case BoardState::CHECKMATED_WHITE:
+        ui.gameEndLabel->setText("♚ Czarne wygrywają!");
+        break;
+    case BoardState::STALEMATE:
+        ui.gameEndLabel->setText("♚ Remis! ♔");
+        break;
+    case BoardState::PLAYED:
+        ui.prevMoveBtn->setDisabled(false);
+        break;
+    case BoardState::REQUEST_PROMOTION:
+        ui.promotionWidget->show();
+        break;
+    default:
+        break;
+    }
+}
+
 
 void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
 {
@@ -235,12 +321,6 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
     Piece* prevClicked = playedGame->getClickedPiece();
     auto prevCoords = playedGame->getClickedPieceCoords();
     auto turn = playedGame->getBoard()->getTurn();
-
-    //bool prevCurrSame = clickedPiece->getColor() == prevClicked->getColor();
-    //bool prevCurrNull = clickedPiece == nullptr && prevClicked == nullptr;
-    //bool prevNullCurrOwn = prevClicked == nullptr && clickedPiece->getColor() == turn;
-    //bool prevNullCurrEnemy = prevClicked == nullptr && clickedPiece->getColor() != turn;
-    //bool prevCurrOwn = clickedPiece->getColor() == turn && prevClicked->getColor() == turn;
 
     clearDisplayMoves(displayedSquares);
     if (
@@ -260,12 +340,12 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
         // valid move and move
         if (playedGame->isMoveValid(prevCoords, fieldCoords))
         {
-            //playedGame->move(prevCoords, fieldCoords);
-            prevClicked->move(playedGame->getBoard(), fieldCoords);
-            playedGame->getBoard()->setTurn(turn == Piece::Color::White ? Piece::Color::Black : Piece::Color::White);
-            //std::vector<std::pair<int, int>> toUpdate = { prevCoords, fieldCoords };
-            auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove().affectedSquares;
+            //prevClicked->move(playedGame->getBoard(), fieldCoords);
+            playedGame->move(prevClicked, fieldCoords);
+            playedGame->getBoard()->setTurn(turn == Color::White ? Color::Black : Color::White);
+            auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares;
             updateSquares(affectedSqrs);
+            handleChessGameStateChange();
         }
         playedGame->setClickedPiece(nullptr);
         playedGame->setClickedPieceCoords({});
@@ -282,5 +362,68 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
     {
         throw std::runtime_error(":(");
     }
+}
+
+void ChessAppQt::handleRestartBtn()
+{
+    delete playedGame;
+    startNewChessGame();
+}
+
+void ChessAppQt::connectRestartBtn()
+{
+    connect(ui.restartBtn, &QPushButton::clicked, this, &ChessAppQt::handleRestartBtn);
+}
+
+void ChessAppQt::connectBackBtn()
+{
+    connect(ui.backBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(2);
+    });
+}
+
+void ChessAppQt::connectSaveBtn()
+{
+    connect(ui.saveBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->saveCurrentGameToFile(constants::SAVE_FILES_DIR);
+    });
+}
+
+void ChessAppQt::loadSavedGames()
+{
+    foreach(QObject * child, ui.savesHolderWidget->children()) {
+        // Check if the child widget is of type QWidget
+        if (QWidget* childWidget = qobject_cast<QWidget*>(child)) {
+            // Delete the child widget
+            delete childWidget;
+        }
+    }
+
+    for (const auto& entry : std::filesystem::directory_iterator(constants::SAVE_FILES_DIR)) {
+        if (entry.is_regular_file() && entry.path().extension() == ".txt") {
+            QWidget* saveHolder = new QWidget();
+            ui.savesHolderLayout->addWidget(saveHolder);
+            QHBoxLayout* layout = new QHBoxLayout(saveHolder);
+
+            QLabel* label = new QLabel();
+            label->setText(QString::fromStdString(entry.path().filename().string()));
+            layout->addWidget(label);
+
+            QPushButton* button = new QPushButton(QString("Wczytaj"));
+            button->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+            layout->addWidget(button);
+
+            connect(button, &QPushButton::clicked, this, [this, entry]() {
+                startNewChessGameFromSave(entry.path().string());
+            });
+        }
+    }
+}
+
+void ChessAppQt::connectSavesBackBtn()
+{
+    connect(ui.saveBackBtn, &QPushButton::clicked, this, [this]() {
+        ui.stackedWidget->setCurrentIndex(2);
+    });
 }
 

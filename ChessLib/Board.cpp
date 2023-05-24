@@ -67,7 +67,12 @@ Piece* Board::getPiece(std::pair<int, int> coords) const
 	return squares[coords.first][coords.second].getPiece();
 }
 
-std::pair<int, int> Board::getKingLocation(Piece::Color const kingColor) const
+std::unique_ptr<Piece> Board::getPieceUniquePtr(const std::pair<int, int>& pieceCoords)
+{
+	return squares[pieceCoords.first][pieceCoords.second].getPieceUniquePtr();
+}
+
+std::pair<int, int> Board::getKingLocation(Color const kingColor) const
 {
 	int rowNum = 0;
 	for (auto& row : squares)
@@ -93,7 +98,7 @@ std::pair<int, int> Board::getKingLocation(Piece::Color const kingColor) const
 std::vector<std::pair<int, int>> Board::getPawnMoves(std::pair<int, int> atCoords, bool ignoreCheck)
 {
 	Pawn* pieceAtCoords = dynamic_cast<Pawn*>(getPiece(atCoords));
-	int dir = pieceAtCoords->getColor() == Piece::Color::White ? 1 : -1;
+	int dir = pieceAtCoords->getColor() == Color::White ? 1 : -1;
 
 	std::vector<std::pair<int, int>> validMoves;
 	std::vector<std::pair<int, int>> takesToCheck = {
@@ -249,7 +254,7 @@ std::vector<std::pair<int, int>> Board::getVerticalMoves(std::pair<int, int> atC
 	return validVerticalMoves;
 }
 
-std::vector<std::pair<int, int>> Board::getCastleMoves(Piece::Color kingColor)
+std::vector<std::pair<int, int>> Board::getCastleMoves(Color kingColor)
 {
 	auto kingCoords = getKingLocation(kingColor);
 	Piece* king = getPiece(kingCoords);
@@ -306,7 +311,7 @@ std::vector<std::pair<int, int>> Board::getEnPassantMoves(std::pair<int, int> pa
 	{
 		validMoves.push_back(
 			{
-				pawn->getColor() == Piece::Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+				pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
 				pawnCoords.second - 1
 			}
 		);
@@ -315,7 +320,7 @@ std::vector<std::pair<int, int>> Board::getEnPassantMoves(std::pair<int, int> pa
 	{
 		validMoves.push_back(
 			{
-				pawn->getColor() == Piece::Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+				pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
 				pawnCoords.second + 1
 			}
 		);
@@ -382,18 +387,21 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 		bool tookPiece = this->getPiece(to) != nullptr;
 		bool takenPieceMoved = takenPiece != nullptr && takenPiece->hasMadeFirstMove();
 
-		MovesTracker::Move mv(
+		auto mvPtr = std::make_unique<MovesTracker::Move>(
 			movedPiece->getType(),
-			takenPiece == nullptr ? Piece::Type::NONE : takenPiece->getType(), 
-			movedPiece->getColor(), 
+			takenPiece == nullptr ? PieceType::NONE : takenPiece->getType(),
+			getPieceUniquePtr(to),
+			movedPiece->getColor(),
 			from, 
 			to, 
 			takenPiece ? takenPiece->hasMadeFirstMove() : false,
-			King::Castle::NONE,
-			{from, to}
+			Castle::NONE,
+			std::vector<std::pair<int, int>>({from, to}),
+			EnPassant::NONE,
+			isCheck(movedPiece->otherColor())
 		);
-		
-		movesTracker->addMove(mv);
+
+		movesTracker->addMove(std::move(mvPtr));
 
 		this->getPiece(from)->handleGotMoved();
 		setPiece(to, setPiece(from, nullptr));
@@ -405,14 +413,13 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 		{
 			if (isCheckMate(getPiece(to)->otherColor()))
 			{
-				std::cout << "CHECK MATE!";
-				throw std::runtime_error("CHECKMATE NOT HANDLED YET!");
+				setBoardState(movedPiece->getColor() == Color::White ? BoardState::CHECKMATED_BLACK : BoardState::CHECKMATED_WHITE);
 			}
 		}
 		// If move stalemated anyone
-		else if (isStalemate(Piece::Color::Black) || isStalemate(Piece::Color::White))
+		else if (isStalemate(Color::Black) || isStalemate(Color::White))
 		{
-			throw std::domain_error("BRUH :((");
+			setBoardState(BoardState::STALEMATE);
 		}
 		// invalidate previously avalible enpassantes
 		if (shouldInvalidateEnPassantes)
@@ -422,7 +429,7 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 	}
 }
 
-bool Board::isCheck(Piece::Color const piecesColor)
+bool Board::isCheck(Color const piecesColor)
 {
 	auto kingCoords = getKingLocation(piecesColor);
 	Piece* king = getPiece(kingCoords);
@@ -460,7 +467,7 @@ bool Board::isCheck(Piece::Color const piecesColor)
 
 		// checked by pawn
 		Pawn* p = dynamic_cast<Pawn*>(getPiece(move));
-		int dir = piecesColor == Piece::Color::White ? -1 : 1;
+		int dir = piecesColor == Color::White ? -1 : 1;
 		if ((move.first - kingCoords.first) * dir == 1 && p)
 			return true;
 	}
@@ -474,7 +481,7 @@ bool Board::isCheck(Piece::Color const piecesColor)
 	return false;
 }
 
-bool Board::isCheckMate(Piece::Color const piecesColor)
+bool Board::isCheckMate(Color const piecesColor)
 {
 	for (int row = 0; row < squares.size(); row++)
 	{
@@ -493,7 +500,7 @@ bool Board::isCheckMate(Piece::Color const piecesColor)
 	return true;
 }
 
-bool Board::isStalemate(Piece::Color const piecesColor)
+bool Board::isStalemate(Color const piecesColor)
 {
 	for (int row = 0; row < squares.size(); row++)
 	{
@@ -525,12 +532,12 @@ MovesTracker* Board::getMovesTracker() const
 	return movesTracker;
 }
 
-Piece::Color Board::getTurn() const
+Color Board::getTurn() const
 {
 	return turn;
 }
 
-void Board::setTurn(Piece::Color const turnColor)
+void Board::setTurn(Color const turnColor)
 {
 	turn = turnColor;
 }
@@ -538,6 +545,70 @@ void Board::setTurn(Piece::Color const turnColor)
 void Board::invalidateEnPassantesOnNextMove()
 {
 	shouldInvalidateEnPassantes = true;
+}
+
+void Board::setBoardState(BoardState stateToSet)
+{
+	boardState = stateToSet;
+}
+
+BoardState Board::getBoardState() const
+{
+	return boardState;
+}
+
+void Board::requestPromotionChoice(std::pair<int, int> const& moveFrom, std::pair<int, int> const& moveTo)
+{
+	setBoardState(BoardState::REQUEST_PROMOTION);
+	promoMoveFrom = moveFrom;
+	promoMoveTo = moveTo;
+
+}
+
+void Board::receivePromotionChoice(Promotions promotion)
+{
+	auto movedPawn = getPiece(promoMoveFrom);
+	auto takenPiece = getPiece(promoMoveTo);
+	auto movedPawnColor = movedPawn->getColor();
+
+	auto mvPtr = std::make_unique<MovesTracker::Move>(
+		PieceType::PAWN,
+		takenPiece == nullptr ? PieceType::NONE : takenPiece->getType(),
+		getPieceUniquePtr(promoMoveTo),
+		movedPawn->getColor(),
+		promoMoveFrom,
+		promoMoveTo,
+		takenPiece ? takenPiece->hasMadeFirstMove() : false,
+		Castle::NONE,
+		std::vector<std::pair<int, int>>({ promoMoveFrom, promoMoveTo }),
+		EnPassant::NONE,
+		false,
+		promotion,
+		getPieceUniquePtr(promoMoveFrom)
+	);
+
+
+	switch (promotion)
+	{
+	case Promotions::ROOK:
+		setPiece(promoMoveTo, std::make_unique<Rook>(movedPawnColor));
+		break;
+	case Promotions::QUEEN:
+		setPiece(promoMoveTo, std::make_unique<Queen>(movedPawnColor));
+		break;
+	case Promotions::KNGIHT:
+		setPiece(promoMoveTo, std::make_unique<Knight>(movedPawnColor));
+		break;
+	case Promotions::BISHOP:
+		setPiece(promoMoveTo, std::make_unique<Bishop>(movedPawnColor));
+		break;
+	case Promotions::NONE:
+		break;
+	default:
+		break;
+	}
+
+	movesTracker->addMove(std::move(mvPtr));
 }
 
 Board::moveState Board::addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
@@ -579,7 +650,7 @@ Board::moveState Board::addMoveIfValid(std::pair<int, int> from, std::pair<int, 
 	return feedback;
 }
 
-void Board::invalidateEnPassantes(Piece::Color piecesColorToInvalidate)
+void Board::invalidateEnPassantes(Color piecesColorToInvalidate)
 {
 	for (auto& row : squares)
 	{

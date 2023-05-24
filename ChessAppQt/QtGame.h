@@ -1,13 +1,7 @@
 #pragma once
 #include <iostream>
 #include <vector>
-//#include "../../../../../Chess/ChessLib/Board.h"
-//#include "../../../../../Chess/ChessLib/Bishop.h"
-//#include "../../../../../Chess/ChessLib/King.h"
-//#include "../../../../../Chess/ChessLib/Knight.h"
-//#include "../../../../../Chess/ChessLib/Pawn.h"
-//#include "../../../../../Chess/ChessLib/Piece.h"
-//#include "../../../../../Chess/ChessLib/Queen.h"
+#include "../ChessLib/Constants.h"
 
 class Piece;
 class Board;
@@ -15,13 +9,10 @@ class Square;
 
 class QtGame
 {
-private:
-	Board* trackedBoard;
-	Piece* clickedPiece;
-	std::pair<int, int> clickedPieceCoords;
-
 public:
+
 	QtGame() : trackedBoard(nullptr), clickedPiece(nullptr), clickedPieceCoords({}) {};
+	~QtGame();
 
 	void setupBoard();
 	void run();
@@ -32,7 +23,7 @@ public:
 
 	bool isMoveValid(std::pair<int, int> const& from, std::pair<int, int> const& to);
 
-	void move(std::pair<int, int> const& from, std::pair<int, int> const& to);
+	void move(Piece* piece, std::pair<int, int> const& to);
 
 	void setClickedPiece(Piece* piece);
 	void setClickedPieceCoords(std::pair<int, int> const& coords);
@@ -41,5 +32,24 @@ public:
 	std::pair<int, int> getClickedPieceCoords() const;
 
 	Board* getBoard() const;
+
+	void setBoardState(const BoardState state);
+
+	BoardState getBoardState() const;
+
+	void choosePromotion(Promotions promotion);
+
+	void loadGameFromFile(std::string const& filePath);
+
+	void saveCurrentGameToFile(std::string const& dirPath);
+
+	std::string rawMovesToString(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves) const;
+	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMovesFromString(std::string rawMovesStr) const;
+
+private:
+	Board* trackedBoard;
+	Piece* clickedPiece;
+	std::pair<int, int> clickedPieceCoords;
+	BoardState boardState = BoardState::PLAYED;
 };
 

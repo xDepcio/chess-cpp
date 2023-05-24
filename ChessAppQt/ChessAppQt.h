@@ -7,6 +7,7 @@
 
 class QtGame;
 class Piece;
+class SkinsManager;
 
 class ChessAppQt : public QMainWindow
 {
@@ -18,7 +19,6 @@ public:
 
     void connectMenuBtns();
 
-    void startGame();
     void updateBoard();
     void updateSquares(std::vector<std::pair<int, int>>& coordsToUpdate);
     void connectSquares();
@@ -27,12 +27,28 @@ public:
 
     void connectTrackerBtns();
 
-    std::string getPathToPiece(Piece* piece) const;
+    void setupSkinsManagement();
+
+    void setupPromotionBtns();
+
+    void startNewChessGame();
+
+    void startNewChessGameFromSave(std::string const& savePath);
+
+    void handleChessGameStateChange();
 
     void handleBoardFieldClick(std::pair<int, int> const& fieldCoords);
+
+    void handleRestartBtn();
+    void connectRestartBtn();
+    void connectBackBtn();
+    void connectSaveBtn();
+    void loadSavedGames();
+    void connectSavesBackBtn();
 
 private:
     std::vector<std::pair<int, int>> displayedSquares;
     Ui::ChessAppQtClass ui;
     QtGame* playedGame;
+    std::unique_ptr<SkinsManager> skinsManager;
 };

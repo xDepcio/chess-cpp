@@ -3,7 +3,6 @@
 
 #include <iostream>
 #include "../ChessLib/Board.h"
-#include "../ChessLib/Metadata.h"
 #include "../ChessLib/Piece.h"
 #include "../ChessLib/Pawn.h"
 #include "../ChessLib/Game.h"

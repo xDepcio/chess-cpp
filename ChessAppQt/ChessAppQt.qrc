@@ -1,4 +1,29 @@
 <RCC>
-    <qresource prefix="ChessAppQt">
+    <qresource prefix="/ChessAppQt"/>
+    <qresource prefix="/skins">
+        <file>images-star-wars/bishop-black.png</file>
+        <file>images-star-wars/bishop-white.png</file>
+        <file>images-star-wars/king-black.png</file>
+        <file>images-star-wars/king-white.png</file>
+        <file>images-star-wars/knight-black.png</file>
+        <file>images-star-wars/knight-white.png</file>
+        <file>images-star-wars/pawn-black.png</file>
+        <file>images-star-wars/pawn-white.png</file>
+        <file>images-star-wars/queen-black.png</file>
+        <file>images-star-wars/queen-white.png</file>
+        <file>images-star-wars/rook-black.png</file>
+        <file>images-star-wars/rook-white.png</file>
+        <file>images-standard/bishop-black.png</file>
+        <file>images-standard/bishop-white.png</file>
+        <file>images-standard/king-black.png</file>
+        <file>images-standard/king-white.png</file>
+        <file>images-standard/knight-black.png</file>
+        <file>images-standard/knight-white.png</file>
+        <file>images-standard/pawn-black.png</file>
+        <file>images-standard/pawn-white.png</file>
+        <file>images-standard/queen-black.png</file>
+        <file>images-standard/queen-white.png</file>
+        <file>images-standard/rook-black.png</file>
+        <file>images-standard/rook-white.png</file>
     </qresource>
 </RCC>

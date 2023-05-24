@@ -2,6 +2,7 @@
 #include "MovesTracker.h"
 #include "Board.h"
 #include "King.h"
+#include "Helpers.h"
 
 bool Pawn::isEnPassantMove(std::pair<int, int> const& move) const
 {
@@ -20,15 +21,20 @@ bool Pawn::isEnPassantMove(std::pair<int, int> const& move) const
     return false;
 }
 
+void Pawn::promotionMove(Board* board, std::pair<int, int> const& to)
+{
+
+}
+
 Pawn::Pawn(Color withColor) : Piece(withColor)
 {
-    Piece::pieceSignature = "p";
-    type = Type::PAWN;
+    Piece::pieceSignature = withColor == Color::Black ? "p" : "P";
+    type = PieceType::PAWN;
 }
 Pawn::Pawn(Color withColor, int id) : Piece(withColor, id)
 {
-    Piece::pieceSignature = "p";
-    type = Type::PAWN;
+    Piece::pieceSignature = withColor == Color::Black ? "p" : "P";
+    type = PieceType::PAWN;
 }
 
 void Pawn::setValidEnPassantLeft(bool valid)
@@ -78,12 +84,20 @@ std::vector<std::pair<int, int>> Pawn::getValidMoves(Board* board, std::pair<int
 
 void Pawn::move(Board* board, std::pair<int, int> to)
 {
+    if (to.first == 0 || to.first == 7)
+    {
+        board->requestPromotionChoice(coordinates, to);
+        //promotionMove(board, to);
+        return;
+    }
+
     if (isEnPassantMove(to))
     {
         enPassantMove(board, to);
         return;
     }
 
+    // sets posibility for other pawns for enpassant
     if (!hasMadeFirstMove() && std::abs(coordinates.first - to.first) == 2)
     {
         if (board->areCoordinatesValid({ to.first, to.second - 1 }))
@@ -103,20 +117,22 @@ void Pawn::move(Board* board, std::pair<int, int> to)
 
 void Pawn::enPassantMove(Board* board, std::pair<int, int> const& to)
 {
-    std::pair<int, int> takenPawnCoords = { getColor() == Piece::Color::White ? to.first + 1 : to.first - 1, to.second };
+    std::pair<int, int> takenPawnCoords = { getColor() == Color::White ? to.first + 1 : to.first - 1, to.second };
 
-    MovesTracker::Move move(
-        Piece::Type::PAWN,
-        Piece::Type::PAWN,
+    auto movePtr = std::make_unique<MovesTracker::Move>(
+        PieceType::PAWN,
+        PieceType::PAWN,
+        board->getPieceUniquePtr(takenPawnCoords),
         getColor(),
         coordinates,
         to,
         true,
-        King::Castle::NONE,
-        { coordinates, to, takenPawnCoords },
-        coordinates.second - to.second == 1 ? EnPassant::LEFT : EnPassant::RIGHT
+        Castle::NONE,
+        std::vector<std::pair<int, int>>({ coordinates, to, takenPawnCoords }),
+        coordinates.second - to.second == 1 ? EnPassant::LEFT : EnPassant::RIGHT,
+        board->isCheck(Helpers::getOtherColor(getColor()))
     );
-    board->getMovesTracker()->addMove(move);
+    board->getMovesTracker()->addMove(std::move(movePtr));
 
     board->setPiece(to, board->setPiece(coordinates, nullptr));
     board->setPiece(takenPawnCoords, nullptr);

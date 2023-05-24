@@ -85,6 +85,7 @@
   <ItemGroup>
     <ClCompile Include="ClickableLabel.cpp" />
     <ClCompile Include="QtGame.cpp" />
+    <ClCompile Include="SkinsManager.cpp" />
     <QtRcc Include="ChessAppQt.qrc" />
     <QtUic Include="ChessAppQt.ui" />
     <QtMoc Include="ChessAppQt.h" />
@@ -92,15 +93,17 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="SkinsManager.h" />
     <QtMoc Include="ClickableLabel.h" />
     <ClInclude Include="QtGame.h" />
-    <ClInclude Include="resource.h" />
-    <ClInclude Include="resource1.h" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ChessLib\ChessLib.vcxproj">
       <Project>{6e5fe92a-8685-4658-8039-0d8514414656}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\..\Desktop\pieces\queen-white.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Condition="Exists('$(QtMsBuild)\qt.targets')">
