@@ -52,6 +52,8 @@ public:
 
 	MovesTracker(Board* boardToTrack) : trackedBoard(boardToTrack) {};
 
+	int getMoveCount() const;
+
 	Move* getPointedMove() const;
 	int getPointedMoveIndex() const;
 

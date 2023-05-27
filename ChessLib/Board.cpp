@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Board.h"
 #include "MovesTracker.h"
 #include "Queen.h"
@@ -42,11 +43,79 @@ std::vector<std::vector<Square>>& Board::getBoard()
 
 std::string Board::getFenBoard()
 {
-	for (auto i : squares) 
+	std::stringstream fen;
+	std::stringstream castle;
+	int empty = 0;
+	for (int i = 0; i < squares.size(); i++)
 	{
-		std::cout << i << std::endl;
+		
+		empty = 0;
+		for (int j = 0; j < squares[0].size(); j++)
+		{
+			
+			Piece* squarePiece = squares[i][j].getPiece();
+			if (squarePiece != nullptr)
+			{
+				if (empty != 0)
+				{
+					fen << empty;
+					empty = 0;
+				}
+				fen << squarePiece->getName()[1];
+			}
+			else
+			{
+				empty += 1;
+			}
+			
+		}
+		if (empty == 8 or empty != 0)
+		{
+			fen << empty;
+		}
+		if(i != squares.size() - 1)
+			fen << "/";
 	}
-	return std::string();
+	
+	fen << " " << (getTurn() == Color::White ? "w" : "b") << " ";
+
+	size_t castle_moves_w = getCastleMoves(Color::White).size();
+	size_t castle_moves_b = getCastleMoves(Color::Black).size();
+
+	switch (castle_moves_w)
+	{
+	case 1:
+		castle << "K";
+		break;
+	case 2:
+		castle << "KQ";
+		break;
+	default:
+		break;
+	}
+	switch (castle_moves_b)
+	{
+	case 1:
+		castle << "k";
+		break;
+	case 2:
+		castle << "kq";
+		break;
+	default:
+		break;
+	}
+
+	if (castle.str().length() == 0) castle << "- ";
+	
+
+	fen << castle.str();
+	fen << "- 0 ";
+	fen << (movesTracker->getMoveCount()+2)/2;
+
+	fen << std::endl;
+
+	return fen.str();
+	
 }
 
 

@@ -9,6 +9,11 @@
 #include "Rook.h"
 #include "Pawn.h"
 
+int MovesTracker::getMoveCount() const
+{
+	return moves.size();
+}
+
 MovesTracker::Move* MovesTracker::getPointedMove() const
 {
 	return moves[pointedMoveNum].get();

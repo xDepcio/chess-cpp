@@ -68,7 +68,7 @@ void Game::run()
 
 	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White, 151));
 
-	boardPt->getFenBoard();
+	
 
 
 	std::vector<std::string> messages;
@@ -77,6 +77,7 @@ void Game::run()
 		do
 		{
 			clearTerminal();
+			std::cout << boardPt->getFenBoard() << std::endl;
 			std::cout << "===============================================\n";
 			std::cout << (playerTurn == Color::White ? "Whites turn" : "Blacks turn") << '\n' << '\n';
 			std::cout << "q - quit\n";
@@ -121,6 +122,7 @@ void Game::run()
 						<< coords.second.first << ", " << coords.second.second;
 					messages.push_back(ss.str());
 					playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
+					boardPt->setTurn(playerTurn);
 				}
 				else
 				{
@@ -180,6 +182,7 @@ void Game::run()
 						<< coords.second.first << ", " << coords.second.second;
 					messages.push_back(ss.str());
 					playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
+					boardPt->setTurn(playerTurn);
 				}
 				else
 				{
