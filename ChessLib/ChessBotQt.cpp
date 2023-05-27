@@ -21,7 +21,7 @@ QString ChessBot::getStockfishOutput(const char* command)
 
 	// write commands to Stockfish's stdin
 	stockfish.write("uci\n"); // Initialize UCI node
-	stockfish.write("ucinewgane\n"); // Start a new gane
+	stockfish.write("ucinewgame\n"); // Start a new gane
 	stockfish.write(command); // Set the chessboard position in FEN notation
 	stockfish.write("go depth 10\n"); // Ask Stockfish to calculate the best move with depth 10
 
