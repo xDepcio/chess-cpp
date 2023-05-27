@@ -3,7 +3,9 @@
 #include <vector>
 #include <iostream>
 #include <typeinfo>
+#include <string>
 #include "Constants.h"
+
 
 class MovesTracker;
 class Queen;
@@ -39,6 +41,10 @@ public:
 	std::unique_ptr<Piece> setPiece(std::pair<int, int> cords, std::unique_ptr<Piece> piece);
 
 	std::vector<std::vector<Square> >& getBoard();
+
+	std::string getFenBoard();
+
+	
 
 	void printBoard() const;
 

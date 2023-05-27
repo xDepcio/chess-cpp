@@ -11,6 +11,12 @@
 #include "Pawn.h"
 #include "Board.h"
 
+void Game::enableAI(bool enable_ai)
+{
+	enable_ai ? ai_game = true : ai_game = false;
+	return;
+}
+
 void Game::run()
 {
 	Color playerTurn = Color::White;
@@ -62,62 +68,127 @@ void Game::run()
 
 	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White, 151));
 
+	boardPt->getFenBoard();
+
+
 	std::vector<std::string> messages;
-	do
+	if (not ai_game)
 	{
-		clearTerminal();
-		std::cout << "===============================================\n";
-		std::cout << (playerTurn == Color::White ? "Whites turn" : "Blacks turn") << '\n' << '\n';
-		std::cout << "q - quit\n";
-		std::cout << "type coordiantes in form (start-end). ex. d2-d4\n";
-		//std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
-
-		std::cout << "===============================================\n";
-		boardPt->printBoard();
-
-		for (auto& msg : messages)
+		do
 		{
-			std::cout << msg << '\n';
-		}
-		std::cout << '\n';
-		messages = {};
+			clearTerminal();
+			std::cout << "===============================================\n";
+			std::cout << (playerTurn == Color::White ? "Whites turn" : "Blacks turn") << '\n' << '\n';
+			std::cout << "q - quit\n";
+			std::cout << "type coordiantes in form (start-end). ex. d2-d4\n";
+			//std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
 
-		std::cout << "Your input: ";
-		std::string input;
-		std::cin >> input;
-		std::cout << input << '\n';
-		auto coords = parseCoords(input);
+			std::cout << "===============================================\n";
+			boardPt->printBoard();
 
-		Piece* movedPiece = boardPt->getPiece(coords.first);
-
-		if (movedPiece == nullptr)
-		{
-			messages.push_back("Illegal move");
-		}
-		else if (movedPiece->getColor() != playerTurn)
-		{
-			std::ostringstream ss;
-			ss << "Can't move " << (playerTurn == Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Color::White ? "Whites " : "Blacks ") << "turn.";
-			messages.push_back(ss.str());
-		}
-		else
-		{
-			if (movedPiece->isMoveValid(boardPt, coords.first, coords.second))
+			for (auto& msg : messages)
 			{
-				boardPt->move(coords.first, coords.second);
-				std::ostringstream ss;
-				ss << (playerTurn == Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
-					<< coords.second.first << ", " << coords.second.second;
-				messages.push_back(ss.str());
-				playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
+				std::cout << msg << '\n';
 			}
-			else
+			std::cout << '\n';
+			messages = {};
+
+			std::cout << "Your input: ";
+			std::string input;
+			std::cin >> input;
+			std::cout << input << '\n';
+			auto coords = parseCoords(input);
+
+			Piece* movedPiece = boardPt->getPiece(coords.first);
+
+			if (movedPiece == nullptr)
 			{
 				messages.push_back("Illegal move");
 			}
-		}
+			else if (movedPiece->getColor() != playerTurn)
+			{
+				std::ostringstream ss;
+				ss << "Can't move " << (playerTurn == Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Color::White ? "Whites " : "Blacks ") << "turn.";
+				messages.push_back(ss.str());
+			}
+			else
+			{
+				if (movedPiece->isMoveValid(boardPt, coords.first, coords.second))
+				{
+					boardPt->move(coords.first, coords.second);
+					std::ostringstream ss;
+					ss << (playerTurn == Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
+						<< coords.second.first << ", " << coords.second.second;
+					messages.push_back(ss.str());
+					playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
+				}
+				else
+				{
+					messages.push_back("Illegal move");
+				}
+			}
 
-	} while (true);
+		} while (true);
+	}
+	/// Ai Game
+	else
+	{
+		do
+		{
+			clearTerminal();
+			std::cout << "===============================================\n";
+			std::cout << (playerTurn == Color::White ? "Whites turn" : "Blacks turn") << '\n' << '\n';
+			std::cout << "q - quit\n";
+			std::cout << "type coordiantes in form (start-end). ex. d2-d4\n";
+			//std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
+
+			std::cout << "===============================================\n";
+			boardPt->printBoard();
+
+			for (auto& msg : messages)
+			{
+				std::cout << msg << '\n';
+			}
+			std::cout << '\n';
+			messages = {};
+
+			std::cout << "Your input: ";
+			std::string input;
+			std::cin >> input;
+			std::cout << input << '\n';
+			auto coords = parseCoords(input);
+
+			Piece* movedPiece = boardPt->getPiece(coords.first);
+
+			if (movedPiece == nullptr)
+			{
+				messages.push_back("Illegal move");
+			}
+			else if (movedPiece->getColor() != playerTurn)
+			{
+				std::ostringstream ss;
+				ss << "Can't move " << (playerTurn == Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Color::White ? "Whites " : "Blacks ") << "turn.";
+				messages.push_back(ss.str());
+			}
+			else
+			{
+				if (movedPiece->isMoveValid(boardPt, coords.first, coords.second))
+				{
+					boardPt->move(coords.first, coords.second);
+					std::ostringstream ss;
+					ss << (playerTurn == Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
+						<< coords.second.first << ", " << coords.second.second;
+					messages.push_back(ss.str());
+					playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
+				}
+				else
+				{
+					messages.push_back("Illegal move");
+				}
+			}
+
+		} while (true);
+	}
 
 
 }

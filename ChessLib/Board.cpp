@@ -40,6 +40,17 @@ std::vector<std::vector<Square>>& Board::getBoard()
 	return squares;
 }
 
+std::string Board::getFenBoard()
+{
+	for (auto i : squares) 
+	{
+		std::cout << i << std::endl;
+	}
+	return std::string();
+}
+
+
+
 void Board::printBoard() const
 {
 	for (int i = 0; i < squares.size(); i++)
