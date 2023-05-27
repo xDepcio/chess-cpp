@@ -49,12 +49,18 @@
     <ClCompile Include="SkinsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="..\ChessLib\ChessBotQt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="QtGame.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="SkinsManager.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ChessLib\ChessBotQt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

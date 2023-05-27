@@ -10,6 +10,7 @@
 #include "Rook.h"
 #include "Pawn.h"
 #include "Board.h"
+#include "ChessBot.h"
 
 void Game::enableAI(bool enable_ai)
 {
@@ -17,9 +18,19 @@ void Game::enableAI(bool enable_ai)
 	return;
 }
 
+void Game::setAIcolor(Color color)
+{
+	human_color = (color == Color::White ? Color::Black : Color::White);
+	return;
+}
+
+
+
 void Game::run()
 {
 	Color playerTurn = Color::White;
+
+	ChessBot chessinator3000;
 
 	Board board(8, 8), *boardPt;
 	boardPt = &board;
@@ -135,6 +146,7 @@ void Game::run()
 	/// Ai Game
 	else
 	{
+
 		do
 		{
 			clearTerminal();
@@ -154,39 +166,80 @@ void Game::run()
 			std::cout << '\n';
 			messages = {};
 
-			std::cout << "Your input: ";
-			std::string input;
-			std::cin >> input;
-			std::cout << input << '\n';
-			auto coords = parseCoords(input);
+			// Human Turn
+			if (playerTurn == human_color)
+			{
+				std::cout << "Your input: ";
+				std::string input;
+				std::cin >> input;
+				std::cout << input << '\n';
+				auto coords = parseCoords(input);
 
-			Piece* movedPiece = boardPt->getPiece(coords.first);
+				Piece* movedPiece = boardPt->getPiece(coords.first);
 
-			if (movedPiece == nullptr)
-			{
-				messages.push_back("Illegal move");
-			}
-			else if (movedPiece->getColor() != playerTurn)
-			{
-				std::ostringstream ss;
-				ss << "Can't move " << (playerTurn == Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Color::White ? "Whites " : "Blacks ") << "turn.";
-				messages.push_back(ss.str());
-			}
-			else
-			{
-				if (movedPiece->isMoveValid(boardPt, coords.first, coords.second))
+				if (movedPiece == nullptr)
 				{
-					boardPt->move(coords.first, coords.second);
+					messages.push_back("Illegal move");
+				}
+				else if (movedPiece->getColor() != playerTurn)
+				{
 					std::ostringstream ss;
-					ss << (playerTurn == Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
-						<< coords.second.first << ", " << coords.second.second;
+					ss << "Can't move " << (playerTurn == Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Color::White ? "Whites " : "Blacks ") << "turn.";
 					messages.push_back(ss.str());
-					playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
-					boardPt->setTurn(playerTurn);
 				}
 				else
 				{
+					if (movedPiece->isMoveValid(boardPt, coords.first, coords.second))
+					{
+						boardPt->move(coords.first, coords.second);
+						std::ostringstream ss;
+						ss << (playerTurn == Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
+							<< coords.second.first << ", " << coords.second.second;
+						messages.push_back(ss.str());
+						playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
+						boardPt->setTurn(playerTurn);
+					}
+					else
+					{
+						messages.push_back("Illegal move");
+					}
+				}
+			}
+			// Computer Move
+			else
+			{
+				std::string input = chessinator3000.getBestMove(boardPt->getFenBoard());
+				
+				auto coords = parseCoords(input);
+
+				Piece* movedPiece = boardPt->getPiece(coords.first);
+
+				if (movedPiece == nullptr)
+				{
 					messages.push_back("Illegal move");
+				}
+				else if (movedPiece->getColor() != playerTurn)
+				{
+					std::ostringstream ss;
+					ss << "Can't move " << (playerTurn == Color::White ? "Blacks " : "Whites ") << "pieces. Its " << (playerTurn == Color::White ? "Whites " : "Blacks ") << "turn.";
+					messages.push_back(ss.str());
+				}
+				else
+				{
+					if (movedPiece->isMoveValid(boardPt, coords.first, coords.second))
+					{
+						boardPt->move(coords.first, coords.second);
+						std::ostringstream ss;
+						ss << (playerTurn == Color::White ? "White" : "Black") << " moved " << movedPiece->getName() << " from " << coords.first.first << ", " << coords.first.second << " to "
+							<< coords.second.first << ", " << coords.second.second;
+						messages.push_back(ss.str());
+						playerTurn = playerTurn == Color::White ? Color::Black : Color::White;
+						boardPt->setTurn(playerTurn);
+					}
+					else
+					{
+						messages.push_back("Illegal move");
+					}
 				}
 			}
 
