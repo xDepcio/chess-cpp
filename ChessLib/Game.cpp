@@ -10,7 +10,7 @@
 #include "Rook.h"
 #include "Pawn.h"
 #include "Board.h"
-#include "ChessBot.h"
+
 
 void Game::enableAI(bool enable_ai)
 {
@@ -29,8 +29,6 @@ void Game::setAIcolor(Color color)
 void Game::run()
 {
 	Color playerTurn = Color::White;
-
-	ChessBot chessinator3000;
 
 	Board board(8, 8), *boardPt;
 	boardPt = &board;
@@ -208,7 +206,8 @@ void Game::run()
 			// Computer Move
 			else
 			{
-				std::string input = chessinator3000.getBestMove(boardPt->getFenBoard());
+				//std::string input = chessinator3000.getBestMove(boardPt->getFenBoard());
+				std::string  input = "d2-d3";
 				
 				auto coords = parseCoords(input);
 

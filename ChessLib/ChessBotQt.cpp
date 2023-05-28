@@ -1,5 +1,5 @@
 #include <sstream>
-#include <QtCoreApplication>
+#include <QtCore>
 #include "ChessBotQt.h"
 
 const std::string
