@@ -98,6 +98,27 @@ BoardState QtGame::getBoardState() const
 	return boardState;
 }
 
+Color QtGame::getBotColor()
+{
+	return botColor;
+}
+
+void QtGame::setUpBotGame(Color bot_color)
+{
+	botColor = Color::Black;
+	botGame = true;
+}
+
+void QtGame::disableBotGame()
+{
+	botGame = false;
+}
+
+bool QtGame::isBotGame()
+{
+	return botGame;
+}
+
 void QtGame::choosePromotion(Promotions promotion)
 {
 	trackedBoard->receivePromotionChoice(promotion);
@@ -175,6 +196,25 @@ std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> QtGame::rawMove
 	}
 
 	return moves;
+}
+
+std::pair<std::pair<int, int>, std::pair<int, int>> QtGame::parseCoords(std::string coords)
+{
+	std::pair<int, int> startCoords = { boardCoordinateToInt(coords[1]), boardCoordinateToInt(coords[0]) };
+	std::pair<int, int> endCoords = { boardCoordinateToInt(coords[4]), boardCoordinateToInt(coords[3]) };
+	return { startCoords, endCoords };
+}
+
+int QtGame::boardCoordinateToInt(char coordinateSign) const
+{
+	if (coordinateSign <= 57) // "9" is 57 in ASCI
+	{
+		return 7 - (coordinateSign - 49);
+	}
+	else
+	{
+		return coordinateSign - 97;
+	}
 }
 
 std::vector<std::vector<Square>>& QtGame::getSquares()

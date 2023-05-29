@@ -83,18 +83,18 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\ChessLib\ChessBotQt.cpp" />
+    <ClCompile Include="ChessAppQt.cpp" />
+    <ClCompile Include="ChessBotQt.cpp" />
     <ClCompile Include="ClickableLabel.cpp" />
     <ClCompile Include="QtGame.cpp" />
     <ClCompile Include="SkinsManager.cpp" />
     <QtRcc Include="ChessAppQt.qrc" />
     <QtUic Include="ChessAppQt.ui" />
     <QtMoc Include="ChessAppQt.h" />
-    <ClCompile Include="ChessAppQt.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\ChessLib\ChessBotQt.h" />
+    <ClInclude Include="ChessBotQt.h" />
     <ClInclude Include="SkinsManager.h" />
     <QtMoc Include="ClickableLabel.h" />
     <ClInclude Include="QtGame.h" />

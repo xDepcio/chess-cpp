@@ -16,8 +16,9 @@
 #include <filesystem>
 #include "../ChessLib/Constants.h"
 
+class ChessBot;
 
-ChessAppQt::ChessAppQt(QWidget* parent) : QMainWindow(parent)
+ChessAppQt::ChessAppQt(QWidget *parent) : QMainWindow(parent)
 {
     ui.setupUi(this);
     setupSkinsManagement();
@@ -40,7 +41,7 @@ void ChessAppQt::connectMenuBtns()
     connect(ui.menuPlayBtn, &QPushButton::clicked, this, [this]() {
         startNewChessGame();
         ui.stackedWidget->setCurrentIndex(0);
-        });
+    });
 
     connect(ui.menuPlayBotBtn, &QPushButton::clicked, this, [this]() {
         startNewChessGameWithBot();
@@ -49,12 +50,12 @@ void ChessAppQt::connectMenuBtns()
 
     connect(ui.menuSkinsBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(1);
-        });
+    });
 
     connect(ui.menuHistoryBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(3);
         loadSavedGames();
-        });
+    });
 }
 
 
@@ -111,7 +112,7 @@ void ChessAppQt::updateSquares(std::vector<std::pair<int, int>>& coordsToUpdate)
         std::string pathToPiece = skinsManager.get()->getPathToPiece(piece);
 
         QString qImagePath = QString::fromStdString(pathToPiece);
-
+        
         QPixmap pixmap(qImagePath);
         pixmap = pixmap.scaled(label->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
         label->setPixmap(pixmap);
@@ -142,7 +143,7 @@ void ChessAppQt::connectSquares()
         {
             connect(sqr, &ClickableLabel::clicked, this, [this, sqr, rowNum, colNum]() {
                 handleBoardFieldClick({ rowNum, colNum });
-                });
+            });
 
             colNum++;
         }
@@ -209,7 +210,7 @@ void ChessAppQt::connectTrackerBtns()
             ui.nextMoveBtn->setDisabled(false);
         }
         ui.prevMoveBtn->setDisabled(false);
-        });
+    });
 
     connect(ui.prevMoveBtn, &QPushButton::clicked, this, [this]() {
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
@@ -225,7 +226,7 @@ void ChessAppQt::connectTrackerBtns()
             ui.prevMoveBtn->setDisabled(false);
         }
         ui.nextMoveBtn->setDisabled(false);
-        });
+    });
 }
 
 void ChessAppQt::setupSkinsManagement()
@@ -235,15 +236,15 @@ void ChessAppQt::setupSkinsManagement()
 
     connect(ui.skinsBackBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(2);
-        });
+    });
 
     connect(ui.radioBtnStandard, &QRadioButton::clicked, this, [this]() {
         skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD);
-        });
+    });
 
     connect(ui.radioBtnStarWars, &QRadioButton::clicked, this, [this]() {
         skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STARWARS);
-        });
+    });
 }
 
 void ChessAppQt::setupPromotionBtns()
@@ -254,22 +255,22 @@ void ChessAppQt::setupPromotionBtns()
         playedGame->choosePromotion(Promotions::QUEEN);
         updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
         ui.promotionWidget->hide();
-        });
+    });
     connect(ui.promotionKnightBtn, &QPushButton::clicked, this, [this]() {
         playedGame->choosePromotion(Promotions::KNGIHT);
         updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
         ui.promotionWidget->hide();
-        });
+    });
     connect(ui.promotionRookBtn, &QPushButton::clicked, this, [this]() {
         playedGame->choosePromotion(Promotions::ROOK);
         updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
         ui.promotionWidget->hide();
-        });
+    });
     connect(ui.promotionBishopBtn, &QPushButton::clicked, this, [this]() {
         playedGame->choosePromotion(Promotions::BISHOP);
         updateSquares(playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares);
         ui.promotionWidget->hide();
-        });
+    });
 }
 
 void ChessAppQt::startNewChessGame()
@@ -291,9 +292,6 @@ void ChessAppQt::startNewChessGameWithBot()
 
     playedGame = new QtGame();
     stockfish = new ChessBot();
-
-    playedGame->setUpBotGame(Color::Black);
-
     playedGame->run();
     updateBoard();
 }
@@ -435,18 +433,16 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
                 throw std::runtime_error(":(");
             }
         }
-        else
+        else 
         {
-
+            
             clearDisplayMoves(displayedSquares);
 
             std::string fenPos = playedGame->getBoard()->getFenBoard();
 
-            std::string bestFishMove = stockfish->getBestMove(fenPos);
 
-            auto coords = playedGame->parseCoords(bestFishMove);
 
-            playedGame->move(playedGame->getPieceAtCoords(coords.first), coords.second);
+            playedGame->move(prevClicked, fieldCoords);
             playedGame->getBoard()->setTurn(turn == Color::White ? Color::Black : Color::White);
 
             auto affectedSqrs = playedGame->getBoard()->getMovesTracker()->getPointedMove()->affectedSquares;
@@ -472,14 +468,14 @@ void ChessAppQt::connectBackBtn()
 {
     connect(ui.backBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(2);
-        });
+    });
 }
 
 void ChessAppQt::connectSaveBtn()
 {
     connect(ui.saveBtn, &QPushButton::clicked, this, [this]() {
         playedGame->saveCurrentGameToFile(constants::SAVE_FILES_DIR);
-        });
+    });
 }
 
 void ChessAppQt::loadSavedGames()
@@ -508,7 +504,7 @@ void ChessAppQt::loadSavedGames()
 
             connect(button, &QPushButton::clicked, this, [this, entry]() {
                 startNewChessGameFromSave(entry.path().string());
-                });
+            });
         }
     }
 }
@@ -517,6 +513,6 @@ void ChessAppQt::connectSavesBackBtn()
 {
     connect(ui.saveBackBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(2);
-        });
+    });
 }
 

@@ -11,7 +11,7 @@ class QtGame
 {
 public:
 
-	QtGame() : trackedBoard(nullptr), clickedPiece(nullptr), clickedPieceCoords({}) {};
+	QtGame() : trackedBoard(nullptr), clickedPiece(nullptr), clickedPieceCoords({}), botColor(Color::Black) {};
 	~QtGame();
 
 	void setupBoard();
@@ -37,6 +37,14 @@ public:
 
 	BoardState getBoardState() const;
 
+	Color getBotColor();
+
+	void setUpBotGame(Color bot_color);
+
+	void disableBotGame();
+
+	bool isBotGame();
+
 	void choosePromotion(Promotions promotion);
 
 	void loadGameFromFile(std::string const& filePath);
@@ -46,7 +54,13 @@ public:
 	std::string rawMovesToString(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves) const;
 	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMovesFromString(std::string rawMovesStr) const;
 
+	std::pair<std::pair<int, int>, std::pair<int, int>> parseCoords(std::string coords);
+	int boardCoordinateToInt(char coordinateSign) const;
+
+
 private:
+	bool botGame = false;
+	Color botColor;
 	Board* trackedBoard;
 	Piece* clickedPiece;
 	std::pair<int, int> clickedPieceCoords;

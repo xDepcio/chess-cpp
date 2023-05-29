@@ -8,6 +8,7 @@
 class QtGame;
 class Piece;
 class SkinsManager;
+class ChessBot;
 
 class ChessAppQt : public QMainWindow
 {
@@ -33,6 +34,8 @@ public:
 
     void startNewChessGame();
 
+    void startNewChessGameWithBot();
+
     void startNewChessGameFromSave(std::string const& savePath);
 
     void handleChessGameStateChange();
@@ -50,5 +53,6 @@ private:
     std::vector<std::pair<int, int>> displayedSquares;
     Ui::ChessAppQtClass ui;
     QtGame* playedGame;
+    ChessBot* stockfish;
     std::unique_ptr<SkinsManager> skinsManager;
 };

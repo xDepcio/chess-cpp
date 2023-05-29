@@ -2437,14 +2437,14 @@
        <widget class="QPushButton" name="menuPlayBtn">
         <property name="geometry">
          <rect>
-          <x>390</x>
+          <x>330</x>
           <y>110</y>
           <width>91</width>
           <height>31</height>
          </rect>
         </property>
         <property name="text">
-         <string>graj</string>
+         <string>Graj z Graczem</string>
         </property>
        </widget>
        <widget class="QPushButton" name="menuHistoryBtn">
@@ -2471,6 +2471,19 @@
         </property>
         <property name="text">
          <string>Skórki</string>
+        </property>
+       </widget>
+       <widget class="QPushButton" name="menuPlayBotBtn">
+        <property name="geometry">
+         <rect>
+          <x>450</x>
+          <y>110</y>
+          <width>91</width>
+          <height>31</height>
+         </rect>
+        </property>
+        <property name="text">
+         <string>Graj z Botem</string>
         </property>
        </widget>
       </widget>

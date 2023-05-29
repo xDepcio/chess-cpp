@@ -32,9 +32,6 @@
     <QtMoc Include="ChessAppQt.h">
       <Filter>Header Files</Filter>
     </QtMoc>
-    <ClCompile Include="ChessAppQt.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -49,7 +46,10 @@
     <ClCompile Include="SkinsManager.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="..\ChessLib\ChessBotQt.cpp">
+    <ClCompile Include="ChessBotQt.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChessAppQt.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -60,7 +60,7 @@
     <ClInclude Include="SkinsManager.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="..\ChessLib\ChessBotQt.h">
+    <ClInclude Include="ChessBotQt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
