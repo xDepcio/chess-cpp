@@ -25,98 +25,98 @@ void presetBoard(Board& board, BoardPresets preset)
 	{
 	case BoardPresets::STANDARD:
 	{
-		board.setPiece({ 1, 0 }, std::make_unique<Pawn>(Piece::Color::Black, 201));
-		board.setPiece({ 1, 1 }, std::make_unique<Pawn>(Piece::Color::Black, 202));
-		board.setPiece({ 1, 2 }, std::make_unique<Pawn>(Piece::Color::Black, 203));
-		board.setPiece({ 1, 3 }, std::make_unique<Pawn>(Piece::Color::Black, 204));
-		board.setPiece({ 1, 4 }, std::make_unique<Pawn>(Piece::Color::Black, 205));
-		board.setPiece({ 1, 5 }, std::make_unique<Pawn>(Piece::Color::Black, 206));
-		board.setPiece({ 1, 6 }, std::make_unique<Pawn>(Piece::Color::Black, 207));
-		board.setPiece({ 1, 7 }, std::make_unique<Pawn>(Piece::Color::Black, 208));
+		board.setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black, 201));
+		board.setPiece({ 1, 1 }, std::make_unique<Pawn>(Color::Black, 202));
+		board.setPiece({ 1, 2 }, std::make_unique<Pawn>(Color::Black, 203));
+		board.setPiece({ 1, 3 }, std::make_unique<Pawn>(Color::Black, 204));
+		board.setPiece({ 1, 4 }, std::make_unique<Pawn>(Color::Black, 205));
+		board.setPiece({ 1, 5 }, std::make_unique<Pawn>(Color::Black, 206));
+		board.setPiece({ 1, 6 }, std::make_unique<Pawn>(Color::Black, 207));
+		board.setPiece({ 1, 7 }, std::make_unique<Pawn>(Color::Black, 208));
 
-		board.setPiece({ 0, 1 }, std::make_unique<Knight>(Piece::Color::Black, 211));
-		board.setPiece({ 0, 6 }, std::make_unique<Knight>(Piece::Color::Black, 212));
+		board.setPiece({ 0, 1 }, std::make_unique<Knight>(Color::Black, 211));
+		board.setPiece({ 0, 6 }, std::make_unique<Knight>(Color::Black, 212));
 
-		board.setPiece({ 0, 2 }, std::make_unique<Bishop>(Piece::Color::Black, 242));
-		board.setPiece({ 0, 5 }, std::make_unique<Bishop>(Piece::Color::Black, 242));
+		board.setPiece({ 0, 2 }, std::make_unique<Bishop>(Color::Black, 242));
+		board.setPiece({ 0, 5 }, std::make_unique<Bishop>(Color::Black, 242));
 
-		board.setPiece({ 0, 0 }, std::make_unique<Rook>(Piece::Color::Black, 221));
-		board.setPiece({ 0, 7 }, std::make_unique<Rook>(Piece::Color::Black, 222));
+		board.setPiece({ 0, 0 }, std::make_unique<Rook>(Color::Black, 221));
+		board.setPiece({ 0, 7 }, std::make_unique<Rook>(Color::Black, 222));
 
-		board.setPiece({ 0, 4 }, std::make_unique<King>(Piece::Color::Black, 231));
+		board.setPiece({ 0, 4 }, std::make_unique<King>(Color::Black, 231));
 
-		board.setPiece({ 0, 3 }, std::make_unique<Queen>(Piece::Color::Black, 251));
+		board.setPiece({ 0, 3 }, std::make_unique<Queen>(Color::Black, 251));
 
 
-		board.setPiece({ 6, 0 }, std::make_unique<Pawn>(Piece::Color::White, 101));
-		board.setPiece({ 6, 1 }, std::make_unique<Pawn>(Piece::Color::White, 102));
-		board.setPiece({ 6, 2 }, std::make_unique<Pawn>(Piece::Color::White, 103));
-		board.setPiece({ 6, 3 }, std::make_unique<Pawn>(Piece::Color::White, 104));
-		board.setPiece({ 6, 4 }, std::make_unique<Pawn>(Piece::Color::White, 105));
-		board.setPiece({ 6, 5 }, std::make_unique<Pawn>(Piece::Color::White, 106));
-		board.setPiece({ 6, 6 }, std::make_unique<Pawn>(Piece::Color::White, 107));
-		board.setPiece({ 6, 7 }, std::make_unique<Pawn>(Piece::Color::White, 108));
+		board.setPiece({ 6, 0 }, std::make_unique<Pawn>(Color::White, 101));
+		board.setPiece({ 6, 1 }, std::make_unique<Pawn>(Color::White, 102));
+		board.setPiece({ 6, 2 }, std::make_unique<Pawn>(Color::White, 103));
+		board.setPiece({ 6, 3 }, std::make_unique<Pawn>(Color::White, 104));
+		board.setPiece({ 6, 4 }, std::make_unique<Pawn>(Color::White, 105));
+		board.setPiece({ 6, 5 }, std::make_unique<Pawn>(Color::White, 106));
+		board.setPiece({ 6, 6 }, std::make_unique<Pawn>(Color::White, 107));
+		board.setPiece({ 6, 7 }, std::make_unique<Pawn>(Color::White, 108));
 
-		board.setPiece({ 7, 1 }, std::make_unique<Knight>(Piece::Color::White, 111));
-		board.setPiece({ 7, 6 }, std::make_unique<Knight>(Piece::Color::White, 112));
+		board.setPiece({ 7, 1 }, std::make_unique<Knight>(Color::White, 111));
+		board.setPiece({ 7, 6 }, std::make_unique<Knight>(Color::White, 112));
 
-		board.setPiece({ 7, 2 }, std::make_unique<Bishop>(Piece::Color::White, 142));
-		board.setPiece({ 7, 5 }, std::make_unique<Bishop>(Piece::Color::White, 142));
+		board.setPiece({ 7, 2 }, std::make_unique<Bishop>(Color::White, 142));
+		board.setPiece({ 7, 5 }, std::make_unique<Bishop>(Color::White, 142));
 
-		board.setPiece({ 7, 0 }, std::make_unique<Rook>(Piece::Color::White, 121));
-		board.setPiece({ 7, 7 }, std::make_unique<Rook>(Piece::Color::White, 122));
+		board.setPiece({ 7, 0 }, std::make_unique<Rook>(Color::White, 121));
+		board.setPiece({ 7, 7 }, std::make_unique<Rook>(Color::White, 122));
 
-		board.setPiece({ 7, 4 }, std::make_unique<King>(Piece::Color::White, 131));
+		board.setPiece({ 7, 4 }, std::make_unique<King>(Color::White, 131));
 
-		board.setPiece({ 7, 3 }, std::make_unique<Queen>(Piece::Color::White, 151));
+		board.setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White, 151));
 		break;
 	}
 	case BoardPresets::CHECK:
 	{
-		board.setPiece({ 1, 0 }, std::make_unique<Pawn>(Piece::Color::Black, 201));
-		board.setPiece({ 1, 1 }, std::make_unique<Pawn>(Piece::Color::Black, 202));
-		board.setPiece({ 1, 2 }, std::make_unique<Pawn>(Piece::Color::Black, 203));
-		board.setPiece({ 1, 3 }, std::make_unique<Pawn>(Piece::Color::Black, 204));
-		board.setPiece({ 1, 4 }, std::make_unique<Pawn>(Piece::Color::Black, 205));
-		board.setPiece({ 3, 5 }, std::make_unique<Pawn>(Piece::Color::Black, 206));
-		board.setPiece({ 1, 6 }, std::make_unique<Pawn>(Piece::Color::Black, 207));
-		board.setPiece({ 1, 7 }, std::make_unique<Pawn>(Piece::Color::Black, 208));
+		board.setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black, 201));
+		board.setPiece({ 1, 1 }, std::make_unique<Pawn>(Color::Black, 202));
+		board.setPiece({ 1, 2 }, std::make_unique<Pawn>(Color::Black, 203));
+		board.setPiece({ 1, 3 }, std::make_unique<Pawn>(Color::Black, 204));
+		board.setPiece({ 1, 4 }, std::make_unique<Pawn>(Color::Black, 205));
+		board.setPiece({ 3, 5 }, std::make_unique<Pawn>(Color::Black, 206));
+		board.setPiece({ 1, 6 }, std::make_unique<Pawn>(Color::Black, 207));
+		board.setPiece({ 1, 7 }, std::make_unique<Pawn>(Color::Black, 208));
 
-		board.setPiece({ 0, 1 }, std::make_unique<Knight>(Piece::Color::Black, 211));
-		board.setPiece({ 0, 6 }, std::make_unique<Knight>(Piece::Color::Black, 212));
+		board.setPiece({ 0, 1 }, std::make_unique<Knight>(Color::Black, 211));
+		board.setPiece({ 0, 6 }, std::make_unique<Knight>(Color::Black, 212));
 
-		board.setPiece({ 0, 2 }, std::make_unique<Bishop>(Piece::Color::Black, 242));
-		board.setPiece({ 0, 5 }, std::make_unique<Bishop>(Piece::Color::Black, 242));
+		board.setPiece({ 0, 2 }, std::make_unique<Bishop>(Color::Black, 242));
+		board.setPiece({ 0, 5 }, std::make_unique<Bishop>(Color::Black, 242));
 
-		board.setPiece({ 0, 0 }, std::make_unique<Rook>(Piece::Color::Black, 221));
-		board.setPiece({ 0, 7 }, std::make_unique<Rook>(Piece::Color::Black, 222));
+		board.setPiece({ 0, 0 }, std::make_unique<Rook>(Color::Black, 221));
+		board.setPiece({ 0, 7 }, std::make_unique<Rook>(Color::Black, 222));
 
-		board.setPiece({ 0, 4 }, std::make_unique<King>(Piece::Color::Black, 231));
+		board.setPiece({ 0, 4 }, std::make_unique<King>(Color::Black, 231));
 
-		board.setPiece({ 0, 3 }, std::make_unique<Queen>(Piece::Color::Black, 251));
+		board.setPiece({ 0, 3 }, std::make_unique<Queen>(Color::Black, 251));
 
 
-		board.setPiece({ 6, 0 }, std::make_unique<Pawn>(Piece::Color::White, 101));
-		board.setPiece({ 6, 1 }, std::make_unique<Pawn>(Piece::Color::White, 102));
-		board.setPiece({ 6, 2 }, std::make_unique<Pawn>(Piece::Color::White, 103));
-		board.setPiece({ 6, 3 }, std::make_unique<Pawn>(Piece::Color::White, 104));
-		board.setPiece({ 4, 4 }, std::make_unique<Pawn>(Piece::Color::White, 105));
-		board.setPiece({ 6, 5 }, std::make_unique<Pawn>(Piece::Color::White, 106));
-		board.setPiece({ 6, 6 }, std::make_unique<Pawn>(Piece::Color::White, 107));
-		board.setPiece({ 6, 7 }, std::make_unique<Pawn>(Piece::Color::White, 108));
+		board.setPiece({ 6, 0 }, std::make_unique<Pawn>(Color::White, 101));
+		board.setPiece({ 6, 1 }, std::make_unique<Pawn>(Color::White, 102));
+		board.setPiece({ 6, 2 }, std::make_unique<Pawn>(Color::White, 103));
+		board.setPiece({ 6, 3 }, std::make_unique<Pawn>(Color::White, 104));
+		board.setPiece({ 4, 4 }, std::make_unique<Pawn>(Color::White, 105));
+		board.setPiece({ 6, 5 }, std::make_unique<Pawn>(Color::White, 106));
+		board.setPiece({ 6, 6 }, std::make_unique<Pawn>(Color::White, 107));
+		board.setPiece({ 6, 7 }, std::make_unique<Pawn>(Color::White, 108));
 
-		board.setPiece({ 7, 1 }, std::make_unique<Knight>(Piece::Color::White, 111));
-		board.setPiece({ 7, 6 }, std::make_unique<Knight>(Piece::Color::White, 112));
+		board.setPiece({ 7, 1 }, std::make_unique<Knight>(Color::White, 111));
+		board.setPiece({ 7, 6 }, std::make_unique<Knight>(Color::White, 112));
 
-		board.setPiece({ 7, 2 }, std::make_unique<Bishop>(Piece::Color::White, 142));
-		board.setPiece({ 7, 5 }, std::make_unique<Bishop>(Piece::Color::White, 142));
+		board.setPiece({ 7, 2 }, std::make_unique<Bishop>(Color::White, 142));
+		board.setPiece({ 7, 5 }, std::make_unique<Bishop>(Color::White, 142));
 
-		board.setPiece({ 7, 0 }, std::make_unique<Rook>(Piece::Color::White, 121));
-		board.setPiece({ 7, 7 }, std::make_unique<Rook>(Piece::Color::White, 122));
+		board.setPiece({ 7, 0 }, std::make_unique<Rook>(Color::White, 121));
+		board.setPiece({ 7, 7 }, std::make_unique<Rook>(Color::White, 122));
 
-		board.setPiece({ 7, 4 }, std::make_unique<King>(Piece::Color::White, 131));
+		board.setPiece({ 7, 4 }, std::make_unique<King>(Color::White, 131));
 
-		board.setPiece({ 3, 7 }, std::make_unique<Queen>(Piece::Color::White, 151));
+		board.setPiece({ 3, 7 }, std::make_unique<Queen>(Color::White, 151));
 		break;
 	}
 	default:
@@ -194,13 +194,13 @@ namespace ChessUnitTests
 			Board b(8, 8);
 			presetBoard(b, BoardPresets::STANDARD);
 
-			b.setPiece({ 3, 0 }, std::make_unique<Pawn>(Piece::Color::White));
+			b.setPiece({ 3, 0 }, std::make_unique<Pawn>(Color::White));
 			Assert::IsTrue(bothStoreSameVals({ {2,0} }, b.getPawnMoves({ 1,0 })));
 
-			b.setPiece({ 2, 1 }, std::make_unique<Pawn>(Piece::Color::White));
+			b.setPiece({ 2, 1 }, std::make_unique<Pawn>(Color::White));
 			Assert::IsTrue(bothStoreSameVals({ }, b.getPawnMoves({ 1,1 })));
 
-			b.setPiece({ 2, 5 }, std::make_unique<Pawn>(Piece::Color::Black));
+			b.setPiece({ 2, 5 }, std::make_unique<Pawn>(Color::Black));
 			Assert::IsTrue(bothStoreSameVals({ }, b.getPawnMoves({ 1,5 })));
 		}
 		TEST_METHOD(Board_getPawnMoves_takes)
@@ -208,15 +208,15 @@ namespace ChessUnitTests
 			Board b(8, 8);
 			presetBoard(b, BoardPresets::STANDARD);
 
-			b.setPiece({ 2, 0 }, std::make_unique<Pawn>(Piece::Color::White));
-			b.setPiece({ 2, 2 }, std::make_unique<Pawn>(Piece::Color::White));
+			b.setPiece({ 2, 0 }, std::make_unique<Pawn>(Color::White));
+			b.setPiece({ 2, 2 }, std::make_unique<Pawn>(Color::White));
 			Assert::IsTrue(bothStoreSameVals({ {2,0},{2,2},{2,1},{3,1} }, b.getPawnMoves({ 1,1 })));
 
 			Board b2(8, 8);
 			presetBoard(b2, BoardPresets::STANDARD);
 
-			b.setPiece({ 2, 0 }, std::make_unique<Pawn>(Piece::Color::Black));
-			b.setPiece({ 2, 2 }, std::make_unique<Pawn>(Piece::Color::White));
+			b.setPiece({ 2, 0 }, std::make_unique<Pawn>(Color::Black));
+			b.setPiece({ 2, 2 }, std::make_unique<Pawn>(Color::White));
 			Assert::IsTrue(bothStoreSameVals({ {2,2},{2,1},{3,1} }, b.getPawnMoves({ 1,1 })));
 		}
 		TEST_METHOD(Board_getKnightMoves)
@@ -230,8 +230,8 @@ namespace ChessUnitTests
 		{
 			Board b(8, 8);
 			presetBoard(b, BoardPresets::STANDARD);
-			b.setPiece({ 2,0 }, std::make_unique<Pawn>(Piece::Color::White));
-			b.setPiece({ 2,2 }, std::make_unique<Pawn>(Piece::Color::Black));
+			b.setPiece({ 2,0 }, std::make_unique<Pawn>(Color::White));
+			b.setPiece({ 2,2 }, std::make_unique<Pawn>(Color::Black));
 
 			Assert::IsTrue(bothStoreSameVals({ {2,0} }, b.getKnightMoves({ 0,1 })));
 		}
@@ -240,12 +240,12 @@ namespace ChessUnitTests
 			Board b(8, 8);
 			presetBoard(b, BoardPresets::CHECK);
 
-			Assert::IsTrue(b.isCheck(Piece::Color::Black));
-			Assert::IsFalse(b.isCheck(Piece::Color::White));
+			Assert::IsTrue(b.isCheck(Color::Black));
+			Assert::IsFalse(b.isCheck(Color::White));
 
 			b.move({ 1,6 }, { 2,6 });
-			Assert::IsFalse(b.isCheck(Piece::Color::Black));
-			Assert::IsFalse(b.isCheck(Piece::Color::White));
+			Assert::IsFalse(b.isCheck(Color::Black));
+			Assert::IsFalse(b.isCheck(Color::White));
 		}
 		TEST_METHOD(Board_getPawnMoves_pinned)
 		{
@@ -261,7 +261,7 @@ namespace ChessUnitTests
 			Board* bp = &b;
 			presetBoard(b, BoardPresets::STANDARD);
 			std::pair<int, int> rookCoords = { 2, 0 };
-			b.setPiece(rookCoords, std::make_unique<Rook>(Piece::Color::Black));
+			b.setPiece(rookCoords, std::make_unique<Rook>(Color::Black));
 
 			Assert::IsTrue(
 				bothStoreSameVals(
@@ -276,7 +276,7 @@ namespace ChessUnitTests
 			Board* bp = &b;
 			presetBoard(b, BoardPresets::STANDARD);
 			std::pair<int, int> bishopCoords = { 1, 1 };
-			b.setPiece(bishopCoords, std::make_unique<Bishop>(Piece::Color::Black));
+			b.setPiece(bishopCoords, std::make_unique<Bishop>(Color::Black));
 			auto moves = b.getPiece(bishopCoords)->getValidMoves(bp, bishopCoords);
 
 			Assert::IsTrue(bothStoreSameVals({ {2,2}, {3,3}, {4,4}, {5,5}, {6,6}, {2,0} }, moves));
