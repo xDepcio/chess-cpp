@@ -36,6 +36,7 @@ void Game::run()
 
 	boardPt->setFenBoard("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKB1R");
 	std::cout << "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKB1R\n";
+
 	std::cout << boardPt->getFenBoard() << std::endl;
 	return;
 
