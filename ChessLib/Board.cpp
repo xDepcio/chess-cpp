@@ -1,4 +1,5 @@
 #include <sstream>
+#include <unordered_map>
 #include "Board.h"
 #include "MovesTracker.h"
 #include "Queen.h"
@@ -127,13 +128,87 @@ void Board::setFenBoard(std::string fenPos)
 	//		int poi* squares.size() + j
 	//	}
 	//}
-	int pos_num;
+	std::unordered_map<char, int> PieceLet{ {'p', 0}, {'r', 1}, {'n', 2}, {'b', 3}, {'k', 4}, {'q', 5} };
+	int pos_num = 0;
+	int pieceIdBlack = 201;
+	int pieceIdWhite = 101;
 	for (auto character : fenPos)
 	{
+		int pieceId;
+		//std::cout << getFenBoard() << std::endl;
+		int iPos = pos_num / squares.size();
+		int jPos = pos_num - iPos * squares.size();
+
+		Color pieceColor;
+
 		if (character == ' ')
 			return;
-		else if (isalpha(character))
 
+		if (character == '/')
+			continue;
+
+		else if (isalpha(character))
+		{
+			if (int(character) < 97)
+			{
+				pieceColor = Color::White;
+				pieceId = pieceIdWhite;
+				pieceIdWhite++;
+			}
+			else
+			{
+				pieceColor = Color::Black;
+				pieceId = pieceIdBlack;
+				pieceIdBlack++;
+			}
+
+			character = tolower(character);
+
+			switch (PieceLet[character])
+			{
+			case 0:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Pawn>(pieceColor, pieceId));
+				pos_num += 1;
+				break;
+			}
+			case 1:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Rook>(pieceColor, pieceId));
+				pos_num += 1;
+				break;
+			}
+			case 2:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Knight>(pieceColor, pieceId));
+				pos_num += 1;
+				break;
+			}
+			case 3:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Bishop>(pieceColor, pieceId));
+				pos_num += 1;
+				break;
+			}
+			case 4:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<King>(pieceColor, pieceId));
+				pos_num += 1;
+				break;
+			}
+			case 5:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Queen>(pieceColor, pieceId));
+				pos_num += 1;
+				break;
+			}
+			}
+			//setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black, 201));
+
+
+		}
+		else
+			pos_num += atoi(&character);
 	}
 	
 	
