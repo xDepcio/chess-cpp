@@ -118,6 +118,33 @@ std::string Board::getFenBoard()
 	
 }
 
+void Board::setFenBoard(std::string fenPos)
+{
+	//for (int i = 0; i < squares.size(); i++)
+	//{
+	//	for (int j = 0; j < squares[0].size(); j++)
+	//	{
+	//		int poi* squares.size() + j
+	//	}
+	//}
+	int pos_num;
+	for (auto character : fenPos)
+	{
+		if (character == ' ')
+			return;
+		else if (isalpha(character))
+
+	}
+	
+	
+
+
+
+
+}
+
+
+
 
 
 void Board::printBoard() const

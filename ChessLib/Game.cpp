@@ -78,6 +78,9 @@ void Game::run()
 	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White, 151));
 
 	
+	boardPt->setFenBoard("\nstring");
+	return;
+
 
 
 	std::vector<std::string> messages;

@@ -44,7 +44,7 @@ public:
 
 	std::string getFenBoard();
 
-	
+	void setFenBoard(std::string fenPos);
 
 	void printBoard() const;
 
