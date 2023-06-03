@@ -42,10 +42,10 @@ void Piece::setMadeFirstMove(bool boolean)
     madeFirstMove = boolean;
 }
 
-void Piece::handleGotTaken(Piece* takenBy)
-{
-    // TODO... Do something when piece is taken
-}
+//void Piece::handleGotTaken(Piece* takenBy)
+//{
+//    // TODO... Do something when piece is taken
+//}
 
 void Piece::move(Board* board, std::pair<int, int> to)
 {
