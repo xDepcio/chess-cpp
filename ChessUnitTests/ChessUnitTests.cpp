@@ -154,6 +154,24 @@ bool bothStoreSameVals(std::vector<std::pair<int, int>> vec1, std::vector<std::p
 	return true;
 }
 
+int boardCoordinateToInt(char coordinateSign)
+{
+	if (coordinateSign <= 57) // "9" is 57 in ASCI
+	{
+		return 7 - (coordinateSign - 49);
+	}
+	else
+	{
+		return coordinateSign - 97;
+	}
+}
+
+std::pair<int, int> parseCoords(std::string coords)
+{
+	return { boardCoordinateToInt(coords[1]), boardCoordinateToInt(coords[0]) };
+}
+
+
 namespace ChessUnitTests
 {
 	TEST_CLASS(helpterFuncsTests)
@@ -219,21 +237,50 @@ namespace ChessUnitTests
 			b.setPiece({ 2, 2 }, std::make_unique<Pawn>(Color::White));
 			Assert::IsTrue(bothStoreSameVals({ {2,2},{2,1},{3,1} }, b.getPawnMoves({ 1,1 })));
 		}
-		TEST_METHOD(Board_getKnightMoves)
+		TEST_METHOD(Board_getKnightMoves_own_and_takes)
 		{
 			Board b(8, 8);
-			presetBoard(b, BoardPresets::STANDARD);
+			b.setFenBoard("r1bqkbnr/pppp1ppp/2n5/3P4/4p3/2N5/PPP1PPPP/R1BQKBNR w KQkq - 0 4");
 
-			Assert::IsTrue(bothStoreSameVals({ {2,0},{2,2} }, b.getKnightMoves({ 0,1 })));
+			Assert::IsTrue(bothStoreSameVals(
+				{ parseCoords("a4"), parseCoords("b5"), parseCoords("b1"), parseCoords("e4") }, b.getKnightMoves(parseCoords("c3"))
+			));
 		}
-		TEST_METHOD(Board_getKnightMoves_takes)
+		TEST_METHOD(Board_getKnightMoves_noone)
 		{
 			Board b(8, 8);
-			presetBoard(b, BoardPresets::STANDARD);
-			b.setPiece({ 2,0 }, std::make_unique<Pawn>(Color::White));
-			b.setPiece({ 2,2 }, std::make_unique<Pawn>(Color::Black));
+			b.setFenBoard("rnbqkbnr/p1pppppp/1p6/8/8/P1P5/1P1PPPPP/RNBQKBNR b KQkq - 0 2");
 
-			Assert::IsTrue(bothStoreSameVals({ {2,0} }, b.getKnightMoves({ 0,1 })));
+			Assert::IsTrue(bothStoreSameVals(
+				{ }, b.getKnightMoves(parseCoords("b1"))
+			));
+		}
+		TEST_METHOD(Board_getKnightMoves_would_cause_own_check)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnb1kbnr/pp1ppppp/2p5/q7/3P4/2N5/PPP1PPPP/R1BQKBNR w KQkq - 1 3");
+
+			Assert::IsTrue(bothStoreSameVals(
+				{ }, b.getKnightMoves(parseCoords("c3"))
+			));
+		}
+		TEST_METHOD(Board_getKnightMoves_own_king_checked)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnb1kbnr/pp1ppppp/2p5/8/1P1P4/P1N5/2P1qPPP/R1BQKBNR w KQkq - 0 5");
+
+			Assert::IsTrue(bothStoreSameVals(
+				{ parseCoords("e2")}, b.getKnightMoves(parseCoords("c3"))
+			));
+		}
+		TEST_METHOD(Board_getKnightMoves_own_king_checked)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnb1kbnr/pp1ppppp/2p5/8/1P1P4/P1N5/2P1qPPP/R1BQKBNR w KQkq - 0 5");
+
+			Assert::IsTrue(bothStoreSameVals(
+				{ parseCoords("e2") }, b.getKnightMoves(parseCoords("c3"))
+			));
 		}
 		TEST_METHOD(Board_isCheck)
 		{
