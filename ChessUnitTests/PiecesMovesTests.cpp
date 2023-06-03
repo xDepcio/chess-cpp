@@ -14,29 +14,9 @@ using namespace TestHelpers;
 
 namespace PiecesMovesTests
 {
-	TEST_CLASS(helpterFuncsTests)
-	{
-	public:
-		TEST_METHOD(helper_bothStoreSameVals)
-		{
-			Assert::IsTrue(bothStoreSameVals({ {1, 2}, {1, 1} }, { {1, 1}, {1, 2} }));
-			Assert::IsTrue(bothStoreSameVals({ {} }, { {} }));
-			Assert::IsFalse(bothStoreSameVals({ {1, 2}, {1, 1} }, { {1, 1}, {1, 2}, {1, 1} }));
-			Assert::IsFalse(bothStoreSameVals({ {1, 2}, {1, 1}, {1, 2} }, { {1, 1}, {1, 2}, {1, 1} }));
-			Assert::IsFalse(bothStoreSameVals({ {1, 2}, {1, 1}, {1, 2} }, { {1, 1} }));
-			Assert::IsFalse(bothStoreSameVals({ {1, 2} }, { {1, 1}, {1, 2}, {1, 1} }));
-		}
-	};
-
 	TEST_CLASS(PiecesMovesTests)
 	{
 	public:
-		class Board_ : private Board
-		{
-			Board_(int w, int h) : Board(w, h) {};
-			friend PiecesMovesTests;
-		};
-		
 		TEST_METHOD(Board_getPawnMoves_forwardsPathClear)
 		{
 			Board b(8, 8);

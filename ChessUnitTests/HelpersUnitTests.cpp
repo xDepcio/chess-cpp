@@ -52,5 +52,9 @@ namespace helperFuncsTests
 			Assert::AreEqual(1, boardCoordinateToInt('7'));
 			Assert::AreEqual(0, boardCoordinateToInt('8'));
 		}
+		TEST_METHOD(helper_stripFen)
+		{
+			Assert::AreEqual(std::string("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR"), stripFen("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1"));
+		}
 	};
 }

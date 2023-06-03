@@ -47,10 +47,21 @@ namespace TestHelpers
 		return true;
 	}
 
-
 	std::pair<int, int> parseCoords(std::string coords)
 	{
 		return { boardCoordinateToInt(coords[1]), boardCoordinateToInt(coords[0]) };
+	}
+	
+	std::string stripFen(std::string fenString)
+	{
+		std::string res;
+		for (auto& c : fenString)
+		{
+			if (c == ' ')
+				return res;
+			res += c;
+		}
+		return res;
 	}
 };
 
