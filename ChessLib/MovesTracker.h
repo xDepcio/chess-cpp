@@ -65,9 +65,6 @@ public:
 	void revertMove(Move* move);
 	void makeMove(Move* move);
 	void updateToLatest();
-	//std::string toPgn() const;
-	//void loadFromPgn(std::string pgnString);
-	//void saveToFile(const std::string& filePath);
 	
 	// Returns moves as vector of pairs with first element being coords from 
 	// which piece move from and second which moved to, can be easily converted to fill Moves data with importRaw()
@@ -82,7 +79,6 @@ private:
 	Board* trackedBoard = nullptr;
 	int pointedMoveNum = -1;
 
-	//std::unique_ptr<Piece> makePieceFromType(Piece::Type type, Piece::Color color);
 	std::string coordsToString(std::pair<int, int> const& coords) const;
 };
 
