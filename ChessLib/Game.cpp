@@ -32,6 +32,14 @@ void Game::run()
 
 	Board board(8, 8), *boardPt;
 	boardPt = &board;
+
+
+	boardPt->setFenBoard("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKB1R");
+	std::cout << "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKB1R\n";
+
+	std::cout << boardPt->getFenBoard() << std::endl;
+	return;
+
 	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black, 201));
 	boardPt->setPiece({ 1, 1 }, std::make_unique<Pawn>(Color::Black, 202));
 	boardPt->setPiece({ 1, 2 }, std::make_unique<Pawn>(Color::Black, 203));
@@ -77,9 +85,8 @@ void Game::run()
 
 	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White, 151));
 
+	//std::cout << boardPt->getFenBoard() << std::endl;
 	
-	boardPt->setFenBoard("\nstring");
-	return;
 
 
 
