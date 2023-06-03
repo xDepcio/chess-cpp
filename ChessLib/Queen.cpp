@@ -8,12 +8,6 @@ Queen::Queen(Color withColor) : Piece(withColor)
     type = PieceType::QUEEN;
 }
 
-Queen::Queen(Color withColor, int id) : Piece(withColor, id)
-{
-    Piece::pieceSignature = withColor == Color::Black ? "q" : "Q";
-    type = PieceType::QUEEN;
-}
-
 std::vector<std::pair<int, int>> Queen::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
     if (!board->getMovesTracker()->onLatestMove())

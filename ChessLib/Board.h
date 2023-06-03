@@ -19,22 +19,6 @@ class Square;
 class Board
 {
 public:
-	//enum class BoardState
-	//{
-	//	CHECKMATED_WHITE,
-	//	CHECKMATED_BLACK,
-	//	STALEMATE,
-	//	PLAYED,
-	//	REQUEST_PROMOTION
-	//};
-	//enum class Promotions
-	//{
-	//	ROOK,
-	//	QUEEN,
-	//	KNIGHT,
-	//	BISHOP
-	//};
-
 	Board(int width, int height);
 	~Board();
 

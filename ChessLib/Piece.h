@@ -8,8 +8,7 @@ class Board;
 class Piece
 {
 public:
-	Piece(Color withColor) : color(withColor), pieceSignature("x"), debugId(0), type(PieceType::NONE) {};
-	Piece(Color withColor, int id) : color(withColor), pieceSignature("x"), debugId(id), type(PieceType::NONE) {};
+	Piece(Color withColor) : color(withColor), pieceSignature("x"), type(PieceType::NONE) {};
 
 	bool isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const;
 
@@ -27,8 +26,6 @@ public:
 
 	void setMadeFirstMove(bool boolean);
 
-	//void handleGotTaken(Piece* takenBy);
-
 	virtual void move(Board* board, std::pair<int, int> to);
 
 	PieceType getType() const;
@@ -41,7 +38,7 @@ public:
 protected:
 	Color color;
 	std::string pieceSignature;
-	int debugId;
+	//int debugId;
 	bool madeFirstMove = false;
 	PieceType type;
 	std::pair<int, int> coordinates;

@@ -10,14 +10,6 @@ King::King(Color withColor) : Piece(withColor)
 	Piece::type = PieceType::KING;
 }
 
-King::King(Color withColor, int id) : Piece(withColor, id)
-{
-	Piece::pieceSignature = withColor == Color::Black ? "k" : "K";
-	Piece::type = PieceType::KING;
-}
-
-
-
 std::vector<std::pair<int, int>> King::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
 	if (!board->getMovesTracker()->onLatestMove())
