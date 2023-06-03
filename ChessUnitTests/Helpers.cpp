@@ -3,6 +3,18 @@
 #ifndef CHESS_TEST_HELPERS
 #define CHESS_TEST_HELPERS
 
+int boardCoordinateToInt(char coordinateSign)
+	{
+		if (coordinateSign <= 57) // "9" is 57 in ASCI
+		{
+			return 7 - (coordinateSign - 49);
+		}
+		else
+		{
+			return coordinateSign - 97;
+		}
+	}
+
 namespace TestHelpers
 {
 	bool bothStoreSameVals(std::vector<std::pair<int, int>> vec1, std::vector<std::pair<int, int>> vec2)
@@ -35,17 +47,6 @@ namespace TestHelpers
 		return true;
 	}
 
-	int boardCoordinateToInt(char coordinateSign)
-	{
-		if (coordinateSign <= 57) // "9" is 57 in ASCI
-		{
-			return 7 - (coordinateSign - 49);
-		}
-		else
-		{
-			return coordinateSign - 97;
-		}
-	}
 
 	std::pair<int, int> parseCoords(std::string coords)
 	{
