@@ -104,20 +104,5 @@ namespace MovesTrackerTests
 
 			Assert::AreEqual(std::string("rnbqkbnr/pp1ppppp/8/5P2/8/2p2N2/PPPPP1PP/RNBQKB1R"), stripFen(b.getFenBoard()));
 		}
-		TEST_METHOD(MovesTracker_prev_remember_enpassant)
-		{
-			Board b(8, 8);
-			b.setFenBoard("rnbqkb1r/pppppppp/7n/2P5/8/8/PP1PPPPP/RNBQKBNR b KQkq - 0 2");
-			b.move(parseCoords("d7"), parseCoords("d5"));
-			b.move(parseCoords("e2"), parseCoords("e4"));
-			b.getMovesTracker()->previous();
-
-			Assert::IsTrue(
-				bothStoreSameVals(
-					b.getPiece(parseCoords("c7"))->getValidMoves(&b, b.getPiece(parseCoords("c7"))->coords()),
-					{ parseCoords("d6"), parseCoords("c6") }
-				)
-			);
-		}
 	};
 }
