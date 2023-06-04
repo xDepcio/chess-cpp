@@ -8,6 +8,7 @@
 #include "Knight.h"
 #include "Rook.h"
 #include "Pawn.h"
+#include "Square.h"
 
 int MovesTracker::getMoveCount() const
 {
@@ -40,7 +41,7 @@ void MovesTracker::next()
 	pointedMoveNum++;
 	Move* moveToMake = moves[pointedMoveNum].get();
 	makeMove(moveToMake);
-	trackedBoard->setTurn(pointedMoveNum+1 % 2 == 0 ? Color::White : Color::Black);
+	trackedBoard->setTurn(pointedMoveNum % 2 == 0 ? Color::Black : Color::White);
 }
 
 void MovesTracker::makeMove(Move* move)
@@ -109,6 +110,26 @@ void MovesTracker::updateToLatest()
 void MovesTracker::startFromCurrent()
 {
 	moves.resize(pointedMoveNum+1);
+	auto movesCopy = std::move(moves);
+	moves.resize(0);
+	clearBoard();
+	trackedBoard->setFenBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	for (auto& mv : movesCopy)
+	{
+		trackedBoard->getPiece(mv.get()->from)->move(trackedBoard, mv.get()->to);
+	}
+	trackedBoard->setTurn(pointedMoveNum % 2 == 0 ? Color::Black : Color::White);
+}
+
+void MovesTracker::clearBoard()
+{
+	for (auto& row : trackedBoard->getBoard())
+	{
+		for (auto& sqr : row)
+		{
+			sqr.setPiece(nullptr);
+		}
+	}
 }
 
 void MovesTracker::previous()

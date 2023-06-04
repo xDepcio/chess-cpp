@@ -66,6 +66,7 @@ public:
 	void makeMove(Move* move);
 	void updateToLatest();
 	void startFromCurrent();
+	void clearBoard();
 
 	// Returns moves as vector of pairs with first element being coords from 
 	// which piece move from and second which moved to, can be easily converted to fill Moves data with importRaw()
