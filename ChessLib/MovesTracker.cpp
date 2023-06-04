@@ -40,6 +40,7 @@ void MovesTracker::next()
 	pointedMoveNum++;
 	Move* moveToMake = moves[pointedMoveNum].get();
 	makeMove(moveToMake);
+	trackedBoard->setTurn(pointedMoveNum+1 % 2 == 0 ? Color::White : Color::Black);
 }
 
 void MovesTracker::makeMove(Move* move)
@@ -163,6 +164,7 @@ void MovesTracker::previous()
 	Move* moveToRevert = moves[pointedMoveNum].get();
 	revertMove(moveToRevert);
 	pointedMoveNum--;
+	trackedBoard->setTurn(pointedMoveNum+1 % 2 == 0 ? Color::White : Color::Black);
 }
 
 void MovesTracker::revertMove(Move* move)

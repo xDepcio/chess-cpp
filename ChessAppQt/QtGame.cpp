@@ -138,6 +138,7 @@ void QtGame::loadGameFromFile(std::string const& filePath)
 		file.close();
 
 		trackedBoard->getMovesTracker()->importRaw(moves);
+		trackedBoard->setTurn(trackedBoard->getMovesTracker()->getMoveCount() % 2 == 0 ? Color::White : Color::Black);
 	}
 	else {
 		std::cout << "Failed to open the file." << std::endl;
