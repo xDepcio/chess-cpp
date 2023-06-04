@@ -202,7 +202,6 @@ void ChessAppQt::connectTrackerBtns()
         if (playedGame->getBoard()->getMovesTracker()->onLatestMove())
         {
             ui.nextMoveBtn->setDisabled(true);
-            //return;
         }
         else
         {
@@ -218,7 +217,6 @@ void ChessAppQt::connectTrackerBtns()
         if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() <= -1)
         {
             ui.prevMoveBtn->setDisabled(true);
-            //return;
         }
         else
         {
@@ -226,6 +224,11 @@ void ChessAppQt::connectTrackerBtns()
         }
         ui.nextMoveBtn->setDisabled(false);
         });
+
+    connect(ui.startFromNowBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->getBoard()->getMovesTracker()->startFromCurrent();
+        ui.nextMoveBtn->setDisabled(true);
+    });
 }
 
 void ChessAppQt::setupSkinsManagement()
@@ -312,6 +315,10 @@ void ChessAppQt::startNewChessGameFromSave(std::string const& savePath)
     playedGame->run();
     playedGame->loadGameFromFile(savePath);
     updateBoard();
+    if (playedGame->getBoard()->getMovesTracker()->getMoveCount() > 0)
+    {
+        ui.prevMoveBtn->setDisabled(false);
+    }
 }
 
 void ChessAppQt::handleChessGameStateChange()

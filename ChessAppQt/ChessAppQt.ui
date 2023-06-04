@@ -2320,6 +2320,13 @@
                </widget>
               </item>
               <item>
+               <widget class="QPushButton" name="startFromNowBtn">
+                <property name="text">
+                 <string>Zacznij tutaj</string>
+                </property>
+               </widget>
+              </item>
+              <item>
                <widget class="QPushButton" name="restartBtn">
                 <property name="text">
                  <string>Zacznij od nowa</string>
