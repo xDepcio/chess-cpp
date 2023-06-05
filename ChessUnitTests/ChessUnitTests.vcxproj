@@ -156,6 +156,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="BoardTests.cpp" />
     <ClCompile Include="Helpers.cpp" />
     <ClCompile Include="HelpersUnitTests.cpp" />
     <ClCompile Include="MovesTrackerTests.cpp" />

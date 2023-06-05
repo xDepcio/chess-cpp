@@ -445,7 +445,7 @@ std::vector<std::pair<int, int>> Board::getCastleMoves(Color kingColor)
 	if (king->hasMadeFirstMove() || isCheck(kingColor))
 		return moves;
 
-	if (!getPiece({ kingCoords.first, 0 })->hasMadeFirstMove())
+	if (getPiece({ kingCoords.first, 0 }) && !getPiece({ kingCoords.first, 0 })->hasMadeFirstMove())
 	{
 		if (!getPiece({ kingCoords.first, 3 }) && !getPiece({ kingCoords.first, 2 }) && !getPiece({ kingCoords.first, 1 }))
 		{
@@ -462,7 +462,7 @@ std::vector<std::pair<int, int>> Board::getCastleMoves(Color kingColor)
 		}
 	}
 
-	if (!getPiece({ kingCoords.first, 7 })->hasMadeFirstMove())
+	if (getPiece({ kingCoords.first, 7 }) && !getPiece({ kingCoords.first, 7 })->hasMadeFirstMove())
 	{
 		if (!getPiece({ kingCoords.first, 5 }) && !getPiece({ kingCoords.first, 6 }))
 		{
