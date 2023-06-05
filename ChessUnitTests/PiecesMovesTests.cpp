@@ -229,5 +229,65 @@ namespace PiecesMovesTests
 				b.getPiece(parseCoords("e1"))->getValidMoves(&b, parseCoords("e1"))
 			));
 		}
+		TEST_METHOD(King_getValidMoves_short_castle_valid)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkbnr/pppp3p/5pp1/4p3/8/3BPN2/PPPP1PPP/RNBQK2R w KQkq - 0 4");
+
+			Assert::IsTrue(bothStoreSameVals(
+				{ parseCoords("f1"), parseCoords("e2"), parseCoords("g1") },
+				b.getPiece(parseCoords("e1"))->getValidMoves(&b, parseCoords("e1"))
+			));
+		}
+		TEST_METHOD(King_getValidMoves_short_castle_invalid_king_previously_moved)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkbnr/pppp3p/5pp1/4p3/8/3BPN2/PPPP1PPP/RNBQK2R w KQkq - 0 4");
+			b.getPiece(parseCoords("e1"))->move(&b, parseCoords("f1"));
+			b.getPiece(parseCoords("f1"))->move(&b, parseCoords("e1"));
+
+			Assert::IsTrue(bothStoreSameVals(
+				{ parseCoords("f1"), parseCoords("e2") },
+				b.getPiece(parseCoords("e1"))->getValidMoves(&b, parseCoords("e1"))
+			));
+		}
+		TEST_METHOD(King_getValidMoves_short_castle_properly_set_rook)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkbnr/pppp3p/5pp1/4p3/8/3BPN2/PPPP1PPP/RNBQK2R w KQkq - 0 4");
+			b.getPiece(parseCoords("e1"))->move(&b, parseCoords("g1"));
+
+			Assert::AreEqual(stripFen("rnbqkbnr/pppp3p/5pp1/4p3/8/3BPN2/PPPP1PPP/RNBQ1RK1 b kq - 1 4"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(King_getValidMoves_long_castle_valid)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkbnr/2p1pppp/1p6/p2p4/5B2/2NP4/PPPQPPPP/R3KBNR w KQkq - 0 5");
+
+			Assert::IsTrue(bothStoreSameVals(
+				{ parseCoords("d1"), parseCoords("c1") },
+				b.getPiece(parseCoords("e1"))->getValidMoves(&b, parseCoords("e1"))
+			));
+		}
+		TEST_METHOD(King_getValidMoves_long_castle_invalid_king_previously_moved)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkbnr/2p1pppp/1p6/p2p4/5B2/2NP4/PPPQPPPP/R3KBNR w KQkq - 0 5");
+			b.getPiece(parseCoords("e1"))->move(&b, parseCoords("d1"));
+			b.getPiece(parseCoords("d1"))->move(&b, parseCoords("e1"));
+
+			Assert::IsTrue(bothStoreSameVals(
+				{ parseCoords("d1") },
+				b.getPiece(parseCoords("e1"))->getValidMoves(&b, parseCoords("e1"))
+			));
+		}
+		TEST_METHOD(King_getValidMoves_long_castle_properly_set_rook)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkbnr/2p1pppp/1p6/p2p4/5B2/2NP4/PPPQPPPP/R3KBNR w KQkq - 0 5");
+			b.getPiece(parseCoords("e1"))->move(&b, parseCoords("c1"));
+
+			Assert::AreEqual(stripFen("rnbqkbnr/2p1pppp/1p6/p2p4/5B2/2NP4/PPPQPPPP/2KR1BNR b kq - 1 5"), stripFen(b.getFenBoard()));
+		}
 	};
 }
