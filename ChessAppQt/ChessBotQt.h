@@ -9,6 +9,9 @@ class ChessBot
 	Requires stockfish to be installed in PATH
 	*/
 private:
+
+	int difficultyLevel = 10;
+
 	static const std::string stockfishName;
 
 	static QString getStockfishOutput(const char* command);
@@ -20,5 +23,7 @@ private:
 
 public:
 	std::string getBestMove(std::string fenPosition) const;
+
+	void setDifficulty(int level);
 
 };
