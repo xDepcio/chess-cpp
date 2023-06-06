@@ -27,11 +27,6 @@ Color Piece::getColor() const
 	return color;
 }
 
-void Piece::handleGotMoved()
-{
-    madeFirstMove = true;
-}
-
 bool Piece::hasMadeFirstMove() const
 {
     return madeFirstMove;
@@ -41,11 +36,6 @@ void Piece::setMadeFirstMove(bool boolean)
 {
     madeFirstMove = boolean;
 }
-
-//void Piece::handleGotTaken(Piece* takenBy)
-//{
-//    // TODO... Do something when piece is taken
-//}
 
 void Piece::move(Board* board, std::pair<int, int> to)
 {

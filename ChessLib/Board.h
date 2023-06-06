@@ -64,8 +64,6 @@ public:
 
 	void setTurn(Color const turnColor);
 
-	void invalidateEnPassantesOnNextMove();
-
 	void setBoardState(BoardState stateToSet);
 
 	BoardState getBoardState() const;
@@ -80,7 +78,6 @@ protected:
 	std::vector<std::vector<Square> > squares = { };
 	MovesTracker* movesTracker;
 	Color turn = Color::White;
-	bool shouldInvalidateEnPassantes = false;
 	BoardState boardState = BoardState::PLAYED;
 	std::pair<int, int> promoMoveFrom;
 	std::pair<int, int> promoMoveTo;

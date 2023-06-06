@@ -20,8 +20,6 @@ public:
 
 	Color getColor() const;
 
-	void handleGotMoved();
-
 	bool hasMadeFirstMove() const;
 
 	void setMadeFirstMove(bool boolean);
@@ -38,7 +36,6 @@ public:
 protected:
 	Color color;
 	std::string pieceSignature;
-	//int debugId;
 	bool madeFirstMove = false;
 	PieceType type;
 	std::pair<int, int> coordinates;

@@ -586,7 +586,7 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 
 		movesTracker->addMove(std::move(mvPtr));
 
-		this->getPiece(from)->handleGotMoved();
+		this->getPiece(from)->setMadeFirstMove(true);
 		setPiece(to, setPiece(from, nullptr));
 
 		this->getPiece(to)->setMadeFirstMove(true);
@@ -604,11 +604,6 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 		{
 			setBoardState(BoardState::STALEMATE);
 		}
-		// invalidate previously avalible enpassantes
-		//if (shouldInvalidateEnPassantes)
-		//{
-		//	invalidateEnPassantes(movedPiece->getColor());
-		//}
 	}
 }
 
@@ -723,11 +718,6 @@ Color Board::getTurn() const
 void Board::setTurn(Color const turnColor)
 {
 	turn = turnColor;
-}
-
-void Board::invalidateEnPassantesOnNextMove()
-{
-	shouldInvalidateEnPassantes = true;
 }
 
 void Board::setBoardState(BoardState stateToSet)
