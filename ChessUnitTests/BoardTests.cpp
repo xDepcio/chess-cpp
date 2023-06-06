@@ -85,5 +85,67 @@ namespace BoardTests
 
 			Assert::IsTrue(b.isStalemate(Color::Black));
 		}
+
+		TEST_METHOD(black_pawn_check)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkbnr/pppp1ppp/8/4p3/5K2/3PP3/PPP2PPP/RNBQ1BNR w KQ - 0 4");
+
+			Assert::IsTrue(b.isCheck(Color::White));
+			Assert::IsFalse(b.isCheck(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::White));
+		}
+		TEST_METHOD(black_knight_check)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/pppppppp/5n2/8/4K3/3PP3/PPP2PPP/RNBQ1BNR w KQ - 3 4");
+
+			Assert::IsTrue(b.isCheck(Color::White));
+			Assert::IsFalse(b.isCheck(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::White));
+		}
+		TEST_METHOD(black_bishop_check)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rn1qkb1r/pbpppp1p/1p3np1/8/4K3/3PP3/PPP2PPP/RNBQ1BNR w KQ - 2 5");
+
+			Assert::IsTrue(b.isCheck(Color::White));
+			Assert::IsFalse(b.isCheck(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::White));
+		}
+		TEST_METHOD(black_rook_check)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rn1qkb2/pbpppp1p/1p2rnp1/8/4K3/3PP3/PPP2PPP/RNBQ1BNR w K - 0 10");
+
+			Assert::IsTrue(b.isCheck(Color::White));
+			Assert::IsFalse(b.isCheck(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::White));
+		}
+		TEST_METHOD(black_queen_check)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rn2kb2/pbpppp1p/1pr2np1/8/q3K3/3PP3/PPP2PPP/RNBQ1BNR w KQ - 0 4");
+
+			Assert::IsTrue(b.isCheck(Color::White));
+			Assert::IsFalse(b.isCheck(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::White));
+		}
+		TEST_METHOD(black_queen_checkMate)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rn2kb2/pbpppp1p/1p3np1/8/qKr5/3PP3/PPP2PPP/RNBQ1BNR w KQ - 0 17");
+
+			Assert::IsTrue(b.isCheck(Color::White));
+			Assert::IsFalse(b.isCheck(Color::Black));
+			Assert::IsFalse(b.isCheckMate(Color::Black));
+			Assert::IsTrue(b.isCheckMate(Color::White));
+		}
+
 	};
 }

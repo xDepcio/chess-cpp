@@ -1,8 +1,16 @@
 #include <sstream>
+#include <filesystem>
 #include <QtCore>
 #include "ChessBotQt.h"
 
-const std::string ChessBot::stockfishName = "stockfish";
+using std::filesystem::current_path;
+
+std::stringstream ss;
+ss << currentpath();
+ss << "\stockfish";
+
+const std::string ChessBot::stockfishName = ss.str();
+// old ver const std::string ChessBot::stockfishName = "stockfish";
 
 QString ChessBot::getStockfishOutput(const char* command)
 {
@@ -21,7 +29,11 @@ QString ChessBot::getStockfishOutput(const char* command)
 	stockfish.write("uci\n"); // Initialize UCI node
 	stockfish.write("ucinewgame\n"); // Start a new gane
 	stockfish.write(command); // Set the chessboard position in FEN notation
-	stockfish.write("go depth 10\n"); // Ask Stockfish to calculate the best move with depth 10
+	std::stringstream levelPrompt;
+	levelPrompt << "go depth " << difficultyLevel;
+	//old ver stockfish.write("go depth 10\n"); // Ask Stockfish to calculate the best move with depth 10
+	stockfish.write(levelPrompt.str());
+
 
 	while (true)
 	{
@@ -65,3 +77,18 @@ std::string ChessBot::getBestMove(std::string fenPosition) const
 }
 
 
+void ChessBot::setDifficulty(int diffLevel)
+{
+	if (diffLevel < 1) 
+	{
+		difficultyLevel = 1;
+	}
+	else if (diffLevel > 10)
+	{
+		difficultyLevel = 10;
+	}
+	else
+	{
+		difficultyLevel = diffLevel;
+	}
+}
