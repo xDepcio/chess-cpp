@@ -25,5 +25,17 @@
         <file>images-standard/queen-white.png</file>
         <file>images-standard/rook-black.png</file>
         <file>images-standard/rook-white.png</file>
+        <file>images-standard-2/bishop-black.png</file>
+        <file>images-standard-2/bishop-white.png</file>
+        <file>images-standard-2/king-black.png</file>
+        <file>images-standard-2/king-white.png</file>
+        <file>images-standard-2/knight-black.png</file>
+        <file>images-standard-2/knight-white.png</file>
+        <file>images-standard-2/pawn-black.png</file>
+        <file>images-standard-2/pawn-white.png</file>
+        <file>images-standard-2/queen-black.png</file>
+        <file>images-standard-2/queen-white.png</file>
+        <file>images-standard-2/rook-black.png</file>
+        <file>images-standard-2/rook-white.png</file>
     </qresource>
 </RCC>

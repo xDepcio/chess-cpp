@@ -81,7 +81,7 @@ void ChessAppQt::updateBoard()
             std::string pathToPiece = skinsManager.get()->getPathToPiece(sqr.getPiece());
             QString qImagePath = QString::fromStdString(pathToPiece);
             QPixmap pixmap(qImagePath);
-            pixmap = pixmap.scaled(qtSquares[qtSquareNum]->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            pixmap = pixmap.scaled(QSize(75, 75), Qt::KeepAspectRatio, Qt::SmoothTransformation);
             qtSquares[qtSquareNum]->setPixmap(pixmap);
             qtSquares[qtSquareNum]->setAlignment(Qt::AlignCenter);
             qtSquareNum++;
@@ -234,7 +234,7 @@ void ChessAppQt::connectTrackerBtns()
 void ChessAppQt::setupSkinsManagement()
 {
     skinsManager = std::move(std::make_unique<SkinsManager>());
-    skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD);
+    skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD_2);
 
     connect(ui.skinsBackBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(2);
@@ -246,6 +246,10 @@ void ChessAppQt::setupSkinsManagement()
 
     connect(ui.radioBtnStarWars, &QRadioButton::clicked, this, [this]() {
         skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STARWARS);
+        });
+
+    connect(ui.radioBtnStandard2, &QRadioButton::clicked, this, [this]() {
+        skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD_2);
         });
 }
 
