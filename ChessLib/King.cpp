@@ -26,6 +26,7 @@ std::vector<std::pair<int, int>> King::getValidMoves(Board* board, std::pair<int
 
 void King::move(Board* board, std::pair<int, int> to)
 {
+	board->invalidateEnPassantes(color);
 	if (std::abs(coordinates.second - to.second) > 1)
 		castleMove(board, { coordinates.first, to.second == 2 ? 0 : 7 });
 	else

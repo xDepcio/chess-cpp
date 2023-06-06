@@ -128,7 +128,7 @@ void QtGame::choosePromotion(Promotions promotion)
 void QtGame::loadGameFromFile(std::string const& filePath)
 {
 	std::ifstream file(filePath);
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> moves;
+	std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> moves;
 
 	if (file.is_open())
 	{
@@ -172,28 +172,64 @@ void QtGame::saveCurrentGameToFile(std::string const& dirPath)
 	}
 }
 
-std::string QtGame::rawMovesToString(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves) const
+char QtGame::promoToChar(Promotions const& promo) const
+{
+	switch (promo)
+	{
+	case Promotions::NONE:
+		return ' ';
+	case Promotions::BISHOP:
+		return 'b';
+	case Promotions::KNGIHT:
+		return 'k';
+	case Promotions::QUEEN:
+		return 'q';
+	case Promotions::ROOK:
+		return 'r';
+	}
+}
+
+Promotions QtGame::charToPromo(char const& promoChar) const
+{
+	switch (promoChar)
+	{
+	case ' ':
+		return Promotions::NONE;
+	case 'b':
+		return Promotions::BISHOP;
+	case 'k':
+		return Promotions::KNGIHT;
+	case 'q':
+		return Promotions::QUEEN;
+	case 'r':
+		return Promotions::ROOK;
+	}
+}
+
+std::string QtGame::rawMovesToString(std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> rawMoves) const
 {
 	std::ostringstream ss;
 
 	for (auto& move : rawMoves)
 	{
-		auto from = move.first;
-		auto to = move.second;
+		auto from = move.first.first;
+		auto to = move.first.second;
 
-		ss << from.first << from.second << to.first << to.second;
+		ss << from.first << from.second << to.first << to.second << promoToChar(move.second);
 	}
 
 	return ss.str();
 }
 
-std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> QtGame::rawMovesFromString(std::string rawMovesStr) const
+std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> QtGame::rawMovesFromString(std::string rawMovesStr) const
 {
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> moves;
+	std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> moves;
 
-	for (int i = 0; i < rawMovesStr.size(); i+=4)
+	for (int i = 0; i < rawMovesStr.size(); i+=5)
 	{
-		moves.push_back({ {rawMovesStr[i] - 48, rawMovesStr[i + 1] - 48}, {rawMovesStr[i + 2] - 48, rawMovesStr[i + 3] - 48} });
+		moves.push_back({
+			{{rawMovesStr[i] - 48, rawMovesStr[i + 1] - 48}, {rawMovesStr[i + 2] - 48, rawMovesStr[i + 3] - 48}}, charToPromo(rawMovesStr[i + 4])
+			});
 	}
 
 	return moves;

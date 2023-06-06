@@ -72,6 +72,7 @@ public:
 
 	void requestPromotionChoice(std::pair<int, int> const& moveFrom, std::pair<int, int> const& moveTo);
 	void receivePromotionChoice(Promotions promotion);
+	void invalidateEnPassantes(Color piecesColorToInvalidate);
 
 protected:
 	int width;
@@ -103,5 +104,4 @@ protected:
 	};
 
 	moveState addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck = false);
-	void invalidateEnPassantes(Color piecesColorToInvalidate);
 };

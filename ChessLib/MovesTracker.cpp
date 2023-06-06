@@ -173,26 +173,35 @@ void MovesTracker::revertMove(Move* move)
 	}
 }
 
-std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> MovesTracker::exportRaw() const
+std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> MovesTracker::exportRaw() const
 {
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves;
-
+	std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> rawMoves;
+	
 	for (auto& mv : moves)
 	{
-		rawMoves.push_back({ mv.get()->from, mv.get()->to });
+		rawMoves.push_back({ {mv.get()->from, mv.get()->to}, mv.get()->promotion});
 	}
 
 	return rawMoves;
 }
 
-void MovesTracker::importRaw(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> const& movesList)
+void MovesTracker::importRaw(std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> const& movesList)
 {
 	for (auto& move : movesList)
 	{
-		auto& from = move.first;
-		auto& to = move.second;
+		auto& from = move.first.first;
+		auto& to = move.first.second;
 
-		trackedBoard->getPiece(from)->move(trackedBoard, to);
+		auto& promo = move.second;
+		if (promo != Promotions::NONE)
+		{
+			trackedBoard->requestPromotionChoice(from, to);
+			trackedBoard->receivePromotionChoice(promo);
+		}
+		else
+		{
+			trackedBoard->getPiece(from)->move(trackedBoard, to);
+		}
 	}
 }
 

@@ -89,6 +89,7 @@ void Pawn::move(Board* board, std::pair<int, int> to)
     if (isEnPassantMove(to))
     {
         enPassantMove(board, to);
+        board->invalidateEnPassantes(color);
         return;
     }
 

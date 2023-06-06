@@ -70,11 +70,11 @@ public:
 
 	// Returns moves as vector of pairs with first element being coords from 
 	// which piece move from and second which moved to, can be easily converted to fill Moves data with importRaw()
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> exportRaw() const;
+	std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> exportRaw() const;
 
 	// Populates MovesTracker with detailed Move structs made from give movesList which is vector of pairs with
 	// first element being coords from which piece move from and second which moved to
-	void importRaw(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> const& movesList);
+	void importRaw(std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> const& movesList);
 
 private:
 	std::vector<std::unique_ptr<Move>> moves = {};

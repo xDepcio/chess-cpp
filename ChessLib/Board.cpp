@@ -563,6 +563,7 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 	// moves found piece (doesn't check if move is valid)
 	Piece* movedPiece = this->getPiece(from);
 	Piece* takenPiece = this->getPiece(to);
+	invalidateEnPassantes(movedPiece->getColor());
 
 	if (movedPiece)
 	{
@@ -604,10 +605,10 @@ void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 			setBoardState(BoardState::STALEMATE);
 		}
 		// invalidate previously avalible enpassantes
-		if (shouldInvalidateEnPassantes)
-		{
-			invalidateEnPassantes(movedPiece->getColor());
-		}
+		//if (shouldInvalidateEnPassantes)
+		//{
+		//	invalidateEnPassantes(movedPiece->getColor());
+		//}
 	}
 }
 
