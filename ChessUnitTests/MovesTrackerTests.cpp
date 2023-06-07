@@ -104,5 +104,113 @@ namespace MovesTrackerTests
 
 			Assert::AreEqual(std::string("rnbqkbnr/pp1ppppp/8/5P2/8/2p2N2/PPPPP1PP/RNBQKB1R"), stripFen(b.getFenBoard()));
 		}
+		TEST_METHOD(MovesTracker_prev_revert_pawn_promotion_to_queen)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::QUEEN);
+			
+			Assert::AreEqual(std::string("Qnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+			
+			b.getMovesTracker()->previous();
+			Assert::AreEqual(std::string("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(MovesTracker_next_make_pawn_promotion_to_queen)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::QUEEN);
+
+			Assert::AreEqual(std::string("Qnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		
+			b.getMovesTracker()->previous();
+			Assert::AreEqual(std::string("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		
+			b.getMovesTracker()->next();
+			Assert::AreEqual(std::string("Qnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(MovesTracker_prev_revert_pawn_promotion_to_knight)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::KNGIHT);
+
+			Assert::AreEqual(std::string("Nnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->previous();
+			Assert::AreEqual(std::string("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(MovesTracker_next_make_pawn_promotion_to_knight)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::KNGIHT);
+
+			Assert::AreEqual(std::string("Nnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->previous();
+			Assert::AreEqual(std::string("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->next();
+			Assert::AreEqual(std::string("Nnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(MovesTracker_prev_revert_pawn_promotion_to_rook)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::ROOK);
+
+			Assert::AreEqual(std::string("Rnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->previous();
+			Assert::AreEqual(std::string("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(MovesTracker_next_make_pawn_promotion_to_rook)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::ROOK);
+
+			Assert::AreEqual(std::string("Rnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->previous();
+			Assert::AreEqual(std::string("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->next();
+			Assert::AreEqual(std::string("Rnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(MovesTracker_prev_revert_pawn_promotion_to_bishop)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::BISHOP);
+
+			Assert::AreEqual(std::string("Bnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->previous();
+			Assert::AreEqual(std::string("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(MovesTracker_next_make_pawn_promotion_to_bishop)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::BISHOP);
+
+			Assert::AreEqual(std::string("Bnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->previous();
+			Assert::AreEqual(std::string("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+
+			b.getMovesTracker()->next();
+			Assert::AreEqual(std::string("Bnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
 	};
 }
