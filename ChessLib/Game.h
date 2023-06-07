@@ -1,6 +1,8 @@
 #pragma once
 #include "Constants.h"
 
+class Board;
+
 class Game
 {
 private:
@@ -14,5 +16,6 @@ public:
 	int boardCoordinateToInt(char coordinateSign) const;
 	void enableAI(bool enable_ai);
 	void setAIcolor(Color color);
+	void printBoard(Board* boardPt) const;
 };
 

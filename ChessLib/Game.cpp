@@ -10,6 +10,7 @@
 #include "Rook.h"
 #include "Pawn.h"
 #include "Board.h"
+#include "Square.h"
 
 
 void Game::enableAI(bool enable_ai)
@@ -22,6 +23,30 @@ void Game::setAIcolor(Color color)
 {
 	human_color = (color == Color::White ? Color::Black : Color::White);
 	return;
+}
+
+void Game::printBoard(Board* boardPt) const
+{
+	auto& squares = boardPt->getBoard();
+
+	for (int i = 0; i < squares.size(); i++)
+	{
+		std::cout << " " << 8 - i << " ";
+		for (int j = 0; j < squares[0].size(); j++)
+		{
+			Piece* squarePiece = squares[i][j].getPiece();
+			if (squarePiece != nullptr)
+			{
+				std::cout << ' ' << squarePiece->getName() << ' ';
+			}
+			else
+			{
+				std::cout << " -- ";
+			}
+		}
+		std::cout << '\n';
+	}
+	std::cout << "    a   b   c   d   e   f   g   h\n";
 }
 
 void Game::run()
@@ -102,7 +127,7 @@ void Game::run()
 			//std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
 
 			std::cout << "===============================================\n";
-			boardPt->printBoard();
+			printBoard(boardPt);
 
 			for (auto& msg : messages)
 			{
@@ -163,7 +188,7 @@ void Game::run()
 			//std::cout << "type comma seperated cordinates where start and\ndestination is dot seperated. ex." << " \"1,1.2,1\"\n" << "first coordinate is row and second is column\n";
 
 			std::cout << "===============================================\n";
-			boardPt->printBoard();
+			printBoard(boardPt);
 
 			for (auto& msg : messages)
 			{

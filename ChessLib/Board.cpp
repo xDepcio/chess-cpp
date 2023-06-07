@@ -212,28 +212,6 @@ void Board::setFenBoard(std::string fenPos)
 	}
 }
 
-void Board::printBoard() const
-{
-	for (int i = 0; i < squares.size(); i++)
-	{
-		std::cout << " " << 8 - i << " ";
-		for (int j = 0; j < squares[0].size(); j++)
-		{
-			Piece* squarePiece = squares[i][j].getPiece();
-			if (squarePiece != nullptr)
-			{
-				std::cout << ' ' << squarePiece->getName() << ' ';
-			}
-			else
-			{
-				std::cout << " -- ";
-			}
-		}
-		std::cout << '\n';
-	}
-	std::cout << "    a   b   c   d   e   f   g   h\n";
-}
-
 Piece* Board::getPiece(std::pair<int, int> coords) const
 {
 	return squares[coords.first][coords.second].getPiece();

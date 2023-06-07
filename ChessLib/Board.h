@@ -30,8 +30,6 @@ public:
 
 	void setFenBoard(std::string fenPos);
 
-	void printBoard() const;
-
 	Piece* getPiece(std::pair<int, int> coords) const;
 	std::unique_ptr<Piece> getPieceUniquePtr(const std::pair<int, int>& pieceCoords);
 
