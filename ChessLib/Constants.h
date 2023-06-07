@@ -53,4 +53,6 @@ enum class PieceType
 namespace constants
 {
 	constexpr char SAVE_FILES_DIR[] = "./saves";
+	constexpr int BOARD_WIDTH = 8;
+	constexpr int BOARD_HEIGHT = 8;
 }

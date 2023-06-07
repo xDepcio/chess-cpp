@@ -210,17 +210,7 @@ void Board::setFenBoard(std::string fenPos)
 		else
 			pos_num += atoi(&character);
 	}
-	
-	
-
-
-
-
 }
-
-
-
-
 
 void Board::printBoard() const
 {
@@ -491,21 +481,17 @@ std::vector<std::pair<int, int>> Board::getEnPassantMoves(std::pair<int, int> pa
 	std::vector<std::pair<int, int>> validMoves;
 	if (pawn->canEnPassantLeft())
 	{
-		validMoves.push_back(
-			{
-				pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
-				pawnCoords.second - 1
-			}
-		);
+		validMoves.push_back({
+			pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+			pawnCoords.second - 1
+		});
 	}
 	if (pawn->canEnPassantRight())
 	{
-		validMoves.push_back(
-			{
-				pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
-				pawnCoords.second + 1
-			}
-		);
+		validMoves.push_back({
+			pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+			pawnCoords.second + 1
+		});
 	}
 
 	return validMoves;

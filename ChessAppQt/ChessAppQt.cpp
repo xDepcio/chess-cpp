@@ -28,7 +28,6 @@ ChessAppQt::ChessAppQt(QWidget* parent) : QMainWindow(parent)
     setupPromotionBtns();
     connectBackBtn();
     connectSaveBtn();
-    //loadSavedGames();
     connectSavesBackBtn();
 }
 
@@ -395,10 +394,6 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
             playedGame->setClickedPiece(clickedPiece);
             playedGame->setClickedPieceCoords(fieldCoords);
         }
-        else
-        {
-            throw std::runtime_error(":(");
-        }
     }
     else
     {
@@ -440,10 +435,6 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
                 displayMoves(validMoves);
                 playedGame->setClickedPiece(clickedPiece);
                 playedGame->setClickedPieceCoords(fieldCoords);
-            }
-            else
-            {
-                throw std::runtime_error(":(");
             }
         }
         else
@@ -496,9 +487,7 @@ void ChessAppQt::connectSaveBtn()
 void ChessAppQt::loadSavedGames()
 {
     foreach(QObject * child, ui.savesHolderWidget->children()) {
-        // Check if the child widget is of type QWidget
         if (QWidget* childWidget = qobject_cast<QWidget*>(child)) {
-            // Delete the child widget
             delete childWidget;
         }
     }
