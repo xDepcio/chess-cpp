@@ -9,7 +9,7 @@ using std::filesystem::current_path;
 
 const std::string ChessBot::stockfishName = ".\\stockfish";
 
-int ChessBot::difficultyLevel = 10;
+int ChessBot::difficultyLevel = 20;
 
 QString ChessBot::getStockfishOutput(const char* command)
 {
@@ -28,11 +28,18 @@ QString ChessBot::getStockfishOutput(const char* command)
 	// write commands to Stockfish's stdin
 	stockfish.write("uci\n"); // Initialize UCI node
 	stockfish.write("ucinewgame\n"); // Start a new gane
-	stockfish.write(command); // Set the chessboard position in FEN notation
-	std::stringstream levelPrompt;
-	levelPrompt << "go depth " << difficultyLevel << "\n";
+	stockfish.write("setoption name UCI_LimitStrength value true\n");
+	std::stringstream skillPrompt;
+	skillPrompt << "setoption name Skill Level value " << difficultyLevel << "\n";
+	stockfish.write(skillPrompt.str().c_str());
 
-	stockfish.write(levelPrompt.str().c_str());
+
+	stockfish.write(command); // Set the chessboard position in FEN notation
+
+
+	
+
+	stockfish.write("go depth 10\n");
 
 	while (true)
 	{
@@ -82,9 +89,9 @@ void ChessBot::setDifficulty(int difflevel)
 	{
 		difficultyLevel = 1;
 	}
-	else if (difflevel > 10)
+	else if (difflevel > 20)
 	{
-		difficultyLevel = 10;
+		difficultyLevel = 20;
 	}
 	else
 	{
