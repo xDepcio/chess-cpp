@@ -8,6 +8,7 @@
 #include "Knight.h"
 #include "Rook.h"
 #include "Pawn.h"
+#include "Square.h"
 
 int MovesTracker::getMoveCount() const
 {
@@ -40,6 +41,7 @@ void MovesTracker::next()
 	pointedMoveNum++;
 	Move* moveToMake = moves[pointedMoveNum].get();
 	makeMove(moveToMake);
+	trackedBoard->setTurn(pointedMoveNum % 2 == 0 ? Color::Black : Color::White);
 }
 
 void MovesTracker::makeMove(Move* move)
@@ -105,64 +107,37 @@ void MovesTracker::updateToLatest()
 	}
 }
 
-//void MovesTracker::saveToFile(const std::string& filePath)
-//{
-//	// ...TODO
-//}
+void MovesTracker::startFromCurrent()
+{
+	moves.resize(pointedMoveNum+1);
+	auto movesCopy = std::move(moves);
+	moves.resize(0);
+	clearBoard();
+	trackedBoard->setFenBoard("rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1");
+	for (auto& mv : movesCopy)
+	{
+		trackedBoard->getPiece(mv.get()->from)->move(trackedBoard, mv.get()->to);
+	}
+	trackedBoard->setTurn(pointedMoveNum % 2 == 0 ? Color::Black : Color::White);
+}
 
-//std::string MovesTracker::toPgn() const
-//{
-//	// TODO... not finished
-//	std::ostringstream result;
-//	for (int i = 0; i < moves.size(); i++)
-//	{
-//		if (i % 2 == 0)
-//			result << i/2 + 1 << ". ";
-//		auto move = moves[i].get();
-//		if (move->castle == Castle::NONE && move->takenPiece == PieceType::NONE)
-//		{
-//			result << coordsToString(move->to) << " ";
-//		}
-//	}
-//
-//	return result.str();
-//}
-
-//void MovesTracker::loadFromPgn(std::string pgnString)
-//{
-//	bool nextIsMove = false;
-//	int charsSkip = 1;
-//	for (int charNum = 0; charNum < pgnString.size(); charNum += charsSkip)
-//	{
-//		charsSkip = 1;
-//		char currChar = pgnString[charNum];
-//
-//		if(nextIsMove)
-//
-//		if (isCharNum(currChar) && pgnString[charNum + 1] == '.')
-//		{
-//			nextIsMove = true;
-//			continue;
-//		}
-//	}
-//}
-//
-//bool isCharNum(char character)
-//{
-//	return character <= 57 && character >= 48;
-//}
-//
-//bool isPieceSign(char character)
-//{
-//	std::string charSigns = "prnbkq"
-//	return character <=
-//}
+void MovesTracker::clearBoard()
+{
+	for (auto& row : trackedBoard->getBoard())
+	{
+		for (auto& sqr : row)
+		{
+			sqr.setPiece(nullptr);
+		}
+	}
+}
 
 void MovesTracker::previous()
 {
 	Move* moveToRevert = moves[pointedMoveNum].get();
 	revertMove(moveToRevert);
 	pointedMoveNum--;
+	trackedBoard->setTurn(pointedMoveNum+1 % 2 == 0 ? Color::White : Color::Black);
 }
 
 void MovesTracker::revertMove(Move* move)
@@ -198,26 +173,35 @@ void MovesTracker::revertMove(Move* move)
 	}
 }
 
-std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> MovesTracker::exportRaw() const
+std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> MovesTracker::exportRaw() const
 {
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves;
-
+	std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> rawMoves;
+	
 	for (auto& mv : moves)
 	{
-		rawMoves.push_back({ mv.get()->from, mv.get()->to });
+		rawMoves.push_back({ {mv.get()->from, mv.get()->to}, mv.get()->promotion});
 	}
 
 	return rawMoves;
 }
 
-void MovesTracker::importRaw(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> const& movesList)
+void MovesTracker::importRaw(std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> const& movesList)
 {
 	for (auto& move : movesList)
 	{
-		auto& from = move.first;
-		auto& to = move.second;
+		auto& from = move.first.first;
+		auto& to = move.first.second;
 
-		trackedBoard->getPiece(from)->move(trackedBoard, to);
+		auto& promo = move.second;
+		if (promo != Promotions::NONE)
+		{
+			trackedBoard->requestPromotionChoice(from, to);
+			trackedBoard->receivePromotionChoice(promo);
+		}
+		else
+		{
+			trackedBoard->getPiece(from)->move(trackedBoard, to);
+		}
 	}
 }
 

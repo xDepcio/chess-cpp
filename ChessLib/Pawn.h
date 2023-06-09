@@ -20,7 +20,7 @@ public:
 	//};
 
 	Pawn(Color withColor);
-	Pawn(Color withColor, int id);
+	//Pawn(Color withColor, int id);
 	//bool isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const override;
 	void setValidEnPassantLeft(bool valid);
 	void setValidEnPassantRight(bool valid);

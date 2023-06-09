@@ -31,11 +31,6 @@ Pawn::Pawn(Color withColor) : Piece(withColor)
     Piece::pieceSignature = withColor == Color::Black ? "p" : "P";
     type = PieceType::PAWN;
 }
-Pawn::Pawn(Color withColor, int id) : Piece(withColor, id)
-{
-    Piece::pieceSignature = withColor == Color::Black ? "p" : "P";
-    type = PieceType::PAWN;
-}
 
 void Pawn::setValidEnPassantLeft(bool valid)
 {
@@ -94,6 +89,7 @@ void Pawn::move(Board* board, std::pair<int, int> to)
     if (isEnPassantMove(to))
     {
         enPassantMove(board, to);
+        board->invalidateEnPassantes(color);
         return;
     }
 

@@ -19,22 +19,6 @@ class Square;
 class Board
 {
 public:
-	//enum class BoardState
-	//{
-	//	CHECKMATED_WHITE,
-	//	CHECKMATED_BLACK,
-	//	STALEMATE,
-	//	PLAYED,
-	//	REQUEST_PROMOTION
-	//};
-	//enum class Promotions
-	//{
-	//	ROOK,
-	//	QUEEN,
-	//	KNIGHT,
-	//	BISHOP
-	//};
-
 	Board(int width, int height);
 	~Board();
 
@@ -80,14 +64,13 @@ public:
 
 	void setTurn(Color const turnColor);
 
-	void invalidateEnPassantesOnNextMove();
-
 	void setBoardState(BoardState stateToSet);
 
 	BoardState getBoardState() const;
 
 	void requestPromotionChoice(std::pair<int, int> const& moveFrom, std::pair<int, int> const& moveTo);
 	void receivePromotionChoice(Promotions promotion);
+	void invalidateEnPassantes(Color piecesColorToInvalidate);
 
 protected:
 	int width;
@@ -95,7 +78,6 @@ protected:
 	std::vector<std::vector<Square> > squares = { };
 	MovesTracker* movesTracker;
 	Color turn = Color::White;
-	bool shouldInvalidateEnPassantes = false;
 	BoardState boardState = BoardState::PLAYED;
 	std::pair<int, int> promoMoveFrom;
 	std::pair<int, int> promoMoveTo;
@@ -119,5 +101,4 @@ protected:
 	};
 
 	moveState addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck = false);
-	void invalidateEnPassantes(Color piecesColorToInvalidate);
 };

@@ -8,12 +8,6 @@ Rook::Rook(Color withColor) : Piece(withColor)
     type = PieceType::ROOK;
 }
 
-Rook::Rook(Color withColor, int id) : Piece(withColor, id)
-{
-    Piece::pieceSignature = withColor == Color::Black ? "r" : "R";
-    type = PieceType::ROOK;
-}
-
 std::vector<std::pair<int, int>> Rook::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
     if (!board->getMovesTracker()->onLatestMove())

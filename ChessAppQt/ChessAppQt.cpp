@@ -168,7 +168,7 @@ void ChessAppQt::displayMoves(std::vector<std::pair<int, int>> const& moves)
 
     for (auto& move : moves)
     {
-        qtSquares[move.first][move.second]->setStyleSheet("background-color: rgb(0, 0, 0);");
+        qtSquares[move.first][move.second]->setStyleSheet((move.first + move.second) % 2 == 0 ? "background-color: rgb(181, 237, 144);" : "background-color: rgb(154, 211, 97);");
     }
 }
 
@@ -187,7 +187,7 @@ void ChessAppQt::clearDisplayMoves(std::vector<std::pair<int, int>> const& moves
 
     for (auto& move : moves)
     {
-        qtSquares[move.first][move.second]->setStyleSheet((move.first + move.second) % 2 == 0 ? "background-color: rgb(226, 232, 217);" : "background-color: rgb(32, 58, 3);");
+        qtSquares[move.first][move.second]->setStyleSheet((move.first + move.second) % 2 == 0 ? "background-color: rgb(238, 238, 210);" : "background-color: rgb(118, 150, 86);");
     }
 
     displayedSquares = {};
@@ -202,7 +202,6 @@ void ChessAppQt::connectTrackerBtns()
         if (playedGame->getBoard()->getMovesTracker()->onLatestMove())
         {
             ui.nextMoveBtn->setDisabled(true);
-            //return;
         }
         else
         {
@@ -218,7 +217,6 @@ void ChessAppQt::connectTrackerBtns()
         if (playedGame->getBoard()->getMovesTracker()->getPointedMoveIndex() <= -1)
         {
             ui.prevMoveBtn->setDisabled(true);
-            //return;
         }
         else
         {
@@ -226,6 +224,11 @@ void ChessAppQt::connectTrackerBtns()
         }
         ui.nextMoveBtn->setDisabled(false);
         });
+
+    connect(ui.startFromNowBtn, &QPushButton::clicked, this, [this]() {
+        playedGame->getBoard()->getMovesTracker()->startFromCurrent();
+        ui.nextMoveBtn->setDisabled(true);
+    });
 }
 
 void ChessAppQt::setupSkinsManagement()
@@ -312,6 +315,10 @@ void ChessAppQt::startNewChessGameFromSave(std::string const& savePath)
     playedGame->run();
     playedGame->loadGameFromFile(savePath);
     updateBoard();
+    if (playedGame->getBoard()->getMovesTracker()->getMoveCount() > 0)
+    {
+        ui.prevMoveBtn->setDisabled(false);
+    }
 }
 
 void ChessAppQt::handleChessGameStateChange()

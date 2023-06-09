@@ -10,14 +10,6 @@ King::King(Color withColor) : Piece(withColor)
 	Piece::type = PieceType::KING;
 }
 
-King::King(Color withColor, int id) : Piece(withColor, id)
-{
-	Piece::pieceSignature = withColor == Color::Black ? "k" : "K";
-	Piece::type = PieceType::KING;
-}
-
-
-
 std::vector<std::pair<int, int>> King::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
 	if (!board->getMovesTracker()->onLatestMove())
@@ -34,6 +26,7 @@ std::vector<std::pair<int, int>> King::getValidMoves(Board* board, std::pair<int
 
 void King::move(Board* board, std::pair<int, int> to)
 {
+	board->invalidateEnPassantes(color);
 	if (std::abs(coordinates.second - to.second) > 1)
 		castleMove(board, { coordinates.first, to.second == 2 ? 0 : 7 });
 	else

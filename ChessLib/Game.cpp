@@ -24,62 +24,67 @@ void Game::setAIcolor(Color color)
 	return;
 }
 
-
-
 void Game::run()
 {
 	Color playerTurn = Color::White;
 
 	Board board(8, 8), *boardPt;
 	boardPt = &board;
-	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black, 201));
-	boardPt->setPiece({ 1, 1 }, std::make_unique<Pawn>(Color::Black, 202));
-	boardPt->setPiece({ 1, 2 }, std::make_unique<Pawn>(Color::Black, 203));
-	boardPt->setPiece({ 1, 3 }, std::make_unique<Pawn>(Color::Black, 204));
-	boardPt->setPiece({ 1, 4 }, std::make_unique<Pawn>(Color::Black, 205));
-	boardPt->setPiece({ 1, 5 }, std::make_unique<Pawn>(Color::Black, 206));
-	boardPt->setPiece({ 1, 6 }, std::make_unique<Pawn>(Color::Black, 207));
-	boardPt->setPiece({ 1, 7 }, std::make_unique<Pawn>(Color::Black, 208));
-
-	boardPt->setPiece({ 0, 1 }, std::make_unique<Knight>(Color::Black, 211));
-	boardPt->setPiece({ 0, 6 }, std::make_unique<Knight>(Color::Black, 212));
-
-	boardPt->setPiece({ 0, 2 }, std::make_unique<Bishop>(Color::Black, 242));
-	boardPt->setPiece({ 0, 5 }, std::make_unique<Bishop>(Color::Black, 242));
-
-	boardPt->setPiece({ 0, 0 }, std::make_unique<Rook>(Color::Black, 221));
-	boardPt->setPiece({ 0, 7 }, std::make_unique<Rook>(Color::Black, 222));
-	
-	boardPt->setPiece({ 0, 4 }, std::make_unique<King>(Color::Black, 231));
-
-	boardPt->setPiece({ 0, 3 }, std::make_unique<Queen>(Color::Black, 251));
 
 
-	boardPt->setPiece({ 6, 0 }, std::make_unique<Pawn>(Color::White, 101));
-	boardPt->setPiece({ 6, 1 }, std::make_unique<Pawn>(Color::White, 102));
-	boardPt->setPiece({ 6, 2 }, std::make_unique<Pawn>(Color::White, 103));
-	boardPt->setPiece({ 6, 3 }, std::make_unique<Pawn>(Color::White, 104));
-	boardPt->setPiece({ 6, 4 }, std::make_unique<Pawn>(Color::White, 105));
-	boardPt->setPiece({ 6, 5 }, std::make_unique<Pawn>(Color::White, 106));
-	boardPt->setPiece({ 6, 6 }, std::make_unique<Pawn>(Color::White, 107));
-	boardPt->setPiece({ 6, 7 }, std::make_unique<Pawn>(Color::White, 108));
+	boardPt->setFenBoard("rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKB1R");
+	std::cout << "rnbqkbnr/pp1ppppp/8/2p5/4P3/8/PPPP1PPP/RNBQKB1R\n";
 
-	boardPt->setPiece({ 7, 1 }, std::make_unique<Knight>(Color::White, 111));
-	boardPt->setPiece({ 7, 6 }, std::make_unique<Knight>(Color::White, 112));
-
-	boardPt->setPiece({ 7, 2 }, std::make_unique<Bishop>(Color::White, 142));
-	boardPt->setPiece({ 7, 5 }, std::make_unique<Bishop>(Color::White, 142));
-
-	boardPt->setPiece({ 7, 0 }, std::make_unique<Rook>(Color::White, 121));
-	boardPt->setPiece({ 7, 7 }, std::make_unique<Rook>(Color::White, 122));
-
-	boardPt->setPiece({ 7, 4 }, std::make_unique<King>(Color::White, 131));
-
-	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White, 151));
-
-	
-	boardPt->setFenBoard("\nstring");
+	std::cout << boardPt->getFenBoard() << std::endl;
 	return;
+
+	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black));
+	boardPt->setPiece({ 1, 1 }, std::make_unique<Pawn>(Color::Black));
+	boardPt->setPiece({ 1, 2 }, std::make_unique<Pawn>(Color::Black));
+	boardPt->setPiece({ 1, 3 }, std::make_unique<Pawn>(Color::Black));
+	boardPt->setPiece({ 1, 4 }, std::make_unique<Pawn>(Color::Black));
+	boardPt->setPiece({ 1, 5 }, std::make_unique<Pawn>(Color::Black));
+	boardPt->setPiece({ 1, 6 }, std::make_unique<Pawn>(Color::Black));
+	boardPt->setPiece({ 1, 7 }, std::make_unique<Pawn>(Color::Black));
+
+	boardPt->setPiece({ 0, 1 }, std::make_unique<Knight>(Color::Black));
+	boardPt->setPiece({ 0, 6 }, std::make_unique<Knight>(Color::Black));
+
+	boardPt->setPiece({ 0, 2 }, std::make_unique<Bishop>(Color::Black));
+	boardPt->setPiece({ 0, 5 }, std::make_unique<Bishop>(Color::Black));
+
+	boardPt->setPiece({ 0, 0 }, std::make_unique<Rook>(Color::Black));
+	boardPt->setPiece({ 0, 7 }, std::make_unique<Rook>(Color::Black));
+	
+	boardPt->setPiece({ 0, 4 }, std::make_unique<King>(Color::Black));
+
+	boardPt->setPiece({ 0, 3 }, std::make_unique<Queen>(Color::Black));
+
+
+	boardPt->setPiece({ 6, 0 }, std::make_unique<Pawn>(Color::White));
+	boardPt->setPiece({ 6, 1 }, std::make_unique<Pawn>(Color::White));
+	boardPt->setPiece({ 6, 2 }, std::make_unique<Pawn>(Color::White));
+	boardPt->setPiece({ 6, 3 }, std::make_unique<Pawn>(Color::White));
+	boardPt->setPiece({ 6, 4 }, std::make_unique<Pawn>(Color::White));
+	boardPt->setPiece({ 6, 5 }, std::make_unique<Pawn>(Color::White));
+	boardPt->setPiece({ 6, 6 }, std::make_unique<Pawn>(Color::White));
+	boardPt->setPiece({ 6, 7 }, std::make_unique<Pawn>(Color::White));
+
+	boardPt->setPiece({ 7, 1 }, std::make_unique<Knight>(Color::White));
+	boardPt->setPiece({ 7, 6 }, std::make_unique<Knight>(Color::White));
+
+	boardPt->setPiece({ 7, 2 }, std::make_unique<Bishop>(Color::White));
+	boardPt->setPiece({ 7, 5 }, std::make_unique<Bishop>(Color::White));
+
+	boardPt->setPiece({ 7, 0 }, std::make_unique<Rook>(Color::White));
+	boardPt->setPiece({ 7, 7 }, std::make_unique<Rook>(Color::White));
+
+	boardPt->setPiece({ 7, 4 }, std::make_unique<King>(Color::White));
+
+	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White));
+
+	//std::cout << boardPt->getFenBoard() << std::endl;
+	
 
 
 

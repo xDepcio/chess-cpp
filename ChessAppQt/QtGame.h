@@ -51,8 +51,12 @@ public:
 
 	void saveCurrentGameToFile(std::string const& dirPath);
 
-	std::string rawMovesToString(std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMoves) const;
-	std::vector<std::pair<std::pair<int, int>, std::pair<int, int>>> rawMovesFromString(std::string rawMovesStr) const;
+	char promoToChar(Promotions const& promo) const;
+
+	Promotions charToPromo(char const& str) const;
+
+	std::string rawMovesToString(std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> rawMoves) const;
+	std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promotions>> rawMovesFromString(std::string rawMovesStr) const;
 
 	std::pair<std::pair<int, int>, std::pair<int, int>> parseCoords(std::string coords);
 	int boardCoordinateToInt(char coordinateSign) const;

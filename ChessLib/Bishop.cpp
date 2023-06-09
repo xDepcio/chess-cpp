@@ -8,12 +8,6 @@ Bishop::Bishop(Color withColor) : Piece(withColor)
 	Piece::type = PieceType::BISHOP;
 }
 
-Bishop::Bishop(Color withColor, int id) : Piece(withColor, id)
-{
-	Piece::pieceSignature = withColor == Color::Black ? "b" : "B";
-	Piece::type = PieceType::BISHOP;
-}
-
 std::vector<std::pair<int, int>> Bishop::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
 	if (!board->getMovesTracker()->onLatestMove())
