@@ -1,16 +1,14 @@
 #pragma once
-
+#include <sstream>
 #include <string>
 #include <QString>
 
 class ChessBot
 {
-	/*
-	Requires stockfish to be installed in PATH
-	*/
+
 private:
 
-	int difficultyLevel = 10;
+	static int difficultyLevel;
 
 	static const std::string stockfishName;
 

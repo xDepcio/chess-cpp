@@ -5,16 +5,16 @@
 
 using std::filesystem::current_path;
 
-std::stringstream ss;
-ss << currentpath();
-ss << "\stockfish";
 
-const std::string ChessBot::stockfishName = ss.str();
-// old ver const std::string ChessBot::stockfishName = "stockfish";
+
+const std::string ChessBot::stockfishName = ".\\stockfish";
+
+int ChessBot::difficultyLevel = 10;
 
 QString ChessBot::getStockfishOutput(const char* command)
 {
 	QProcess stockfish;
+
 
 	// Initialize stockfish
 	stockfish.start(ChessBot::stockfishName.c_str());
@@ -30,10 +30,9 @@ QString ChessBot::getStockfishOutput(const char* command)
 	stockfish.write("ucinewgame\n"); // Start a new gane
 	stockfish.write(command); // Set the chessboard position in FEN notation
 	std::stringstream levelPrompt;
-	levelPrompt << "go depth " << difficultyLevel;
-	//old ver stockfish.write("go depth 10\n"); // Ask Stockfish to calculate the best move with depth 10
-	stockfish.write(levelPrompt.str());
+	levelPrompt << "go depth " << difficultyLevel << "\n";
 
+	stockfish.write(levelPrompt.str().c_str());
 
 	while (true)
 	{
@@ -77,18 +76,18 @@ std::string ChessBot::getBestMove(std::string fenPosition) const
 }
 
 
-void ChessBot::setDifficulty(int diffLevel)
+void ChessBot::setDifficulty(int difflevel)
 {
-	if (diffLevel < 1) 
+	if (difflevel < 1) 
 	{
 		difficultyLevel = 1;
 	}
-	else if (diffLevel > 10)
+	else if (difflevel > 10)
 	{
 		difficultyLevel = 10;
 	}
 	else
 	{
-		difficultyLevel = diffLevel;
+		difficultyLevel = difflevel;
 	}
 }
