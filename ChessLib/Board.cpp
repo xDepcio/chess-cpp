@@ -133,6 +133,9 @@ void Board::setFenBoard(std::string fenPos)
 		if (character == ' ')
 			return;
 		else if (isalpha(character))
+		{
+
+		}
 
 	}
 	
