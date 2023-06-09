@@ -30,16 +30,18 @@ QString ChessBot::getStockfishOutput(const char* command)
 	stockfish.write("ucinewgame\n"); // Start a new gane
 	stockfish.write("setoption name UCI_LimitStrength value true\n");
 	std::stringstream skillPrompt;
-	skillPrompt << "setoption name Skill Level value " << difficultyLevel << "\n";
-	stockfish.write(skillPrompt.str().c_str());
+	//skillPrompt << "setoption name Skill Level value " << difficultyLevel << "\n";
+	//stockfish.write(skillPrompt.str().c_str());
+	stockfish.write("setoption name Skill Level value 1\n");
 
 
 	stockfish.write(command); // Set the chessboard position in FEN notation
 
-
 	
-
-	stockfish.write("go depth 10\n");
+	std::stringstream depPrompt;
+	depPrompt << "go depth " << (difficultyLevel / 2) + 1 << "\n";
+	stockfish.write(depPrompt.str().c_str());
+	//stockfish.write("go depth 10\n");
 
 	while (true)
 	{

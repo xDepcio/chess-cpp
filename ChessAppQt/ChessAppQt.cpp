@@ -24,6 +24,9 @@ ChessAppQt::ChessAppQt(QWidget* parent) : QMainWindow(parent)
     connectMenuBtns();
     connectSquares();
     connectTrackerBtns();
+
+    setupDiffWidget();
+
     connectRestartBtn();
     setupPromotionBtns();
     connectBackBtn();
@@ -211,6 +214,7 @@ void ChessAppQt::connectTrackerBtns()
         });
 
     connect(ui.prevMoveBtn, &QPushButton::clicked, this, [this]() {
+        
         auto move = playedGame->getBoard()->getMovesTracker()->getPointedMove();
         playedGame->getBoard()->getMovesTracker()->previous();
         updateSquares(move->affectedSquares);
@@ -226,9 +230,34 @@ void ChessAppQt::connectTrackerBtns()
         });
 
     connect(ui.startFromNowBtn, &QPushButton::clicked, this, [this]() {
+        ui.gameEndLabel->setText("");
         playedGame->getBoard()->getMovesTracker()->startFromCurrent();
         ui.nextMoveBtn->setDisabled(true);
     });
+}
+
+void ChessAppQt::setupDiffWidget()
+{
+    //ui.diffWidget->hide();
+
+    connect(ui.diffSlider, &QSlider::sliderMoved, this, [this]() {
+
+        std::stringstream ss;
+        ss << "Poziom trudności: ";
+        ss << ui.diffSlider->value();
+        ui.label_3->setText(ss.str().c_str());
+        playedGame->setGameDiff(ui.diffSlider->value());
+        });
+
+    connect(ui.diffSlider, &QSlider::valueChanged, this, [this]() {
+
+        std::stringstream ss;
+        ss << "Poziom trudności: ";
+        ss << ui.diffSlider->value();
+        ui.label_3->setText(ss.str().c_str());
+        playedGame->setGameDiff(ui.diffSlider->value());
+        });
+    
 }
 
 void ChessAppQt::setupSkinsManagement()
@@ -280,6 +309,8 @@ void ChessAppQt::startNewChessGame()
     ui.nextMoveBtn->setDisabled(true);
     ui.prevMoveBtn->setDisabled(true);
     ui.promotionWidget->hide();
+    ui.diffWidget->hide();
+    ui.gameEndLabel->setText("");
 
     playedGame = new QtGame();
     playedGame->run();
@@ -291,9 +322,12 @@ void ChessAppQt::startNewChessGameWithBot()
     ui.nextMoveBtn->setDisabled(true);
     ui.prevMoveBtn->setDisabled(true);
     ui.promotionWidget->hide();
+    ui.diffWidget->show();
+    ui.gameEndLabel->setText("");
 
     playedGame = new QtGame();
     stockfish = new ChessBot();
+
 
     playedGame->setUpBotGame(Color::Black);
 
@@ -310,6 +344,7 @@ void ChessAppQt::startNewChessGameFromSave(std::string const& savePath)
     ui.nextMoveBtn->setDisabled(true);
     ui.prevMoveBtn->setDisabled(true);
     ui.promotionWidget->hide();
+    ui.gameEndLabel->setText("");
 
     playedGame = new QtGame();
     playedGame->run();
@@ -449,6 +484,8 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
 
             std::string fenPos = playedGame->getBoard()->getFenBoard();
 
+            stockfish->setDifficulty(playedGame->getGameDiff());
+
             std::string bestFishMove = stockfish->getBestMove(fenPos);
 
             auto coords = playedGame->parseCoords(bestFishMove);
@@ -466,8 +503,12 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
 
 void ChessAppQt::handleRestartBtn()
 {
+    bool bot = playedGame->isBotGame();
     delete playedGame;
-    startNewChessGame();
+    if (not bot)
+        startNewChessGame();
+    else
+        startNewChessGameWithBot();
 }
 
 void ChessAppQt::connectRestartBtn()

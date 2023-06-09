@@ -28,6 +28,8 @@ public:
 
     void connectTrackerBtns();
 
+    void setupDiffWidget();
+
     void setupSkinsManagement();
 
     void setupPromotionBtns();

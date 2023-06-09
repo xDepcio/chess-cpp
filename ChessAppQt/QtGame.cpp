@@ -119,6 +119,16 @@ bool QtGame::isBotGame()
 	return botGame;
 }
 
+int QtGame::getGameDiff()
+{
+	return botGameDiff;
+}
+
+void QtGame::setGameDiff(int diffLevel)
+{
+	botGameDiff = diffLevel;
+}
+
 void QtGame::choosePromotion(Promotions promotion)
 {
 	trackedBoard->receivePromotionChoice(promotion);

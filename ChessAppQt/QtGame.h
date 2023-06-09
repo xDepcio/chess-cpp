@@ -45,6 +45,10 @@ public:
 
 	bool isBotGame();
 
+	int getGameDiff();
+
+	void setGameDiff(int diffLevel);
+
 	void choosePromotion(Promotions promotion);
 
 	void loadGameFromFile(std::string const& filePath);
@@ -64,6 +68,7 @@ public:
 
 private:
 	bool botGame = false;
+	int botGameDiff = 20;
 	Color botColor;
 	Board* trackedBoard;
 	Piece* clickedPiece;
