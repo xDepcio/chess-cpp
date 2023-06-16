@@ -129,7 +129,8 @@ void QtGame::setGameDiff(int diffLevel)
 void QtGame::choosePromotion(Promotions promotion)
 {
 	trackedBoard->receivePromotionChoice(promotion);
-	boardState = BoardState::PLAYED;
+	trackedBoard->setBoardState(BoardState::PLAYED);
+	boardState = trackedBoard->getBoardState();
 }
 
 void QtGame::loadGameFromFile(std::string const& filePath)
