@@ -1,18 +1,34 @@
+#include <sstream>
+#include <unordered_map>
 #include "Board.h"
+#include "MovesTracker.h"
+#include "Queen.h"
+#include "Bishop.h"
+#include "King.h"
+#include "Knight.h"
+#include "Rook.h"
+#include "Pawn.h"
+#include "Square.h"
 
 Board::Board(int width, int height)
 {
 	this->width = width;
 	this->height = height;
+	movesTracker = new MovesTracker(this);
 
 	for (int j = 0; j < height; j++)
 	{
 		squares.push_back(std::vector<Square>());
 		for (int i = 0; i < width; i++)
 		{
-			squares[j].push_back(Square());
+			squares[j].push_back(Square({j, i}));
 		}
 	}
+}
+
+Board::~Board()
+{
+	delete movesTracker;
 }
 
 std::unique_ptr<Piece> Board::setPiece(std::pair<int, int> cords, std::unique_ptr<Piece> piece)
@@ -26,26 +42,174 @@ std::vector<std::vector<Square>>& Board::getBoard()
 	return squares;
 }
 
-void Board::printBoard() const
+std::string Board::getFenBoard()
 {
+	std::stringstream fen;
+	std::stringstream castle;
+	int empty = 0;
 	for (int i = 0; i < squares.size(); i++)
 	{
-		std::cout << " " << 8 - i << " ";
+		
+		empty = 0;
 		for (int j = 0; j < squares[0].size(); j++)
 		{
+			
 			Piece* squarePiece = squares[i][j].getPiece();
 			if (squarePiece != nullptr)
 			{
-				std::cout << ' ' << squarePiece->getName() << ' ';
+				if (empty != 0)
+				{
+					fen << empty;
+					empty = 0;
+				}
+				fen << squarePiece->getName()[1];
 			}
 			else
 			{
-				std::cout << " -- ";
+				empty += 1;
 			}
+			
 		}
-		std::cout << '\n';
+		if (empty == 8 or empty != 0)
+		{
+			fen << empty;
+		}
+		if(i != squares.size() - 1)
+			fen << "/";
 	}
-	std::cout << "    a   b   c   d   e   f   g   h\n";
+	
+	fen << " " << (getTurn() == Color::White ? "w" : "b") << " ";
+
+	size_t castle_moves_w = getCastleMoves(Color::White).size();
+	size_t castle_moves_b = getCastleMoves(Color::Black).size();
+
+	switch (castle_moves_w)
+	{
+	case 1:
+		castle << "K";
+		break;
+	case 2:
+		castle << "KQ";
+		break;
+	default:
+		break;
+	}
+	switch (castle_moves_b)
+	{
+	case 1:
+		castle << "k";
+		break;
+	case 2:
+		castle << "kq";
+		break;
+	default:
+		break;
+	}
+
+	if (castle.str().length() == 0) castle << "- ";
+	
+
+	fen << castle.str();
+	fen << "- 0 ";
+	fen << (movesTracker->getMoveCount()+2)/2;
+
+	fen << std::endl;
+
+	return fen.str();
+	
+}
+
+void Board::setFenBoard(std::string fenPos)
+{
+	//for (int i = 0; i < squares.size(); i++)
+	//{
+	//	for (int j = 0; j < squares[0].size(); j++)
+	//	{
+	//		int poi* squares.size() + j
+	//	}
+	//}
+	std::unordered_map<char, int> PieceLet{ {'p', 0}, {'r', 1}, {'n', 2}, {'b', 3}, {'k', 4}, {'q', 5} };
+	int pos_num = 0;
+	//int pieceIdBlack = 201;
+	//int pieceIdWhite = 101;
+	for (auto character : fenPos)
+	{
+		//int pieceId;
+		//std::cout << getFenBoard() << std::endl;
+		int iPos = pos_num / squares.size();
+		int jPos = pos_num - iPos * squares.size();
+
+		Color pieceColor;
+
+		if (character == ' ')
+			return;
+
+		if (character == '/')
+			continue;
+
+		else if (isalpha(character))
+		{
+			if (int(character) < 97)
+			{
+				pieceColor = Color::White;
+				//pieceId = pieceIdWhite;
+				//pieceIdWhite++;
+			}
+			else
+			{
+				pieceColor = Color::Black;
+				//pieceId = pieceIdBlack;
+				//pieceIdBlack++;
+			}
+
+			character = tolower(character);
+
+			switch (PieceLet[character])
+			{
+			case 0:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Pawn>(pieceColor));
+				pos_num += 1;
+				break;
+			}
+			case 1:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Rook>(pieceColor));
+				pos_num += 1;
+				break;
+			}
+			case 2:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Knight>(pieceColor));
+				pos_num += 1;
+				break;
+			}
+			case 3:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Bishop>(pieceColor));
+				pos_num += 1;
+				break;
+			}
+			case 4:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<King>(pieceColor));
+				pos_num += 1;
+				break;
+			}
+			case 5:
+			{
+				setPiece({ iPos, jPos }, std::make_unique<Queen>(pieceColor));
+				pos_num += 1;
+				break;
+			}
+			}
+			//setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black, 201));
+
+
+		}
+		else
+			pos_num += atoi(&character);
+	}
 }
 
 Piece* Board::getPiece(std::pair<int, int> coords) const
@@ -53,7 +217,12 @@ Piece* Board::getPiece(std::pair<int, int> coords) const
 	return squares[coords.first][coords.second].getPiece();
 }
 
-std::pair<int, int> Board::getKingLocation(Piece::Color const kingColor) const
+std::unique_ptr<Piece> Board::getPieceUniquePtr(const std::pair<int, int>& pieceCoords)
+{
+	return squares[pieceCoords.first][pieceCoords.second].getPieceUniquePtr();
+}
+
+std::pair<int, int> Board::getKingLocation(Color const kingColor) const
 {
 	int rowNum = 0;
 	for (auto& row : squares)
@@ -79,7 +248,7 @@ std::pair<int, int> Board::getKingLocation(Piece::Color const kingColor) const
 std::vector<std::pair<int, int>> Board::getPawnMoves(std::pair<int, int> atCoords, bool ignoreCheck)
 {
 	Pawn* pieceAtCoords = dynamic_cast<Pawn*>(getPiece(atCoords));
-	int dir = pieceAtCoords->getColor() == Piece::Color::White ? 1 : -1;
+	int dir = pieceAtCoords->getColor() == Color::White ? 1 : -1;
 
 	std::vector<std::pair<int, int>> validMoves;
 	std::vector<std::pair<int, int>> takesToCheck = {
@@ -180,20 +349,6 @@ std::vector<std::pair<int, int>> Board::getKnightMoves(std::pair<int, int> atCoo
 	for (auto& move : movesToCheck)
 	{
 		addMoveIfValid(atCoords, move, validKnightMoves, ignoreCheck);
-		//if (areCoordinatesValid(move))
-		//{
-		//	Piece* pieceToBeTaken = getPiece(move);
-		//	if (pieceToBeTaken == nullptr || pieceToBeTaken->getColor() != knightAtCoords->getColor())
-		//	{
-		//		auto taken = setPiece(move, setPiece(atCoords, nullptr));
-		//		if (ignoreCheck || !isCheck(knightAtCoords->getColor()))
-		//		{
-		//			validKnightMoves.push_back(move);
-		//		}
-		//		setPiece(atCoords, setPiece(move, std::move(taken)));
-		//	}
-
-		//}
 	}
 
 	return validKnightMoves;
@@ -201,59 +356,6 @@ std::vector<std::pair<int, int>> Board::getKnightMoves(std::pair<int, int> atCoo
 
 std::vector<std::pair<int, int>> Board::getHorizontalMoves(std::pair<int, int> atCoords, bool ignoreCheck)
 {
-	//int row = atCoords.first;
-	//int col = atCoords.second;
-	//Piece* pieceAtCoords = squares[row][col].getPiece();
-
-	//std::vector<std::pair<int, int>> validHorizontalMoves;
-
-	//bool areSquaresLeft = true;
-	//int dir = -1;
-	//int checkCol = col;
-	//while (areSquaresLeft)
-	//{
-	//	checkCol += dir;
-	//	if (areCoordinatesValid({ row, checkCol }))
-	//	{
-	//		Piece* pieceAtSquare = squares[row][checkCol].getPiece();
-	//		if (pieceAtSquare == nullptr)
-	//		{
-	//			auto taken = setPiece({ row, checkCol }, setPiece(atCoords, nullptr));
-	//			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
-	//			{
-	//				validHorizontalMoves.push_back({ row, checkCol });
-	//			}
-	//			setPiece(atCoords, setPiece({ row, checkCol }, std::move(taken)));
-	//		}
-	//		else if (pieceAtSquare->getColor() != pieceAtCoords->getColor())
-	//		{
-	//			auto taken = setPiece({ row, checkCol }, setPiece(atCoords, nullptr));
-	//			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
-	//			{
-	//				validHorizontalMoves.push_back({ row, checkCol });
-	//			}
-	//			setPiece(atCoords, setPiece({ row, checkCol }, std::move(taken)));
-	//			checkCol = col;
-	//			dir += 2;
-	//		}
-	//		else
-	//		{
-	//			checkCol = col;
-	//			dir += 2;
-	//		}
-
-	//	}
-	//	else
-	//	{
-	//		checkCol = col;
-	//		dir += 2;
-	//	}
-	//	if (dir > 1)
-	//	{
-	//		areSquaresLeft = false;
-	//	}
-	//}
-
 	int row = atCoords.first;
 	int col = atCoords.second;
 	Piece* pieceAtCoords = squares[row][col].getPiece();
@@ -267,7 +369,7 @@ std::vector<std::pair<int, int>> Board::getHorizontalMoves(std::pair<int, int> a
 	{
 		checkCol += dir;
 		Board::moveState mvFeedback = addMoveIfValid(atCoords, { row, checkCol }, validHorizontalMoves, ignoreCheck);
-		if (mvFeedback.status == Board::moveState::Status::invalid)
+		if (mvFeedback.reason == Board::moveState::Reason::invalid_wrong_coords || mvFeedback.reason == Board::moveState::Reason::invalid_takes_own || mvFeedback.reason == Board::moveState::Reason::valid_takes_enemy)
 		{
 			dir += 2;
 			checkCol = col;
@@ -292,62 +394,85 @@ std::vector<std::pair<int, int>> Board::getVerticalMoves(std::pair<int, int> atC
 	{
 		checkRow += dir;
 		Board::moveState mvFeedback = addMoveIfValid(atCoords, { checkRow, col }, validVerticalMoves, ignoreCheck);
-		if (mvFeedback.status == Board::moveState::Status::invalid)
+		if (mvFeedback.reason == Board::moveState::Reason::invalid_wrong_coords || mvFeedback.reason == Board::moveState::Reason::invalid_takes_own || mvFeedback.reason == Board::moveState::Reason::valid_takes_enemy)
 		{
 			dir += 2;
 			checkRow = row;
 		}
 	}
 
-	//while (areSquaresLeft)
-	//{
-	//	checkRow += dir;
-	//	if (areCoordinatesValid({ checkRow, col }))
-	//	{
-	//		Piece* pieceAtSquare = squares[checkRow][col].getPiece();
-	//		// Square is empty
-	//		if (pieceAtSquare == nullptr)
-	//		{
-	//			auto taken = setPiece({ checkRow, col }, setPiece(atCoords, nullptr));
-	//			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
-	//			{
-	//				validVerticalMoves.push_back({ checkRow, col });
-	//			}
-	//			setPiece(atCoords, setPiece({ checkRow, col }, std::move(taken)));
-	//		}
-	//		// Square has enemy's piece
-	//		else if (pieceAtSquare->getColor() != pieceAtCoords->getColor())
-	//		{
-	//			auto taken = setPiece({ checkRow, col }, setPiece(atCoords, nullptr));
-	//			if (ignoreCheck || !isCheck(pieceAtCoords->getColor()))
-	//			{
-	//				validVerticalMoves.push_back({ checkRow, col });
-	//			}
-	//			setPiece(atCoords, setPiece({ checkRow, col }, std::move(taken)));
-	//			checkRow = row;
-	//			dir += 2;
-	//		}
-	//		// Square has your piece
-	//		else
-	//		{
-	//			checkRow = row;
-	//			dir += 2;
-	//		}
-
-	//	}
-	//	// coords out of board
-	//	else
-	//	{
-	//		checkRow = row;
-	//		dir += 2;
-	//	}
-	//	if (dir > 1)
-	//	{
-	//		areSquaresLeft = false;
-	//	}
-	//}
-
 	return validVerticalMoves;
+}
+
+std::vector<std::pair<int, int>> Board::getCastleMoves(Color kingColor)
+{
+	auto kingCoords = getKingLocation(kingColor);
+	Piece* king = getPiece(kingCoords);
+	std::vector<std::pair<int, int>> moves = {};
+
+	if (king->hasMadeFirstMove() || isCheck(kingColor))
+		return moves;
+
+	if (getPiece({ kingCoords.first, 0 }) && !getPiece({ kingCoords.first, 0 })->hasMadeFirstMove())
+	{
+		if (!getPiece({ kingCoords.first, 3 }) && !getPiece({ kingCoords.first, 2 }) && !getPiece({ kingCoords.first, 1 }))
+		{
+			setPiece({ kingCoords.first, 3 }, setPiece(kingCoords, nullptr));
+			if (!isCheck(kingColor))
+			{
+				setPiece(kingCoords, setPiece({ kingCoords.first, 3 }, nullptr));
+				addMoveIfValid(kingCoords, { kingCoords.first, 2 }, moves);
+			}
+			else
+			{
+				setPiece(kingCoords, setPiece({ kingCoords.first, 3 }, nullptr));
+			}
+		}
+	}
+
+	if (getPiece({ kingCoords.first, 7 }) && !getPiece({ kingCoords.first, 7 })->hasMadeFirstMove())
+	{
+		if (!getPiece({ kingCoords.first, 5 }) && !getPiece({ kingCoords.first, 6 }))
+		{
+			setPiece({ kingCoords.first, 5 }, setPiece(kingCoords, nullptr));
+			if (!isCheck(kingColor))
+			{
+				setPiece(kingCoords, setPiece({ kingCoords.first, 5 }, nullptr));
+				addMoveIfValid(kingCoords, { kingCoords.first, 6 }, moves);
+			}
+			else
+			{
+				setPiece(kingCoords, setPiece({ kingCoords.first, 5 }, nullptr));
+			}
+		}
+	}
+
+	return moves;
+}
+
+std::vector<std::pair<int, int>> Board::getEnPassantMoves(std::pair<int, int> pawnCoords)
+{
+	Pawn* pawn = dynamic_cast<Pawn*>(getPiece(pawnCoords));
+	if (!pawn)
+		return {};
+
+	std::vector<std::pair<int, int>> validMoves;
+	if (pawn->canEnPassantLeft())
+	{
+		validMoves.push_back({
+			pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+			pawnCoords.second - 1
+		});
+	}
+	if (pawn->canEnPassantRight())
+	{
+		validMoves.push_back({
+			pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+			pawnCoords.second + 1
+		});
+	}
+
+	return validMoves;
 }
 
 std::vector<std::pair<int, int>> Board::getDiagonalMoves(std::pair<int, int> atCoords, bool ignoreCheck)
@@ -374,12 +499,12 @@ std::vector<std::pair<int, int>> Board::getDiagonalMoves(std::pair<int, int> atC
 		if (!leftInvalid)
 		{
 			Board::moveState mvFeedbackLeft = addMoveIfValid(atCoords, { checkRow, checkColLeft }, validDiagonalMoves, ignoreCheck);
-			leftInvalid = mvFeedbackLeft.status == Board::moveState::Status::invalid;
+			leftInvalid = mvFeedbackLeft.reason == Board::moveState::Reason::invalid_wrong_coords || mvFeedbackLeft.reason == Board::moveState::Reason::invalid_takes_own || mvFeedbackLeft.reason == Board::moveState::Reason::valid_takes_enemy;
 		}
 		if (!rightInvalid)
 		{
 			Board::moveState mvFeedbackRight = addMoveIfValid(atCoords, { checkRow, checkColRight }, validDiagonalMoves, ignoreCheck);
-			rightInvalid = mvFeedbackRight.status == Board::moveState::Status::invalid;
+			rightInvalid = mvFeedbackRight.reason == Board::moveState::Reason::invalid_wrong_coords || mvFeedbackRight.reason == Board::moveState::Reason::invalid_takes_own || mvFeedbackRight.reason == Board::moveState::Reason::valid_takes_enemy;
 		}
 
 		if (leftInvalid && rightInvalid)
@@ -400,24 +525,53 @@ std::vector<std::pair<int, int>> Board::getDiagonalMoves(std::pair<int, int> atC
 void Board::move(std::pair<int, int> from, std::pair<int, int> to)
 {
 	// moves found piece (doesn't check if move is valid)
-	if (this->getPiece(from))
+	Piece* movedPiece = this->getPiece(from);
+	Piece* takenPiece = this->getPiece(to);
+	invalidateEnPassantes(movedPiece->getColor());
+
+	if (movedPiece)
 	{
-		this->getPiece(from)->handleGotMoved();
+		bool tookPiece = this->getPiece(to) != nullptr;
+		bool takenPieceMoved = takenPiece != nullptr && takenPiece->hasMadeFirstMove();
+
+		auto mvPtr = std::make_unique<MovesTracker::Move>(
+			movedPiece->getType(),
+			takenPiece == nullptr ? PieceType::NONE : takenPiece->getType(),
+			getPieceUniquePtr(to),
+			movedPiece->getColor(),
+			from, 
+			to, 
+			takenPiece ? takenPiece->hasMadeFirstMove() : false,
+			Castle::NONE,
+			std::vector<std::pair<int, int>>({from, to}),
+			EnPassant::NONE,
+			isCheck(movedPiece->otherColor())
+		);
+
+		movesTracker->addMove(std::move(mvPtr));
+
+		this->getPiece(from)->setMadeFirstMove(true);
 		setPiece(to, setPiece(from, nullptr));
+
+		this->getPiece(to)->setMadeFirstMove(true);
 
 		// If current moved checked enemy
 		if (isCheck(getPiece(to)->otherColor()))
 		{
 			if (isCheckMate(getPiece(to)->otherColor()))
 			{
-				std::cout << "CHECK MATE!";
-				throw std::runtime_error("CHECKMATE NOT HANDLED YET!");
+				setBoardState(movedPiece->getColor() == Color::White ? BoardState::CHECKMATED_BLACK : BoardState::CHECKMATED_WHITE);
 			}
+		}
+		// If move stalemated anyone
+		else if (isStalemate(Color::Black) || isStalemate(Color::White))
+		{
+			setBoardState(BoardState::STALEMATE);
 		}
 	}
 }
 
-bool Board::isCheck(Piece::Color const piecesColor)
+bool Board::isCheck(Color const piecesColor)
 {
 	auto kingCoords = getKingLocation(piecesColor);
 	Piece* king = getPiece(kingCoords);
@@ -426,6 +580,7 @@ bool Board::isCheck(Piece::Color const piecesColor)
 	auto rookChecksVer = getVerticalMoves(kingCoords, true);
 	auto rookChecksHor = getHorizontalMoves(kingCoords, true);
 	auto bishopChecks = getDiagonalMoves(kingCoords, true);
+	auto kingMoves = getKingMoves(kingCoords, true);
 
 	std::vector<std::pair<int, int>> rookChecks;
 	rookChecks.insert(rookChecks.end(), rookChecksVer.begin(), rookChecksVer.end());
@@ -454,19 +609,25 @@ bool Board::isCheck(Piece::Color const piecesColor)
 
 		// checked by pawn
 		Pawn* p = dynamic_cast<Pawn*>(getPiece(move));
-		int dir = piecesColor == Piece::Color::White ? 1 : -1;
+		int dir = piecesColor == Color::White ? -1 : 1;
 		if ((move.first - kingCoords.first) * dir == 1 && p)
+			return true;
+	}
+
+	for (auto& move : kingMoves)
+	{
+		if (King* k = dynamic_cast<King*>(getPiece(move)))
 			return true;
 	}
 
 	return false;
 }
 
-bool Board::isCheckMate(Piece::Color const piecesColor)
+bool Board::isCheckMate(Color const piecesColor)
 {
 	for (int row = 0; row < squares.size(); row++)
 	{
-		for (int col = 0; col < squares[0].size(); col++)
+		for (int col = 0; col < squares[row].size(); col++)
 		{
 			Square& sqr = squares[row][col];
 			Piece* piece = sqr.getPiece();
@@ -476,6 +637,22 @@ bool Board::isCheckMate(Piece::Color const piecesColor)
 				if (validMoves.size() > 0)
 					return false;
 			}
+		}
+	}
+	return true;
+}
+
+bool Board::isStalemate(Color const piecesColor)
+{
+	for (int row = 0; row < squares.size(); row++)
+	{
+		for (int col = 0; col < squares[row].size(); col++)
+		{
+			Square& sqr = squares[row][col];
+			Piece* piece = sqr.getPiece();
+
+			if (piece != nullptr && piece->getColor() == piecesColor && piece->getValidMoves(this, { row, col }).size() != 0)
+				return false;
 		}
 	}
 	return true;
@@ -492,7 +669,86 @@ bool Board::areCoordinatesValid(std::pair<int, int> coordinates) const
 	return true;
 }
 
-Board::moveState Board::addMoveIfValid(std::pair<int, int>& from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
+MovesTracker* Board::getMovesTracker() const
+{
+	return movesTracker;
+}
+
+Color Board::getTurn() const
+{
+	return turn;
+}
+
+void Board::setTurn(Color const turnColor)
+{
+	turn = turnColor;
+}
+
+void Board::setBoardState(BoardState stateToSet)
+{
+	boardState = stateToSet;
+}
+
+BoardState Board::getBoardState() const
+{
+	return boardState;
+}
+
+void Board::requestPromotionChoice(std::pair<int, int> const& moveFrom, std::pair<int, int> const& moveTo)
+{
+	setBoardState(BoardState::REQUEST_PROMOTION);
+	promoMoveFrom = moveFrom;
+	promoMoveTo = moveTo;
+
+}
+
+void Board::receivePromotionChoice(Promotions promotion)
+{
+	auto movedPawn = getPiece(promoMoveFrom);
+	auto takenPiece = getPiece(promoMoveTo);
+	auto movedPawnColor = movedPawn->getColor();
+
+	auto mvPtr = std::make_unique<MovesTracker::Move>(
+		PieceType::PAWN,
+		takenPiece == nullptr ? PieceType::NONE : takenPiece->getType(),
+		getPieceUniquePtr(promoMoveTo),
+		movedPawn->getColor(),
+		promoMoveFrom,
+		promoMoveTo,
+		takenPiece ? takenPiece->hasMadeFirstMove() : false,
+		Castle::NONE,
+		std::vector<std::pair<int, int>>({ promoMoveFrom, promoMoveTo }),
+		EnPassant::NONE,
+		false,
+		promotion,
+		getPieceUniquePtr(promoMoveFrom)
+	);
+
+
+	switch (promotion)
+	{
+	case Promotions::ROOK:
+		setPiece(promoMoveTo, std::make_unique<Rook>(movedPawnColor));
+		break;
+	case Promotions::QUEEN:
+		setPiece(promoMoveTo, std::make_unique<Queen>(movedPawnColor));
+		break;
+	case Promotions::KNGIHT:
+		setPiece(promoMoveTo, std::make_unique<Knight>(movedPawnColor));
+		break;
+	case Promotions::BISHOP:
+		setPiece(promoMoveTo, std::make_unique<Bishop>(movedPawnColor));
+		break;
+	case Promotions::NONE:
+		break;
+	default:
+		break;
+	}
+
+	movesTracker->addMove(std::move(mvPtr));
+}
+
+Board::moveState Board::addMoveIfValid(std::pair<int, int> from, std::pair<int, int> to, std::vector<std::pair<int, int>>& addTo, bool ignoreCheck)
 {
 	moveState feedback = moveState();
 	
@@ -529,4 +785,20 @@ Board::moveState Board::addMoveIfValid(std::pair<int, int>& from, std::pair<int,
 	feedback.status = Board::moveState::Status::invalid;
 	feedback.reason = Board::moveState::Reason::invalid_takes_own;
 	return feedback;
+}
+
+void Board::invalidateEnPassantes(Color piecesColorToInvalidate)
+{
+	for (auto& row : squares)
+	{
+		for (auto& sqr : row)
+		{
+			Pawn* p = dynamic_cast<Pawn*>(sqr.getPiece());
+			if (p && p->getColor() == piecesColorToInvalidate)
+			{
+				p->setValidEnPassantLeft(false);
+				p->setValidEnPassantRight(false);
+			}
+		}
+	}
 }

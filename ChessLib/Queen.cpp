@@ -1,17 +1,17 @@
 #include "Queen.h"
+#include "MovesTracker.h"
+#include "Board.h"
 
 Queen::Queen(Color withColor) : Piece(withColor)
 {
-	Piece::pieceSignature = "q";
-}
-
-Queen::Queen(Color withColor, int id) : Piece(withColor, id)
-{
-	Piece::pieceSignature = "q";
+    Piece::pieceSignature = withColor == Color::Black ? "q" : "Q";
+    type = PieceType::QUEEN;
 }
 
 std::vector<std::pair<int, int>> Queen::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
+    if (!board->getMovesTracker()->onLatestMove())
+        return {};
     std::vector<std::pair<int, int>> moves;
     auto horizontalMoves = board->getHorizontalMoves(atCoords, ignoreCheck);
     moves.insert(moves.end(), horizontalMoves.begin(), horizontalMoves.end());

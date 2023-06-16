@@ -6,10 +6,13 @@ std::unique_ptr<Piece> Square::setPiece(std::unique_ptr<Piece> pieceToSet)
 	std::unique_ptr<Piece> old = std::move(piece);
 	piece = std::move(pieceToSet);
 
-	if (old != nullptr)
-	{
-		old->handleGotTaken(piece.get());
-	}
+	if (piece)
+		piece.get()->setCoords(coords);
+
+	//if (old != nullptr)
+	//{
+	//	old->handleGotTaken(piece.get());
+	//}
 
 	return old;
 }
@@ -17,4 +20,9 @@ std::unique_ptr<Piece> Square::setPiece(std::unique_ptr<Piece> pieceToSet)
 Piece* Square::getPiece() const
 {
 	return piece.get();
+}
+
+std::unique_ptr<Piece> Square::getPieceUniquePtr()
+{
+	return std::move(piece);
 }

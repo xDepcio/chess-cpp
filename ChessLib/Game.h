@@ -1,20 +1,21 @@
 #pragma once
-#include <iostream>
-#include "Board.h"
-#include <vector>
-#include <iomanip>
-#include <sstream>
-#include "Knight.h"
-#include "Rook.h"
-#include "Bishop.h"
-#include "Queen.h"
+#include "Constants.h"
+
+class Board;
 
 class Game
 {
+private:
+	bool ai_game = false;
+	Color human_color = Color::White;
+
 public:
 	void run();
 	void clearTerminal();
 	std::pair<std::pair<int, int>, std::pair<int, int>> parseCoords(std::string coords);
 	int boardCoordinateToInt(char coordinateSign) const;
+	void enableAI(bool enable_ai);
+	void setAIcolor(Color color);
+	void printBoard(Board* boardPt) const;
 };
 
