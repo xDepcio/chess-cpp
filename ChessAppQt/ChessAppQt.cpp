@@ -31,7 +31,6 @@ ChessAppQt::ChessAppQt(QWidget* parent) : QMainWindow(parent)
     setupPromotionBtns();
     connectBackBtn();
     connectSaveBtn();
-    //loadSavedGames();
     connectSavesBackBtn();
 }
 
@@ -84,7 +83,7 @@ void ChessAppQt::updateBoard()
             std::string pathToPiece = skinsManager.get()->getPathToPiece(sqr.getPiece());
             QString qImagePath = QString::fromStdString(pathToPiece);
             QPixmap pixmap(qImagePath);
-            pixmap = pixmap.scaled(qtSquares[qtSquareNum]->size(), Qt::KeepAspectRatio, Qt::SmoothTransformation);
+            pixmap = pixmap.scaled(QSize(75, 75), Qt::KeepAspectRatio, Qt::SmoothTransformation);
             qtSquares[qtSquareNum]->setPixmap(pixmap);
             qtSquares[qtSquareNum]->setAlignment(Qt::AlignCenter);
             qtSquareNum++;
@@ -263,7 +262,7 @@ void ChessAppQt::setupDiffWidget()
 void ChessAppQt::setupSkinsManagement()
 {
     skinsManager = std::move(std::make_unique<SkinsManager>());
-    skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD);
+    skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD_2);
 
     connect(ui.skinsBackBtn, &QPushButton::clicked, this, [this]() {
         ui.stackedWidget->setCurrentIndex(2);
@@ -275,6 +274,10 @@ void ChessAppQt::setupSkinsManagement()
 
     connect(ui.radioBtnStarWars, &QRadioButton::clicked, this, [this]() {
         skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STARWARS);
+        });
+
+    connect(ui.radioBtnStandard2, &QRadioButton::clicked, this, [this]() {
+        skinsManager.get()->setSelectedPackage(SkinsManager::SkinsPackage::STANDARD_2);
         });
 }
 
@@ -426,10 +429,6 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
             playedGame->setClickedPiece(clickedPiece);
             playedGame->setClickedPieceCoords(fieldCoords);
         }
-        else
-        {
-            throw std::runtime_error(":(");
-        }
     }
     else
     {
@@ -471,10 +470,6 @@ void ChessAppQt::handleBoardFieldClick(std::pair<int, int> const& fieldCoords)
                 displayMoves(validMoves);
                 playedGame->setClickedPiece(clickedPiece);
                 playedGame->setClickedPieceCoords(fieldCoords);
-            }
-            else
-            {
-                throw std::runtime_error(":(");
             }
         }
         else
@@ -533,9 +528,7 @@ void ChessAppQt::connectSaveBtn()
 void ChessAppQt::loadSavedGames()
 {
     foreach(QObject * child, ui.savesHolderWidget->children()) {
-        // Check if the child widget is of type QWidget
         if (QWidget* childWidget = qobject_cast<QWidget*>(child)) {
-            // Delete the child widget
             delete childWidget;
         }
     }

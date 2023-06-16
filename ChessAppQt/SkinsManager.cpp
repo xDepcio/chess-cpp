@@ -16,6 +16,9 @@ std::string SkinsManager::getPathToPiece(Piece* piece) const
 	case SkinsManager::SkinsPackage::STARWARS:
 		base += "images-star-wars/";
 		break;
+	case SkinsPackage::STANDARD_2:
+		base += "images-standard-2/";
+		break;
 	default:
 		throw std::runtime_error("invalid skins package");
 		break;

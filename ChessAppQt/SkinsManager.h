@@ -9,7 +9,8 @@ public:
 	enum class SkinsPackage
 	{
 		STANDARD,
-		STARWARS
+		STARWARS,
+		STANDARD_2
 	};
 
 	// Returns string in QResource format

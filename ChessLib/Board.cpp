@@ -210,38 +210,6 @@ void Board::setFenBoard(std::string fenPos)
 		else
 			pos_num += atoi(&character);
 	}
-	
-	
-
-
-
-
-}
-
-
-
-
-
-void Board::printBoard() const
-{
-	for (int i = 0; i < squares.size(); i++)
-	{
-		std::cout << " " << 8 - i << " ";
-		for (int j = 0; j < squares[0].size(); j++)
-		{
-			Piece* squarePiece = squares[i][j].getPiece();
-			if (squarePiece != nullptr)
-			{
-				std::cout << ' ' << squarePiece->getName() << ' ';
-			}
-			else
-			{
-				std::cout << " -- ";
-			}
-		}
-		std::cout << '\n';
-	}
-	std::cout << "    a   b   c   d   e   f   g   h\n";
 }
 
 Piece* Board::getPiece(std::pair<int, int> coords) const
@@ -491,21 +459,17 @@ std::vector<std::pair<int, int>> Board::getEnPassantMoves(std::pair<int, int> pa
 	std::vector<std::pair<int, int>> validMoves;
 	if (pawn->canEnPassantLeft())
 	{
-		validMoves.push_back(
-			{
-				pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
-				pawnCoords.second - 1
-			}
-		);
+		validMoves.push_back({
+			pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+			pawnCoords.second - 1
+		});
 	}
 	if (pawn->canEnPassantRight())
 	{
-		validMoves.push_back(
-			{
-				pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
-				pawnCoords.second + 1
-			}
-		);
+		validMoves.push_back({
+			pawn->getColor() == Color::White ? pawnCoords.first - 1 : pawnCoords.first + 1,
+			pawnCoords.second + 1
+		});
 	}
 
 	return validMoves;

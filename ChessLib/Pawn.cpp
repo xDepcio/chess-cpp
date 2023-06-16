@@ -21,11 +21,6 @@ bool Pawn::isEnPassantMove(std::pair<int, int> const& move) const
     return false;
 }
 
-void Pawn::promotionMove(Board* board, std::pair<int, int> const& to)
-{
-
-}
-
 Pawn::Pawn(Color withColor) : Piece(withColor)
 {
     Piece::pieceSignature = withColor == Color::Black ? "p" : "P";
@@ -52,20 +47,6 @@ bool Pawn::canEnPassantRight() const
     return validEnPassantRight;
 }
 
-//bool Pawn::isMoveValid(Board* board, std::pair<int, int> const& from, std::pair<int, int> const& to) const
-//{
-//    std::vector<std::pair<int, int>> validMoves = this->getValidMoves(board, from);
-//    for (auto& move : validMoves)
-//    {
-//        if (move == to)
-//        {
-//            return true;
-//        }
-//    }
-//
-//    return false;
-//}
-
 std::vector<std::pair<int, int>> Pawn::getValidMoves(Board* board, std::pair<int, int> const& atCoords, bool ignoreCheck) const
 {
     if (!board->getMovesTracker()->onLatestMove())
@@ -82,7 +63,6 @@ void Pawn::move(Board* board, std::pair<int, int> to)
     if (to.first == 0 || to.first == 7)
     {
         board->requestPromotionChoice(coordinates, to);
-        //promotionMove(board, to);
         return;
     }
 

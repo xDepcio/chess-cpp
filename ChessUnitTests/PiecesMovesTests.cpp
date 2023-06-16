@@ -289,5 +289,41 @@ namespace PiecesMovesTests
 
 			Assert::AreEqual(stripFen("rnbqkbnr/2p1pppp/1p6/p2p4/5B2/2NP4/PPPQPPPP/2KR1BNR b kq - 1 5"), stripFen(b.getFenBoard()));
 		}
+		TEST_METHOD(Pawn_promotion_to_queen)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::QUEEN);
+
+			Assert::AreEqual(stripFen("Qnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(Pawn_promotion_to_knight)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::KNGIHT);
+
+			Assert::AreEqual(stripFen("Nnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(Pawn_promotion_to_rook)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::ROOK);
+
+			Assert::AreEqual(stripFen("Rnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
+		TEST_METHOD(Pawn_promotion_to_bishop)
+		{
+			Board b(8, 8);
+			b.setFenBoard("rnbqkb1r/1P1ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR w KQkq - 1 5");
+			b.getPiece(parseCoords("b7"))->move(&b, parseCoords("a8"));
+			b.receivePromotionChoice(Promotions::BISHOP);
+
+			Assert::AreEqual(stripFen("Bnbqkb1r/3ppppp/p4n2/8/8/8/P1PPPPPP/RNBQKBNR"), stripFen(b.getFenBoard()));
+		}
 	};
 }

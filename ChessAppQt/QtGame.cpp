@@ -7,6 +7,7 @@
 #include "../ChessLib/King.h"
 #include "../ChessLib/Queen.h"
 #include "../ChessLib/MovesTracker.h"
+#include "../ChessLib/Constants.h"
 #include <sstream>
 #include <fstream>
 #include <ctime>
@@ -21,9 +22,7 @@ QtGame::~QtGame()
 
 void QtGame::setupBoard()
 {
-	Board* boardPt = new Board(8, 8);
-	//Board board(8, 8), *boardPt;
-	//boardPt = &board;
+	Board* boardPt = new Board(constants::BOARD_WIDTH, constants::BOARD_HEIGHT);
 	trackedBoard = boardPt;
 	boardPt->setPiece({ 1, 0 }, std::make_unique<Pawn>(Color::Black));
 	boardPt->setPiece({ 1, 1 }, std::make_unique<Pawn>(Color::Black));
@@ -69,8 +68,6 @@ void QtGame::setupBoard()
 	boardPt->setPiece({ 7, 4 }, std::make_unique<King>(Color::White));
 
 	boardPt->setPiece({ 7, 3 }, std::make_unique<Queen>(Color::White));
-
-	//lastBoardState = boardPt->getBoard();
 }
 
 void QtGame::run()
@@ -239,7 +236,7 @@ std::vector<std::pair<std::pair<std::pair<int, int>, std::pair<int, int>>, Promo
 	{
 		moves.push_back({
 			{{rawMovesStr[i] - 48, rawMovesStr[i + 1] - 48}, {rawMovesStr[i + 2] - 48, rawMovesStr[i + 3] - 48}}, charToPromo(rawMovesStr[i + 4])
-			});
+		});
 	}
 
 	return moves;
@@ -254,7 +251,7 @@ std::pair<std::pair<int, int>, std::pair<int, int>> QtGame::parseCoords(std::str
 
 int QtGame::boardCoordinateToInt(char coordinateSign) const
 {
-	if (coordinateSign <= 57) // "9" is 57 in ASCI
+	if (coordinateSign <= '9') // "9" is 57 in ASCI
 	{
 		return 7 - (coordinateSign - 49);
 	}
